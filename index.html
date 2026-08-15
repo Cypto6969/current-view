@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8" />
+<title>BTC Regime View — Current Cycle</title>
+<style>
+  :root {
+    --bull: #2b7fff;        /* blue */
+    --bull-soft: #2b7fff22;
+    --bear: #ff8a1f;        /* orange */
+    --bear-soft: #ff8a1f22;
+    --bg: #0f1216;
+    --panel: #171b21;
+    --panel-2: #1f242c;
+    --text: #e8ecf1;
+    --muted: #8b95a3;
+    --border: #2a313b;
+    --ok: #6ee27a;
+    --pending: #c9c34a;
+    --fail: #e25b5b;
+  }
+  /* LIGHT MODE — sun-readable. Toggled via header button, persisted in localStorage. */
+  body.light {
+    --bull: #1f6fe0;
+    --bull-soft: #1f6fe01f;
+    --bear: #c9620a;
+    --bear-soft: #c9620a1f;
+    --bg: #f3f6fa;
+    --panel: #ffffff;
+    --panel-2: #e9eef4;
+    --text: #161b22;
+    --muted: #586272;
+    --border: #cbd3dd;
+    --ok: #1f9d52;
+    --pending: #8a7c12;
+    --fail: #c43b3b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 32px 24px 64px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 24px;
+  }
+  h1 { margin: 0; font-size: 22px; letter-spacing: 0.2px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .asof { color: var(--muted); font-size: 13px; }
+  .theme-btn {
+    background: var(--panel-2); border: 1px solid var(--border); color: var(--text);
+    font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px;
+    cursor: pointer; transition: all 0.15s ease; white-space: nowrap;
+  }
+  .theme-btn:hover { border-color: var(--bull); color: var(--bull); }
+
+  /* SOPR / Next Regime Watch card */
+  .sopr {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px 18px;
+    align-items: center;
+  }
+  .sopr-eyebrow {
+    grid-column: 1 / -1;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.8px;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: -2px;
+  }
+  .sopr-label  { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; }
+  .sopr-bar {
+    position: relative; height: 8px; border-radius: 4px;
+    background: var(--panel-2); overflow: hidden;
+  }
+  .sopr-bar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, var(--bear), var(--bull));
+    border-radius: 4px;
+  }
+  .sopr-count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px; font-weight: 700; white-space: nowrap;
+  }
+  .sopr-count .target { color: var(--muted); font-weight: 400; }
+  .sopr-meta {
+    grid-column: 1 / -1;
+    font-size: 11px; color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-top: 2px;
+  }
+
+  /* Regime tag — small breadcrumb above the verdict, BTC tab only */
+  .regime-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .regime-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bear); }
+
+  /* VERDICT BANNER */
+  .verdict {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    background: var(--panel);
+    transition: all 0.2s ease;
+  }
+  .verdict.not_in  { border-color: var(--border); }
+  .verdict.close   { border-color: var(--pending); background: linear-gradient(180deg, var(--panel) 0%, rgba(201,195,74,0.06) 100%); }
+  .verdict.pending { border-color: var(--pending); background: linear-gradient(180deg, var(--panel) 0%, rgba(201,195,74,0.10) 100%); }
+  .verdict.weak    { border-color: var(--bear); background: linear-gradient(180deg, var(--panel) 0%, rgba(255,138,31,0.08) 100%); }
+  .verdict.strong  { border-color: var(--bear); background: linear-gradient(180deg, var(--panel) 0%, rgba(255,138,31,0.14) 100%); }
+  .verdict.full    { border-color: var(--bear); background: linear-gradient(180deg, var(--panel) 0%, rgba(255,138,31,0.24) 100%); box-shadow: 0 0 30px rgba(255,138,31,0.18); }
+
+  .verdict-top { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .verdict-emoji { font-size: 26px; line-height: 1; }
+  .verdict-label { font-size: 20px; font-weight: 800; letter-spacing: 0.4px; flex: 1; }
+  .verdict-pct { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .verdict.strong .verdict-pct, .verdict.full .verdict-pct, .verdict.weak .verdict-pct { color: var(--bear); font-weight: 700; }
+  .verdict.pending .verdict-pct, .verdict.close .verdict-pct { color: var(--pending); font-weight: 700; }
+
+  .verdict-action { font-size: 14px; color: var(--text); margin-bottom: 16px; line-height: 1.45; padding: 8px 12px; background: var(--panel-2); border-left: 3px solid var(--bear); border-radius: 0 4px 4px 0; }
+  .verdict.not_in  .verdict-action { border-left-color: var(--border); }
+  .verdict.close   .verdict-action,
+  .verdict.pending .verdict-action { border-left-color: var(--pending); }
+
+  .prob-bar {
+    position: relative;
+    height: 14px;
+    border-radius: 7px;
+    background: linear-gradient(90deg,
+      var(--bull) 0%,
+      var(--bull) var(--split, 50%),
+      var(--bear) var(--split, 50%),
+      var(--bear) 100%);
+    overflow: hidden;
+  }
+  .prob-bar .split {
+    position: absolute; top: -3px; bottom: -3px;
+    width: 2px; background: var(--text);
+    box-shadow: 0 0 0 1px var(--bg);
+  }
+
+  .verdict-dates { margin-top: 14px; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .verdict-dates .vd { display: inline-flex; align-items: center; gap: 6px; }
+  .verdict-dates .vd b { font-weight: 700; color: var(--text); }
+  .verdict-dates .vd.met b   { color: var(--bear); }
+  .verdict-dates .vd.miss b  { color: var(--muted); }
+  .verdict-dates .vd-sep { color: var(--border); }
+
+  .verdict-next { margin-top: 10px; font-size: 12px; color: var(--muted); font-style: italic; }
+
+  /* toggle */
+  .toggle {
+    display: inline-flex; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 4px; margin-bottom: 18px;
+  }
+  .toggle button {
+    background: transparent; border: 0; color: var(--muted);
+    padding: 8px 18px; font-size: 14px; font-weight: 600;
+    border-radius: 8px; cursor: pointer; transition: all 0.15s ease;
+  }
+  .toggle button.active.bull { background: var(--bull-soft); color: var(--bull); }
+  .toggle button.active.bear { background: var(--bear-soft); color: var(--bear); }
+
+  /* scenario panel */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .panel.bull { border-left-color: var(--bull); }
+  .panel.bear { border-left-color: var(--bear); }
+  .panel h2 { margin: 0 0 4px; font-size: 18px; }
+  .panel .analog { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+  .panel .thesis { font-size: 14px; margin-bottom: 18px; padding: 10px 12px; background: var(--panel-2); border-radius: 6px; }
+
+  .section-h { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin: 16px 0 8px; }
+
+  .levels { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .level {
+    background: var(--panel-2); border-radius: 6px; padding: 10px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .level .name { color: var(--muted); font-size: 13px; }
+  .level .val { font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; text-align: right; overflow-wrap: break-word; min-width: 0; }
+
+  .trigger {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; background: var(--panel-2); border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dot.ok { background: var(--ok); }
+  .dot.pending { background: var(--pending); }
+  .dot.fail { background: var(--fail); }
+  .trigger-label { flex: 1; font-size: 14px; }
+  .trigger-status { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  .notes { margin-top: 14px; padding: 10px 12px; background: var(--panel-2); border-left: 2px solid var(--border); border-radius: 4px; color: var(--muted); font-size: 13px; font-style: italic; }
+
+  /* charts */
+  .charts { display: flex; flex-direction: column; gap: 12px; }
+  .chart-card { background: var(--panel-2); border-radius: 6px; padding: 8px; }
+  .chart-card img { display: block; width: 100%; height: auto; border-radius: 4px; cursor: zoom-in; background: #000; }
+  .chart-caption { font-size: 12px; color: var(--muted); padding: 8px 4px 4px; }
+  .chart-empty { font-size: 13px; color: var(--muted); font-style: italic; padding: 12px; background: var(--panel-2); border-radius: 6px; text-align: center; }
+  /* zoom modal */
+  .zoom-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; cursor: zoom-out; padding: 24px;
+  }
+  .zoom-overlay.open { display: flex; }
+  .zoom-overlay img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+
+  /* signal grid */
+  .embed-wrap {
+    margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);
+  }
+  .embed-wrap h3 { margin: 0; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
+  .signals-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .signals-asof { font-size: 12px; color: var(--muted); }
+  .embed-note { font-size: 12px; color: var(--muted); margin-top: 12px; }
+  .embed-note a { color: var(--bull); }
+  .embed-note code { background: var(--panel-2); padding: 1px 5px; border-radius: 3px; }
+
+  /* summary table — mirrors Notion dashboard rollups */
+  .sig-summary { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 4px 14px; margin-bottom: 20px; overflow-x: auto; }
+  .sig-summary table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sig-summary th { text-align: left; color: var(--muted); font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; padding: 10px 8px; border-bottom: 1px solid var(--border); }
+  .sig-summary th.num, .sig-summary td.num { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .sig-summary td { padding: 10px 8px; }
+  .sig-summary tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+  .sig-summary .col-cat { font-weight: 600; }
+  .sig-summary .col-tier { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+  .sig-summary .status { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.4px; }
+  .sig-summary .status.met       { background: var(--bear-soft); color: var(--bear); }
+  .sig-summary .status.partial   { background: rgba(201,195,74,0.18); color: var(--pending); }
+  .sig-summary .status.not_met   { background: var(--panel-2); color: var(--muted); }
+  .sig-summary .status.none      { background: transparent; color: var(--muted); }
+
+  /* per-category cards */
+  .sig-group { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .sig-group-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; gap: 12px; }
+  .sig-group-name { font-weight: 600; font-size: 14px; }
+  .sig-group-count { font-size: 12px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .sig-group-count.met { color: var(--bear); }
+  .sig-group-count.partial { color: var(--pending); }
+  .sig-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+  @media (max-width: 640px) { .sig-list { grid-template-columns: 1fr; } }
+  .sig-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
+  .sig-item a { color: var(--text); text-decoration: none; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sig-item a:hover { text-decoration: underline; color: var(--bull); white-space: normal; }
+  .sig-item.firing a { color: var(--bear); font-weight: 600; }
+  .sig-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--border); }
+  .sig-item.firing .sig-dot { background: var(--bear); box-shadow: 0 0 6px var(--bear); }
+  .sig-item-date { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--muted); flex-shrink: 0; }
+  .sig-item.firing .sig-item-date { color: var(--bear); }
+  .sig-empty { font-size: 13px; color: var(--muted); font-style: italic; padding: 16px; text-align: center; }
+
+  /* LOCAL BOTTOM ENTRY READ */
+  .lb-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; gap: 12px; }
+  .lb-header h3 { margin: 0; font-size: 15px; }
+  .lb-asof { font-size: 11px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  /* the swing trigger — the headline */
+  .lb-swing { border: 1px solid var(--border); border-left: 4px solid var(--bull); border-radius: 8px; background: var(--bull-soft); padding: 12px 14px; margin-bottom: 14px; }
+  .lb-swing.go { border-left-color: var(--bull); background: var(--bull-soft); }
+  .lb-swing-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--bull); font-weight: 700; margin-bottom: 4px; }
+  .lb-swing-verdict { font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .lb-swing-meta { font-size: 12px; color: var(--muted); margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .lb-el3 { display: inline-block; padding: 1px 7px; border-radius: 999px; font-weight: 700; font-size: 11px; }
+  .lb-el3.pending { background: var(--panel-2); color: var(--muted); }
+  .lb-el3.fired { background: var(--bull-soft); color: var(--bull); }
+  /* readiness gauge */
+  .lb-gauge-track { height: 8px; border-radius: 999px; background: var(--panel-2); overflow: hidden; margin: 4px 0 6px; }
+  .lb-gauge-fill { height: 100%; width: var(--v, 0%); background: var(--bull); border-radius: 999px; }
+  .lb-gauge-cap { font-size: 12px; color: var(--muted); }
+  .lb-gauge-cap b { color: var(--text); }
+  /* path chips */
+  .lb-paths { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .lb-path { font-size: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; flex: 1; min-width: 150px; }
+  .lb-path .lbp-name { font-weight: 700; }
+  .lb-path.pass { border-color: var(--bull); background: var(--bull-soft); }
+  .lb-path.pass .lbp-name { color: var(--bull); }
+  .lb-path .lbp-rule { color: var(--muted); font-size: 11px; display: block; margin-top: 2px; }
+  /* group tally table */
+  .lb-groups { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+  .lb-groups th { text-align: left; color: var(--muted); font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; padding: 8px; border-bottom: 1px solid var(--border); }
+  .lb-groups td { padding: 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .lb-groups .lbg-name { font-weight: 600; white-space: nowrap; }
+  .lb-groups .lbg-count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .lb-groups .lbg-count.hot { color: var(--bull); font-weight: 700; }
+  .lb-groups .lbg-fired { color: var(--bull); font-size: 12px; }
+  .lb-groups .lbg-warn { color: var(--bear); font-size: 12px; }
+  .lb-groups .lbg-pending { color: var(--muted); font-size: 12px; }
+  /* needs list */
+  .lb-needs { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; background: var(--panel-2); }
+  .lb-needs-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .lb-needs ul { margin: 0; padding-left: 18px; }
+  .lb-needs li { margin: 3px 0; line-height: 1.4; }
+  .lb-caveat { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 10px; line-height: 1.4; }
+
+  /* COLLAPSIBLE SECTIONS (dropdowns) */
+  .section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .section > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 14px 18px;
+    transition: background 0.12s ease;
+    border-radius: 10px;
+  }
+  .section > summary::-webkit-details-marker { display: none; }
+  .section > summary::before {
+    content: "\25B8"; color: var(--muted); font-size: 12px; line-height: 1;
+    transition: transform 0.15s ease; align-self: center;
+  }
+  .section[open] > summary::before { transform: rotate(90deg); }
+  .section > summary:hover { background: var(--panel-2); }
+  .sec-title { font-size: 15px; font-weight: 700; letter-spacing: 0.3px; }
+  .sec-sub { font-size: 12px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .section > .section-body { padding: 4px 18px 18px; }
+  #secSignals .embed-wrap { margin-top: 4px; padding-top: 0; border-top: none; }
+
+  /* nested subsection — Position Sizing inside Current Scenario */
+  .subsection {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+  .subsection > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 11px 14px;
+  }
+  .subsection > summary::-webkit-details-marker { display: none; }
+  .subsection > summary::before {
+    content: "\25B8"; color: var(--muted); font-size: 11px;
+    transition: transform 0.15s ease;
+  }
+  .subsection[open] > summary::before { transform: rotate(90deg); }
+  .subsection > .section-body { padding: 2px 14px 14px; }
+  .sizing-card { margin-bottom: 14px; }
+  .sizing-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+  /* TOP-LEVEL TABS */
+  .top-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 22px;
+  }
+  .top-tabs button {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .top-tabs button:hover { color: var(--text); }
+  .top-tabs button.active {
+    background: var(--panel-2);
+    color: var(--text);
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .top-tabs button .count {
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  /* TRADE CARDS (Active Trades / Trade Plans) */
+  .trade-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .trade-header {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .trade-ticker {
+    font-size: 20px; font-weight: 800; letter-spacing: 0.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .trade-direction {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    letter-spacing: 0.4px; text-transform: uppercase;
+  }
+  .trade-direction.long  { background: var(--bull-soft); color: var(--bull); }
+  .trade-direction.short { background: var(--bear-soft); color: var(--bear); }
+  .trade-meta {
+    font-size: 12px; color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    flex: 1;
+  }
+  .trade-status {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 9px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .trade-status.active   { background: var(--bear-soft); color: var(--bear); }
+  .trade-status.trailing { background: var(--bull-soft); color: var(--bull); }
+  .trade-status.scaled   { background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); }
+  .trade-status.watching { background: rgba(201,195,74,0.15); color: var(--pending); }
+  .trade-status.win      { background: var(--bull-soft); color: var(--bull); }
+  .trade-status.loss     { background: var(--bear-soft); color: var(--bear); }
+  .trade-status.scratch  { background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); }
+  /* Setup chip — names the setup/config at a glance (convention: SETUP · CONFIG, e.g. "3-TAP ACCUM · P02") */
+  .trade-setup {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 9px; border-radius: 4px; text-transform: uppercase;
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  /* P&L badge — blue = win, orange = loss (colorblind-safe, matches the bull/bear palette) */
+  .trade-pnl { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; font-weight: 800; white-space: nowrap; }
+  .trade-pnl.win { color: var(--bull); }
+  .trade-pnl.loss { color: var(--bear); }
+  .trade-pnl.scratch { color: var(--muted); }
+  .trade-card.closed { opacity: 0.92; }
+  .trade-thesis {
+    font-size: 14px; padding: 8px 12px; background: var(--panel-2);
+    border-left: 3px solid var(--border); border-radius: 0 4px 4px 0;
+    margin-bottom: 14px;
+  }
+  .trade-toggle {
+    display: inline-flex; background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 3px; margin-bottom: 14px;
+  }
+  .trade-toggle button {
+    background: transparent; border: 0; color: var(--muted);
+    padding: 6px 14px; font-size: 13px; font-weight: 600;
+    border-radius: 6px; cursor: pointer;
+  }
+  .trade-toggle button.active.bull { background: var(--bull-soft); color: var(--bull); }
+  .trade-toggle button.active.bear { background: var(--bear-soft); color: var(--bear); }
+  /* per-trade scenario panel — smaller indent than the BTC top-level scenarios */
+  .trade-card .panel { padding: 14px 16px; margin-bottom: 0; }
+  .trade-card .panel h2 { font-size: 15px; }
+  .trade-card .analog { font-size: 12px; }
+  .trade-card .thesis { font-size: 13px; padding: 8px 10px; margin-bottom: 12px; }
+  .trade-card .section-h { margin: 12px 0 6px; }
+
+  /* FRACTAL COMPARISON — IREN setup then analog fractal(s), stacked vertically so images are full-width / large */
+  .fractal-compare { display: flex; flex-direction: column; gap: 18px; }
+  .fc-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .fc-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+    font-weight: 700; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .fc-col.analog .fc-label { color: var(--bear); }
+  .fc-col.current .fc-label { color: var(--bull); }
+  .fc-tag {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 2px 6px; border-radius: 999px; text-transform: uppercase;
+  }
+  .fc-col.current .fc-tag { background: var(--bull-soft); color: var(--bull); }
+  .fc-col.analog  .fc-tag { background: var(--bear-soft); color: var(--bear); }
+  .fc-placeholder {
+    background: var(--panel-2); border: 1px dashed var(--border); border-radius: 6px;
+    padding: 22px 14px; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.5;
+  }
+  .fc-placeholder code { background: var(--panel); padding: 1px 6px; border-radius: 3px; font-size: 11px; color: var(--text); }
+  .fc-placeholder .fc-ph-file { display: block; margin-top: 6px; font-size: 11px; }
+
+  /* WHY THESE FRACTALS — shared rationale callout above the scenario toggle */
+  .fractal-why {
+    background: var(--panel-2); border: 1px solid var(--border); border-left: 3px solid var(--bull);
+    border-radius: 0 6px 6px 0; padding: 12px 14px; margin-bottom: 14px;
+  }
+  .fractal-why .fw-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.7px; text-transform: uppercase;
+    color: var(--bull); margin-bottom: 6px;
+  }
+  .fractal-why .fw-body { font-size: 13.5px; line-height: 1.5; color: var(--text); }
+  .fractal-why .fw-base { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+  .fractal-why .fw-base b { color: var(--bull); font-weight: 700; }
+
+  /* scenario tag — small pill next to a scenario heading (e.g. "Base case") */
+  .scn-tag {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 999px; vertical-align: middle;
+    background: var(--bull-soft); color: var(--bull); margin-left: 8px;
+  }
+
+  .trade-empty {
+    background: var(--panel); border: 1px dashed var(--border);
+    border-radius: 12px; padding: 32px 20px; text-align: center;
+    color: var(--muted); font-size: 14px;
+  }
+  .trade-empty code { background: var(--panel-2); padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+
+  .hidden { display: none; }
+
+  @media (max-width: 640px) {
+    .levels { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .top-tabs { flex-direction: column; }
+    .top-tabs button { text-align: left; }
+  }
+  /* Archived trade — collapsible wrapper preserving the full original card */
+  .closed-archive { margin-bottom: 12px; }
+  .closed-archive > summary .sec-sub { flex: 1; min-width: 80px; }
+  .closed-archive > summary .trade-pnl { white-space: normal; overflow-wrap: anywhere; max-width: 55%; font-size: 13px; text-align: right; }
+  .closed-archive > summary .trade-direction { align-self: center; }
+  .closed-archive .trade-card { margin-bottom: 0; border: none; padding: 14px 0 0; }
+  /* Position & Sizing — stat table on the execution panel */
+  .position-box { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 2px 14px; }
+  .position-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 2px; font-size: 13.5px; }
+  .position-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+  .position-row .pk { color: var(--muted); }
+  .position-row .pv { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; text-align: right; white-space: normal; overflow-wrap: break-word; min-width: 0; }
+  .position-row .pv.win { color: var(--bull); }
+  .position-row .pv.loss { color: var(--bear); }
+  .position-sub .position-box { border: none; background: transparent; padding: 0; }
+  /* Trade Plans — collapsible accordion wrapper */
+  .plan-collapse { margin-bottom: 12px; }
+  .plan-collapse > summary .sec-sub { flex: 1; min-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .plan-collapse > summary .trade-direction { align-self: center; }
+  .plan-collapse .trade-card { margin-bottom: 0; border: none; padding: 14px 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>BTC Regime View — Current Cycle</h1>
+    <div class="asof" id="asof">As of —</div>
+  </header>
+
+  <!-- TOP-LEVEL TABS -->
+  <div class="top-tabs" role="tablist">
+    <button data-tab="btc"    class="active">BTC</button>
+    <button data-tab="active">Active Trades <span class="count" id="activeCount"></span></button>
+    <button data-tab="plans">Trade Plans <span class="count" id="plansCount"></span></button>
+    <button data-tab="closed">Archived <span class="count" id="closedCount"></span></button>
+  </div>
+
+  <!-- ============ TAB: BTC ============ -->
+  <div class="tab-section" id="tabBtc">
+
+  <!-- ===== DROPDOWN 1: REGIME ===== -->
+  <details class="section" id="secRegime" open>
+  <summary><span class="sec-title">Regime</span><span class="sec-sub" id="secRegimeSub"></span></summary>
+  <div class="section-body">
+
+  <!-- Regime context — the framing for the whole signal model on this tab -->
+  <div class="regime-tag">
+    <span class="dot"></span>
+    Regime: Bear Local Bottom · v3 Entry Model (A/B/B2)
+  </div>
+
+  <!-- VERDICT BANNER — the unignorable top -->
+  <div class="verdict" id="verdict">
+    <div class="verdict-top">
+      <span class="verdict-emoji" id="verdictEmoji">—</span>
+      <span class="verdict-label" id="verdictLabel">—</span>
+      <span class="verdict-pct"><span id="bearPct">—</span>% bear · <span id="bullPct">—</span>% bull</span>
+    </div>
+    <div class="verdict-action" id="verdictAction">—</div>
+    <div class="prob-bar" id="probBar">
+      <div class="split" id="probSplit" style="left: 50%;"></div>
+    </div>
+    <div class="verdict-dates" id="verdictDates"></div>
+    <div class="verdict-next" id="verdictNext">—</div>
+  </div>
+
+  <!-- SOPR / Next Regime Watch — countdown to the next regime flip -->
+  <div class="sopr" id="soprCard">
+    <div class="sopr-eyebrow">Next Regime Watch · SOPR Timer</div>
+    <div class="sopr-label" id="soprLabel">—</div>
+    <div class="sopr-bar"><div class="sopr-bar-fill" id="soprFill" style="width: 0%"></div></div>
+    <div class="sopr-count" id="soprCount">—</div>
+    <div class="sopr-meta" id="soprMeta">—</div>
+  </div>
+
+  </div><!-- /section-body --></details><!-- /secRegime -->
+
+  <!-- ===== DROPDOWN 2: CURRENT SCENARIO ===== -->
+  <details class="section" id="secScenario" open>
+  <summary><span class="sec-title">Current Scenario</span><span class="sec-sub" id="secScenarioSub"></span></summary>
+  <div class="section-body">
+
+  <!-- Toggle -->
+  <div class="toggle" role="tablist">
+    <button id="btnBull" class="bull" role="tab">Scenario 1 · Retest</button>
+    <button id="btnBear" class="bear" role="tab">Scenario 2 · Dump</button>
+  </div>
+
+  <!-- Panels -->
+  <div id="panelBull" class="panel bull">
+    <h2>Scenario 1 — Retest Entry</h2>
+    <div class="analog">Analog: <span id="bullAnalog">—</span></div>
+    <div class="thesis" id="bullThesis">—</div>
+
+    <div class="section-h">Charts</div>
+    <div class="charts" id="bullCharts"></div>
+
+    <div class="section-h">Key Levels</div>
+    <div class="levels" id="bullLevels"></div>
+
+    <div class="section-h">What Has to Happen</div>
+    <div id="bullTriggers"></div>
+
+    <div class="notes" id="bullNotes"></div>
+  </div>
+
+  <div id="panelBear" class="panel bear hidden">
+    <h2>Scenario 2 — Straight Dump</h2>
+    <div class="analog">Analog: <span id="bearAnalog">—</span></div>
+    <div class="thesis" id="bearThesis">—</div>
+
+    <div class="section-h">Charts</div>
+    <div class="charts" id="bearCharts"></div>
+
+    <div class="section-h">Key Levels</div>
+    <div class="levels" id="bearLevels"></div>
+
+    <div class="section-h">What Has to Happen</div>
+    <div id="bearTriggers"></div>
+
+    <div class="notes" id="bearNotes"></div>
+  </div>
+
+  <!-- NESTED DROPDOWN: POSITION SIZING (inside Current Scenario) -->
+  <details class="subsection" id="secSizing" open>
+  <summary><span class="sec-title">Position Sizing &amp; Execution</span><span class="sec-sub">on trigger</span></summary>
+  <div class="section-body" id="sizingRoot"></div>
+  </details>
+
+  </div><!-- /section-body --></details><!-- /secScenario -->
+
+  <!-- ===== DROPDOWN 3: LIVE SIGNALS ===== -->
+  <details class="section" id="secSignals" open>
+  <summary><span class="sec-title">Live Signals</span><span class="sec-sub" id="secSignalsSub"></span></summary>
+  <div class="section-body">
+
+  <!-- LOCAL BOTTOM ENTRY READ (auto-synced from Market Signals via sync_local_bottom.py) -->
+  <div class="embed-wrap" id="lbRead"></div>
+
+  <!-- ARCHIVED Local Top grid — frozen snapshot, May 2026 Bear Local Top -->
+  <details class="subsection" id="secArchivedSignals">
+    <summary><span class="sec-title">Archived Signals — May 2026 Bear Local Top</span><span class="sec-sub">frozen · read-only</span></summary>
+    <div class="embed-wrap">
+      <div class="signals-header">
+        <h3>🗄️ Archived — May 2026 Bear Local Top</h3>
+        <span class="signals-asof" id="signalsAsOf">—</span>
+      </div>
+      <div class="sig-summary" id="signalSummary"></div>
+      <div id="signalGrid"></div>
+      <div class="embed-note">
+        Frozen record of the Local Top cycle (fully confirmed 5/16–5/27). Live regime is now the Local Bottom read above.
+        <br />
+        <a id="openDashboard" href="#" target="_blank" rel="noopener">Open Local Top Dashboard ↗</a>
+        &nbsp;·&nbsp;
+        <a id="openSignals" href="#" target="_blank" rel="noopener">Open Market Signals view ↗</a>
+      </div>
+    </div>
+  </details>
+
+  </div><!-- /section-body --></details><!-- /secSignals -->
+
+  </div> <!-- /tabBtc -->
+
+  <!-- ============ TAB: ACTIVE TRADES ============ -->
+  <div class="tab-section hidden" id="tabActive">
+    <div id="activeTradesRoot"></div>
+  </div>
+
+  <!-- ============ TAB: TRADE PLANS ============ -->
+  <div class="tab-section hidden" id="tabPlans">
+    <div id="tradePlansRoot"></div>
+  </div>
+
+  <!-- ============ TAB: CLOSED ============ -->
+  <div class="tab-section hidden" id="tabClosed">
+    <div id="closedTradesRoot"></div>
+  </div>
+
+  <!-- Click-to-zoom overlay for chart images (global, lives outside tabs) -->
+  <div id="zoomOverlay" class="zoom-overlay"><img id="zoomImg" src="" alt="" /></div>
+
+</div>
+
+<script>
+// SIGNALS_START — auto-synced by sync.py, do not hand-edit
+const SIGNALS = {
+  "asOf": "2026-07-29",
+  "overall": {
+    "stateLabel": "Local Top Fully Confirmed",
+    "stateShort": "BEAR RELIEF LOCAL TOP — FULLY CONFIRMED",
+    "stateEmoji": "🔴",
+    "stateClass": "full",
+    "bear": 100,
+    "bull": 0,
+    "counts": {
+      "strong": 9,
+      "weak": 1,
+      "gate": 1,
+      "bmsb": 1
+    },
+    "confirmsFired": 10,
+    "confirmsThreshold": 10,
+    "confirmsInDate": "2026-05-10",
+    "confirmsConfirmDate": "2026-05-27",
+    "nextMilestone": "Bear leg active. Next regime: Local Bottom watch (see SOPR timer below)."
+  },
+  "groups": [
+    {
+      "name": "Gate (BTC 50 SMA 2W)",
+      "tier": "Gate",
+      "required": 1,
+      "firing": 1,
+      "total": 1,
+      "status": "met",
+      "inDate": null,
+      "confirmDate": null,
+      "signals": [
+        {
+          "name": "BTC 50 SMA 2 week close below, LT ",
+          "firing": true,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-50-SMA-2-week-close-below-LT-2ea598518cd2806387f4cc2c47d2573a"
+        }
+      ]
+    },
+    {
+      "name": "Strong Confirms",
+      "tier": "P2",
+      "required": 1,
+      "firing": 9,
+      "total": 10,
+      "status": "met",
+      "inDate": "2026-05-10",
+      "confirmDate": null,
+      "signals": [
+        {
+          "name": "Realized P&L Ratio= 3 and close below (close above then loses 3) Weekly",
+          "firing": true,
+          "lastTriggered": "2026-05-10",
+          "currentRead": "Closed above 3, lose and confirms",
+          "url": "https://app.notion.com/p/Realized-P-L-Ratio-3-and-close-below-close-above-then-loses-3-Weekly-306598518cd2808c927ec5dc971ac5b0"
+        },
+        {
+          "name": "BTC 1 Week BMSB Close above and then lose Daily BMSB (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-15",
+          "currentRead": "2 weeks Above BMSB W closed, now just need D BMSB and confirmed,  insid on the daily 5.13",
+          "url": "https://app.notion.com/p/BTC-1-Week-BMSB-Close-above-and-then-lose-Daily-BMSB-Strong-306598518cd280f18219df1021087764"
+        },
+        {
+          "name": "Total MC - Close above BMSB and then fail (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-15",
+          "currentRead": "Closed above BMSB 5/10",
+          "url": "https://app.notion.com/p/Total-MC-Close-above-BMSB-and-then-fail-Strong-2ee598518cd2804990d1eea8f4da818f"
+        },
+        {
+          "name": "Others - Close 1 week above BMSB and then loses (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-16",
+          "currentRead": "Closed above BMSB 5/10",
+          "url": "https://app.notion.com/p/Others-Close-1-week-above-BMSB-and-then-loses-Strong-2ee598518cd2802da96fe38421a4d47d"
+        },
+        {
+          "name": "Puell - Retest from Below, close above then fails (strong) ",
+          "firing": true,
+          "lastTriggered": "2026-05-16",
+          "currentRead": "Closed above BMSB 5/4",
+          "url": "https://app.notion.com/p/Puell-Retest-from-Below-close-above-then-fails-strong-306598518cd280a1a8c8d4f2d3a64cb8"
+        },
+        {
+          "name": "Total 3 - Close above BMSB, then lose (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-16",
+          "currentRead": "Closed above BMSB 5/10",
+          "url": "https://app.notion.com/p/Total-3-Close-above-BMSB-then-lose-Strong-2ee598518cd280bf849fee879a78ca6a"
+        },
+        {
+          "name": "BTC/GOLD Diagonal W BMSB close above (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-17",
+          "currentRead": "Closed above BMSB 5/10",
+          "url": "https://app.notion.com/p/BTC-GOLD-Diagonal-W-BMSB-close-above-Strong-2e9598518cd280e2b86de475cd2dc25b"
+        },
+        {
+          "name": "USDT.D+USDC.D Weekly Close above BMSB (2 weeks in 2022) then fail (strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-17",
+          "currentRead": "Closed above BMSB 5/10",
+          "url": "https://app.notion.com/p/USDT-D-USDC-D-Weekly-Close-above-BMSB-2-weeks-in-2022-then-fail-strong-2e8598518cd280bbb337c0a19bbfc237"
+        },
+        {
+          "name": "BTC Ln/Price - Close above 0 + Fails after (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-27",
+          "currentRead": "Above wiating for close below",
+          "url": "https://app.notion.com/p/BTC-Ln-Price-Close-above-0-Fails-after-Strong-2ca598518cd281a698cae79f68a57d4e"
+        },
+        {
+          "name": "ETH W - BMSB 1 week close above (strong)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/ETH-W-BMSB-1-week-close-above-strong-2ea598518cd280ccaa33c881a764da9b"
+        }
+      ]
+    },
+    {
+      "name": "Weak Confirms",
+      "tier": "P2.5",
+      "required": 2,
+      "firing": 1,
+      "total": 10,
+      "status": "partial",
+      "inDate": null,
+      "confirmDate": null,
+      "signals": [
+        {
+          "name": "ETH W - BMSB 1 week tap retest from below or weakness before tap(weak) ",
+          "firing": true,
+          "lastTriggered": "2026-05-12",
+          "currentRead": "",
+          "url": "https://app.notion.com/p/ETH-W-BMSB-1-week-tap-retest-from-below-or-weakness-before-tap-weak-306598518cd280019bcbc8f4359b2e6b"
+        },
+        {
+          "name": "BTC 1 Week BMSB Tap from below then lose Daily BMSB (weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-1-Week-BMSB-Tap-from-below-then-lose-Daily-BMSB-weak-306598518cd28030a683c7ea823b2340"
+        },
+        {
+          "name": "BTC Ln/Price - Taps 0 from below+ Fails (Weak) or weakness before tap",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-Ln-Price-Taps-0-from-below-Fails-Weak-or-weakness-before-tap-306598518cd280ab96f9e5c9be068c5c"
+        },
+        {
+          "name": "BTC/GOLD PA Diagonal Tap W BMSB (Weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-GOLD-PA-Diagonal-Tap-W-BMSB-Weak-309598518cd2808e93bbd4dc0f3e30e4"
+        },
+        {
+          "name": "Others - Fails after tapping 1 week from  under BMSB or weakness before tap(weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/Others-Fails-after-tapping-1-week-from-under-BMSB-or-weakness-before-tap-weak-306598518cd28056bbcdfd08f9e134af"
+        },
+        {
+          "name": "Puell - Retest from Below, no close above, tap or weakness before tap (weak",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/Puell-Retest-from-Below-no-close-above-tap-or-weakness-before-tap-weak-2ca598518cd281c98c5ec13f77f56ab2"
+        },
+        {
+          "name": "Realized P&L Ratio= 3 and close below (cant reach 3 then closes below Daily",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/Realized-P-L-Ratio-3-and-close-below-cant-reach-3-then-closes-below-Daily-2ea598518cd28032ae88fdacbdd84387"
+        },
+        {
+          "name": "Total 3 - Weekly taps BMSB and close below or too weak to reach  (weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/Total-3-Weekly-taps-BMSB-and-close-below-or-too-weak-to-reach-weak-306598518cd28092839ee9f0a4f3674e"
+        },
+        {
+          "name": "Total MC - Taps from below BMSB or cant reach (weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/Total-MC-Taps-from-below-BMSB-or-cant-reach-weak-306598518cd280b384e4edbf84fad112"
+        },
+        {
+          "name": "USDT.D+USDC.D tap from below BMSB or cant reach because (Weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/USDT-D-USDC-D-tap-from-below-BMSB-or-cant-reach-because-Weak-306598518cd2804aa9dafb6057a1e78d"
+        }
+      ]
+    },
+    {
+      "name": "Additional Watchlist",
+      "tier": "Watch",
+      "required": 1,
+      "firing": 2,
+      "total": 2,
+      "status": "met",
+      "inDate": "2026-04-07",
+      "confirmDate": "2026-04-26",
+      "signals": [
+        {
+          "name": "BTC/IGV W Diag PA (Additoinal)",
+          "firing": true,
+          "lastTriggered": "2026-04-07",
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-IGV-W-Diag-PA-Additoinal-2fc598518cd280c8bb1dc9715bb59f00"
+        },
+        {
+          "name": "USDT.D+USDC.D RSI Local Channel touch Bottom (or within % like march 22) (Additoinal)",
+          "firing": true,
+          "lastTriggered": "2026-04-26",
+          "currentRead": "Offically taggeed",
+          "url": "https://app.notion.com/p/USDT-D-USDC-D-RSI-Local-Channel-touch-Bottom-or-within-like-march-22-Additoinal-2cd598518cd280ef8d7ecf54a0394469"
+        }
+      ]
+    },
+    {
+      "name": "BTC BMSB Daily Lost",
+      "tier": "P3",
+      "required": 1,
+      "firing": 1,
+      "total": 2,
+      "status": "met",
+      "inDate": "2026-05-15",
+      "confirmDate": null,
+      "signals": [
+        {
+          "name": "BTC 1 Week BMSB Close above and then lose Daily BMSB (Strong)",
+          "firing": true,
+          "lastTriggered": "2026-05-15",
+          "currentRead": "2 weeks Above BMSB W closed, now just need D BMSB and confirmed,  insid on the daily 5.13",
+          "url": "https://app.notion.com/p/BTC-1-Week-BMSB-Close-above-and-then-lose-Daily-BMSB-Strong-306598518cd280f18219df1021087764"
+        },
+        {
+          "name": "BTC 1 Week BMSB Tap from below then lose Daily BMSB (weak)",
+          "firing": false,
+          "lastTriggered": null,
+          "currentRead": "",
+          "url": "https://app.notion.com/p/BTC-1-Week-BMSB-Tap-from-below-then-lose-Daily-BMSB-weak-306598518cd28030a683c7ea823b2340"
+        }
+      ]
+    }
+  ]
+};
+// SIGNALS_END
+
+// LB_READ_START — auto-synced by sync_local_bottom.py, do not hand-edit
+const LB_READ = {
+  "asOf": "2026-07-17",
+  "cycle": "Jun 2026 Bottom",
+  "entered": false,
+  "conviction": "STD",
+  "readiness": 40,
+  "paths": {
+    "A": {
+      "pass": false,
+      "rule": "E1E T1 ≥ 1"
+    },
+    "B": {
+      "pass": false,
+      "rule": "Gate T1S ≥ 5 AND (E1E T2≥2 OR Gate T1C≥43%)"
+    },
+    "B2": {
+      "pass": false,
+      "rule": "Gate T1S ≥ 4 AND Conf T1S≥80%"
+    }
+  },
+  "groups": {
+    "Gate T1S": {
+      "fired": 2,
+      "testable": 6,
+      "pct": 33,
+      "firedNames": [
+        "EL2, PA BTC Touch  (6/24)",
+        "STH P&L Margin < -12% (6/4)"
+      ],
+      "pendingNames": [
+        "EL3, PA BTC Touch ",
+        "Total Crypto - Below Black Channel Bottom, lower thin line",
+        "USDT.D- Black Hoz. Top =6.350 (2019 2.01) 2021 (4.86) 2018 .52 ",
+        "BTC Quarterly Perf < -20%"
+      ],
+      "warnNames": [
+        "BTC Quarterly Perf < -20%"
+      ]
+    },
+    "Gate T1C": {
+      "fired": 2,
+      "testable": 5,
+      "pct": 40,
+      "firedNames": [
+        "Stablecoin SRO < -2 (6/6)",
+        "USDT RSI - Channel Top W >70 (6/22)"
+      ],
+      "pendingNames": [
+        "USDT.D+USDC.D RSI Channel touch Top",
+        "USDT.D+USDC.D RSI >72.22 Local Bottom",
+        "ES/VIX - RSI Alert 2W"
+      ],
+      "warnNames": [
+        "USDT.D+USDC.D RSI Channel touch Top"
+      ]
+    },
+    "E1E T1": {
+      "fired": 0,
+      "testable": 6,
+      "pct": 0,
+      "firedNames": [],
+      "pendingNames": [
+        "Global Liquidity RSI 2W: <32.20",
+        "Global Liquidity - Black Line touch",
+        "ES/VIX - Red Trendline Alert",
+        "ES/VIX - RSI Alert 2W",
+        "BTC/VIX - W RSI Alert",
+        "BTC/VIX - Trendline Alert W"
+      ],
+      "warnNames": []
+    },
+    "E1E T2": {
+      "fired": 1,
+      "testable": 6,
+      "pct": 17,
+      "firedNames": [
+        "Miner Composite/BTC - Channel Bottom (7/17)"
+      ],
+      "pendingNames": [
+        "Total 2 - Channel break 38% down, covid macro bottom ",
+        "WGMI - Channel Bottom",
+        "Miner Composite - Channel Bottom",
+        "Lagging Miners - Channel Bottom / mid line if late cycle",
+        "Credit Spreads ES & BTC- Channel Bottom Light blue"
+      ],
+      "warnNames": [
+        "Miner Composite - Channel Bottom",
+        "Lagging Miners - Channel Bottom / mid line if late cycle"
+      ]
+    },
+    "Conf T1S": {
+      "fired": 3,
+      "testable": 13,
+      "pct": 23,
+      "firedNames": [
+        "Total Crypto - RSI Diag Breakout (small / local bottom) (6/11)",
+        "BTC/GOLD Diagonal RSI Break W (7/13)",
+        "BTC/GOLD Diagonal Trendline Break (7/13)"
+      ],
+      "pendingNames": [
+        "Total 2 - Diagonal Break RSI W",
+        "Total Crypto - Channel Top Blue Breakout (small)",
+        "WGMI - Breakout Above Diag RSI",
+        "WGMI - Breakout Above Diag",
+        "ETH RSI- Diag Breakout Confirmation Weekly",
+        "Degen Chart - Diagonal Break",
+        "Total 2 - Diagonal Break W",
+        "USDT.D+USDC.D PA Diag close below",
+        "Others Amsterdam W RSI ≤ 39.64",
+        "OBV BTC - Bullish Breakout Confirmation"
+      ],
+      "warnNames": [
+        "ETH RSI- Diag Breakout Confirmation Weekly",
+        "Total 2 - Diagonal Break W",
+        "Others Amsterdam W RSI ≤ 39.64"
+      ]
+    },
+    "Leading": {
+      "fired": 2,
+      "testable": 4,
+      "pct": 50,
+      "firedNames": [
+        "Total Crypto - RSI <26.41, leads absolute bottom by 30-40 days (6/2)",
+        "SOPR 7 SMA ~ 1 (5/18)"
+      ],
+      "pendingNames": [
+        "Total Crypto - Channel Bottom black line",
+        "Degen Chart D RSI < 28.65"
+      ],
+      "warnNames": []
+    }
+  },
+  "needs": [
+    "Gate T1S +3 → 5/6 (pending: EL3, PA BTC Touch , Total Crypto - Below Black Channel Bottom, lower thin line, USDT.D- Black Hoz. Top =6.350 (2019 2.01) 2021 (4.86) 2018 .52 , BTC Quarterly Perf < -20%)",
+    "a conditional: E1E T2 1→2, OR Gate T1C 40%→43%",
+    "— OR any single E1E T1 alert (Path A override): Global Liquidity RSI 2W: <32.20, Global Liquidity - Black Line touch, ES/VIX - Red Trendline Alert…"
+  ],
+  "swing": {
+    "sopr": "2026-05-18",
+    "soprBottom": "2026-06-18",
+    "eh3": "2026-06-20",
+    "eh4": "2026-07-14",
+    "maxEH": 4,
+    "el2Fired": "2026-06-24",
+    "el3Fired": null,
+    "verdict": "EL3 not yet. With EH3 (6/20) + EH4 (7/14) already in, EL3 = SAFE bottom → go long. It is ALSO a Gate T1S fire, so it advances Path B on the same candle."
+  }
+};
+// LB_READ_END
+
+// =============================================================
+// EDIT ME — all view content lives in this DATA object.
+// Save the file, refresh the browser. No server needed.
+// =============================================================
+const DATA = {
+  asset: "BTC",
+  asOf: "2026-08-07",
+  // What to DO when in each state. Edit these to match your actual playbook.
+  // The verdict banner reads from this map by the state label sync.py computes.
+  actionByState: {
+    "Local Top Fully Confirmed":      "→ Maximum bear conviction. All confirms fired. Execute add per your plan (see Bearish Scenario).",
+    "Local Top Confirmed Strong":     "→ Bear regime confirmed (strong). Maintain position. Watch for full confirmation.",
+    "Local Top Confirmed Weak":       "→ Bear regime confirmed (weak). Initiate position per Bearish Scenario.",
+    "Local Top Pending Confirmation": "Prepare entry. Do NOT enter — waiting on BMSB Daily lost.",
+    "Local Top Close":                "Monitor closely. One signal from formal trigger.",
+    "Local Top Not In":               "No regime trigger. Monitor only."
+  },
+
+  // Next regime to flip into after the current one fully unfolds.
+  // For Local Top → Local Bottom (tracked via SOPR). Edit target as the cycle evolves.
+  nextRegime: {
+    label: "Local Bottom",
+    triggerNote: "SOPR",
+    triggerFiredDate: "2026-05-18",  // when the watch trigger fired (the actual kickoff)
+    targetDate: "2026-06-18"          // estimated arrival of the next regime
+  },
+  probability: {
+    bull: 0,
+    bear: 100,
+    note: "Local Top Fully Confirmed | Confirms:10/10 (9 strict, 1 loose) Gate:1 BMSB:1 | Synced 2026-07-29"
+  },
+  // Public notion.site share-to-web URLs.
+  notionDashboardUrl:   "https://flannel-eyebrow-e0c.notion.site/d57d32a625b44b078858164acca2f817?v=ee625a5356f947fc9a5a98a2a322de11",
+  notionSignalsViewUrl: "https://flannel-eyebrow-e0c.notion.site/d9cf2c50c50547f39c4196122ad5705c?v=2e8598518cd280199b88000c887456f3",
+  scenarios: {
+    bull: {
+      label: "Scenario 1 · Retest",
+      analog: "Retest entry · Mar/Apr 2022 local top",
+      thesisOneLiner: "In play if BTC HOLDS above $63,500 by 6/6. Then wait for a retest of the purple diagonal boundary or the BMSB (~.236, $71.4k) to enter short; SL just above the .382 at $73,500 (also just above BMSB + diag). Targets the $60k low → $58.2k → $51.5k. (Note: any daily close below $63,500 before then → exit, see Scenario 2.)",
+      charts: [
+        { src: "charts/BTC%20Current/BTCUSD_2026-06-04_18-37-45.png", caption: "Scenario 1 — retest: hold above $63.5k by 6/6, then short a retest of the purple diag / BMSB (~.236, $71.4k), SL $73.5k" }
+      ],
+      levels: [
+        { name: "In play if — holds by 6/6",          value: "above $63,500" },
+        { name: "Entry — retest diag / BMSB (~.236)", value: "$71,449" },
+        { name: "Stop — above .382 / BMSB / diag",    value: "$73,500" },
+        { name: "TP1 — the low (take-out)",           value: "$60,000" },
+        { name: "TP2 — liquidity-trail start",        value: "$58,209" },
+        { name: "TP3 — 50% wick (above .66/.705)",    value: "$51,480" }
+      ],
+      triggers: [
+        { label: "6/6 daily close ABOVE $63,500 → retest scenario confirmed in play",  status: "pending" },
+        { label: "Retest of purple diag / BMSB (~.236, $71.4k) → short, SL $73,500", status: "pending" },
+        { label: "Breaks the low → TP1 take-out $60k",                               status: "pending" },
+        { label: "TP2 $58.2k → TP3 $51.5k",                                          status: "pending" }
+      ],
+      notes: "Entry is the retest of the purple diagonal boundary or the BMSB (~.236, $71,449); SL just above the .382 at $73,500 (also just above the BMSB + diagonal). Targets: TP1 $60k (the low take-out), TP2 $58,209 (start of a liquidity trail), TP3 $51,480 (50% of a wick — above the .66/.705, the 2022 reversal zone). CAVEAT: with the SOPR timer landing 6/18–22, this retest may never set up — price could keep dropping instead (see Scenario 2)."
+    },
+    bear: {
+      label: "Scenario 2 · Dump",
+      analog: "Breakdown / straight dump · 2022 leg",
+      thesisOneLiner: "Triggers on ANY daily close below $63,500 — regardless of day. The breakdown dumps straight: short from $63,500, SL at the .111 ($65,137). Same targets as Scenario 1 — the $60k low → $58.2k → $51.5k, extending into the .666–.705 zone ($49k–$50.5k).",
+      charts: [
+        { src: "charts/BTC%20Current/BTCUSD_2026-06-04_18-37-26.png", caption: "Scenario 2 — straight dump: any daily close below $63.5k, short the breakdown (entry $63.5k, SL .111 = $65,137), runs to $51.5k and the .666–.705 zone ($49k–$50.5k)" }
+      ],
+      levels: [
+        { name: "Triggers on — any daily close",    value: "below $63,500" },
+        { name: "Entry — breakdown short",          value: "$63,500" },
+        { name: "Stop — .111",                      value: "$65,137" },
+        { name: "TP1 — the low (take-out)",         value: "$60,000" },
+        { name: "TP2 — liquidity-trail start",      value: "$58,209" },
+        { name: "TP3 — 50% wick (above .66/.705)",  value: "$51,480" },
+        { name: "Extended target zone",             value: "$49,003–$50,466" }
+      ],
+      triggers: [
+        { label: "Any daily close BELOW $63,500 → this scenario in play", status: "pending" },
+        { label: "Short the breakdown from $63,500, SL .111 ($65,137)", status: "pending" },
+        { label: "Breaks the low → TP1 take-out $60k",                  status: "pending" },
+        { label: "TP2 $58.2k → TP3 $51.5k → ext $49–50.5k",             status: "pending" }
+      ],
+      notes: "On ANY daily close below $63,500 (regardless of day), the straight-dump breakdown is in play: short from $63,500, SL at the .111 ($65,137). Targets shared with Scenario 1: TP1 $60k (the low take-out), TP2 $58,209 (liquidity-trail start), TP3 $51,480 (50% of a wick — above the .66/.705, the 2022 zone we hit before reversing), with extension to $49,003–$50,466. The SOPR timer 6/18–22 favors this path."
+    }
+  },
+
+  // -----------------------------------------------------------------
+  // POSITION SIZING & EXECUTION — rendered in the nested dropdown inside
+  // the Current Scenario section. Fill per-scenario size by running /trade-sizing.
+  // -----------------------------------------------------------------
+  positionSizing: {
+    onTrigger: [
+      "Confirm the DAILY CLOSE — not an intraday wick — before acting on the $63,500 trigger (it fires on any day's close). (Set that TradingView alert to 'Once Per Bar Close' on the Daily.)",
+      "Read the LIVE BMSB / diagonal off the chart. The printed $71,449 entry / $73,500 stop are a 6/4 snapshot and drift over days — trust the alert level, not the static number.",
+      "Run /trade-sizing (conviction haircut → positional multiplier → R:R gate) to set size before entry.",
+      "Place the full bracket immediately: entry + SL + TP1 $60k / TP2 $58.2k / TP3 $51.5k OCOs."
+    ],
+    scenarios: [
+      { name: "Scenario 1 · Retest (short ~$71.4k, SL $73.5k)", instrument: "[ASK BRENDAN — spot / options]", size: "[run /trade-sizing]", risk: "[% AUM]", expiry: "[if options: clear 6/18–22]" },
+      { name: "Scenario 2 · Dump (short $63.5k, SL $65.1k)",    instrument: "[ASK BRENDAN — spot / options]", size: "[run /trade-sizing]", risk: "[% AUM]", expiry: "[if options: clear 6/18–22]" }
+    ],
+    note: "Fill the per-scenario size by running /trade-sizing — don't free-hand it. If options, the expiry must clear the SOPR window (6/18–22) so you're not fighting theta into the target zone."
+  },
+
+  // -----------------------------------------------------------------
+  // ACTIVE TRADES — positions you currently hold.
+  // Each entry mirrors the BTC scenarios structure: bull/bear sub-scenarios with
+  // levels, triggers, charts, notes. Status options: "active", "trailing", "scaled".
+  // CONVENTION (8/10): no projected $ payout lines on active/plan cards — R multiples only
+  // (dollars live in /trade-sizing). Realized $ shows once, at close, in closedTrades.
+  // -----------------------------------------------------------------
+  activeTrades: [
+    {
+      ticker: "BTC",
+      direction: "long",
+      status: "active",
+      setupTag: "3-Tap Accum · PO1/PO2 fork",
+      entry: "8/14 — FILLED · 193 cts @ $62,600 (Limit 1, to the tick) · SL $62,150 resting · BE→$62,600 on TOUCH of the .382 $63,650 (alert set)",
+      plannedEntry: "Adds 96 + 96 cts at the 3rd tap (~Mon 8/17): PO1 limit $62,030 (rests once the .382 tags) OR PO2 by confirmation ONLY · add SL under the 3rd tap (set at placement) · add TPs $73,300 / $74,200",
+      sizeNote: "SIZED 8/13 · FILLED 8/14: 193 of 385 cts on (sizing basis: 74.58% util · acct $70,790) · remaining 96 + 96 = the 3rd-tap adds · live risk 450 pts to SL $62,150 (13.1R to TP1) — goes to ZERO at the BE move",
+      thesisOneLiner: "Same campaign, now LIVE: 193 cts filled at $62,600 — the 2nd-tap sweep front-run printed to the tick. The 8/14 HLC recount moved the map: the original 1st tap is disqualified, so this entry is the 2ND 4-hr tap, not the 3rd — a lower 3rd tap is still owed and time cycles put it ~Mon 8/17. Both configs are back on the table: PO2 if the 3rd tap lands at the .111 $62,835 (outside the demand zone), PO1 if it is the deeper 50%-fill at $62,030. The tell: a 4-hr close back inside the demand zone ($62,832–$62,266) = PO1 lean → exit the 193 early and reload at $62,030. Adds (96+96) go on at the 3rd tap — PO1 by resting limit, PO2 by confirmation only (the 8/13 lesson). TPs unchanged: $68,500 / $73,300 / $74,200.",
+      bull: {
+        label: "Live 193 + the 8/17 3rd-tap fork",
+        analog: "3-tap accumulation off the 4-hr demand zone · HLC tap-count governs — taps read off the HLC area, not candles (8/14)",
+        openPosition: true,
+        position: [
+          { k: "Order 1 — 2nd-tap sweep · FILLED 8/14", v: "193 cts @ $62,600 · SL $62,150 · TP $68,500", tone: "win" },
+          { k: "BE move — pre-committed · alert set",    v: "TOUCH of the .382 $63,650 → SL on the 193 → $62,600" },
+          { k: "Order 2 — PO1 3rd-tap reload · arms at the .382 tag", v: "96 + 96 cts limit @ $62,030 · SL under the tap low (set at placement) · TP $73,300 / $74,200" },
+          { k: "Order 2-alt — PO2 3rd tap · confirmation ONLY, no resting limit", v: "96 + 96 cts on a 1-hr close above the $63,650 BOS (or a clean LTF 3-tap accumulation above demand) · SL under the .111 tap (set at placement) · TP $73,300 / $74,200" },
+          { k: "Early exit — the PO1 tell",              v: "4-hr close inside the demand zone ($62,832–$62,266) → exit the 193 early · reload = the $62,030 limit" }
+        ],
+        levels: [
+          { name: "The .382 — BE trigger (TOUCH) + the confirmation BOS", value: "$63,650" },
+          { name: "The .111 — PO2 3rd-tap level (outside the zone)",      value: "$62,835" },
+          { name: "PO1 50%-fill inefficiency — reload/add limit",          value: "$62,030" },
+          { name: "Demand zone (4-hr) — top / bottom",                     value: "$62,832 – $62,266" },
+          { name: "SL — live on the 193, below the zone",                  value: "$62,150 → BE $62,600 after the .382 touch" },
+          { name: "3rd-tap window — time cycles",                          value: "~Mon Aug 17" },
+          { name: "R @ fill — $62,600 / SL $62,150 (450 pts)",             value: "13.1R to TP1 $68,500 · 23.8R to TP2" },
+          { name: "TP1 / TP2 / TP3 — unchanged",                           value: "$68,500 × 193 · $73,300 × 96 · $74,200 × 96" },
+          { name: "P03 short TPs — stall at TP1 only",                     value: "$62,000 / $61,700 / $61,500 · 1-min exit trail $62,300" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/13 — P02 stopped $63,145 (−$1,408.55 pre-fees, all 394 cts) → archived with the loss on record; this card resets to the P01 hunt", status: "met" },
+          { label: "2. ✔ 8/13 — SL LOCKED: $62,150 (below the demand zone · revised from $62,200 pre-placement) · TV alert at the line — set at write time", status: "met" },
+          { label: "3. ✔ 8/13 — SIZED: 385 cts (74.58% util · acct $70,790) · orders = the TP brackets 193/96/96 (no entry-half split — Brendan 8/13) · gates pass: 2.45% acct / ≈0.55% AUM", status: "met" },
+          { label: "4. ✔ 8/13 — Limit 1 RESTING: 193 cts @ $62,600 · SL $62,150 · TP $68,500 · decision: placed ahead of structure — a sweep can't be alarm-chased, and the ladder allows this one estimated limit", status: "met" },
+          { label: "5. ✔ 8/14 — FILLED: Limit 1, 193 cts @ $62,600 to the tick — the drawn path PRINTED (the LTF PO1 distribution was the 3rd LTF tap into the demand midline = tap 2 of the HTF Wyckoff) → card GRADUATED to Active", status: "met" },
+          { label: "6. ✔ 8/14 — HLC RECOUNT: the original 1st tap disqualified → this entry = the 2ND 4-hr tap · a lower 3rd tap is owed, time cycles say ~Mon 8/17 · PO1 AND PO2 both back on the table · Limit 2 (96+96 @ ~$63,000 midline) CANCELLED — superseded by the 3rd-tap add plan", status: "met" },
+          { label: "7. TOUCH of the .382 $63,650 → move SL on the 193 to BE $62,600 AND place the PO1 reload limit 96+96 @ $62,030 (one alert fires both actions)", status: "pending" },
+          { label: "8. THE TELL: a 4-hr close inside the demand zone ($62,832–$62,266) → PO1 lean → exit the 193 early · the $62,030 limit is the reload", status: "pending" },
+          { label: "9. PO2 add — confirmation ONLY: a 1-hr close above the $63,650 BOS (re-mark the BOS lower if the PO1 tap prints first) or a clean LTF 3-tap accumulation above demand → 96+96 · SL under the 3rd tap · NO resting limit at the .111 — that is the 8/13 stop-out shape", status: "pending" },
+          { label: "10. TV alerts at write time: .382 $63,650 touch · 4-hr close inside the zone · 1-hr close above $63,650 — written lines BINDING", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — HTF (daily): thesis unchanged",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_14-35-23.png", caption: "HTF — daily (8/13): the range & targets, unchanged. TP ladder $68,618 (the .49) / $73,343 (the .666) / $74,498 (the .705) with the deviation band above — the card TPs ($68,500 / $73,300 / $74,200) are the front-runs, the CARD governs. Below price: the .382 $63,269 · the .85 $62,725 · the .49 $62,269 — the down-leg projection points at $62,722.5. Bybit chart — card numbers govern." },
+            body: "The HTF read carries over from the P02 whole: after the HTF accumulation P03, liquidity trails sit on BOTH sides of the range, there is NO HTF distribution, and the bias is accumulation — the targets above get taken BEFORE lower, with the weekly still a bear market and time-cycle lows expected in October. The stop-out changed the ENTRY structure, not the thesis: the deeper tap into the demand zone is one of the ways the same move starts."
+          },
+          {
+            title: "The read — MTF (4-hr): delivery into the demand zone",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_14-45-11.png", caption: "MTF — 4-hr (8/13): the new ladder off the $65,573.4 swing — the .666 $63,318 / .705 $63,190 / .786 $62,924 / .82 $62,813, with the demand zone shaded below the .82 and the −0.3 $52,485 line beneath. Time-cycle arcs along the bottom. The CARD zone numbers govern: top $62,832 · bottom $62,266 (Brendan 8/14). Bybit chart — the CARD governs." },
+            body: "The P02 broke exactly the way the ladder priced it: price swept the old .618/.666/.705 cluster, took the $63,145 stop, and delivered into the shelf that caps the 4-hr demand zone. The trade now is the P01/P02 version of the same 3-tap: the zone got tapped, swept, and the front-run filled — the fork above (the recount section) is what resolves next."
+          },
+          {
+            title: "The read — LTF (1-hr): the entry that printed",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_14-48-23.png", caption: "LTF — 1-hr (8/13): pre-fill structure. The 1.0 $63,189 lost on the flush to the 1.3 $62,806, then reclaimed. Demand zone shaded below $62.8k. Bybit chart — the CARD governs. (8/14: Limit 1 filled off this map — see the recount section for the updated fork.)" },
+            body: "This was the chart the entry was hunted on, and it delivered: the LTF distribution wicked the 5-min BOS three times on the 1-hr, led into the 2nd tap, and the 3rd LTF tap — the 1-hr PO1 — landed exactly on the demand midline + Wyckoff deviation zone, which was tap 2 of the HTF structure. Limit 1 filled at $62,600 to the tick. Not luck: it was the mapped confluence. From here the 1-hr is watched for the 8/17 3rd-tap sequence — the fork rules in the recount section govern."
+          },
+          {
+            title: "The path — what I'm looking for (visual reminder)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_15-01-49.png", caption: "LTF — 1-hr PATH VIEW (8/13): the visual playbook, NOT a prediction. 8/14: this path PRINTED — the 2nd-tap sweep to the 1.3 filled Limit 1 at $62,600. Retained for the record; the live expectation is now the 8/17 fork (recount section). The written levels and rules govern — the path invalidates; the trade doesn't." },
+            body: "USAGE RULE — this section exists so the expectation is labeled AS an expectation. 8/14 UPDATE: the drawn sequence played out exactly — sweep, fill, bounce off the midline. That validates the METHOD, not the next guess: the new expectation (3-tap distribution into the .382, dump into the Monday 3rd tap) lives in the recount section under the same rule — entries fire on WRITTEN rules only, the tape governs, and if price prints a different shape that still satisfies the written rules, the trade is ON and the path is redrawn."
+          },
+          {
+            title: "The recount + the 8/17 fork (8/14)",
+            body: "THE DISCOVERY: taps read off the HLC area, not candles — night-and-day clearer. On HLC the original 1st tap is DISQUALIFIED, so the count is: one sure tap, a sneaky maybe-2nd, and the entry tap — making the fill the 2ND 4-hr tap, not the 3rd. A lower 3rd tap is owed, and the time-cycle alignment from the last 3-tap puts it ~Mon Aug 17. THE FORK: (a) 3rd tap at the .111 $62,835, outside the demand zone → PO2 — preferred lean, because a 3rd entry INTO the zone would demand a 100%+ move of the zone; (b) 3rd tap at the 50%-fill $62,030 → PO1 — a new low under the zone; (c) deep flush toward the old $61k — unlikely with 2 taps already in, treated as stand-down territory. THE TELL: a 4-hr close back inside the zone ($62,832–$62,266) = PO1 lean → exit the 193 early (BE protects it by then) and the $62,030 reload limit does the work. THE EXPECTED PATH INTO IT: a 3-tap distribution into the .382 $63,650 (also the range .5 and the 1-hr BOS), likely a wick above, then the dump into the 3rd tap. ENTRY DISCIPLINE AT THE FORK: PO1 = resting limit (front-running a deep tap is the ladder's job — it is how this fill worked); PO2 = confirmation ONLY (a resting limit at the .111 is exactly the 8/13 stop-out shape). KNOWN COST, ACCEPTED: BE is a TOUCH trigger — a PO2 tap wicking below $62,600 BEs the long out flat before the bounce (the .111 clears BE by only ~235 pts); the reload limit + confirmation path re-establish the position if that happens."
+          },
+          {
+            title: "P03 short at TP1 — carried from the P02",
+            body: "Unchanged. Armed ONLY if price stalls inside the $68.5k zone — a clean clear that keeps moving = the idea is GONE. The dump either front-runs the ~62k trail (written TPs $62,000 / $61,700 / $61,500) or extends to the HTF .666 $60,673 (context only — the written TPs govern). Entry: the BOS on the distribution, on the lowest timeframe where it is TRUE structure. SL above the distribution high. 1-min exit trail: close back above $62,300. MECHANICS: on CDE a short in the SAME contract nets against whatever long is still riding — size it knowing it reduces/hedges the long."
+          },
+          {
+            title: "Trail & exits",
+            body: "TPs unchanged: $68,500 × 193 · $73,300 × 96 · $74,200 × 96. BE — RESOLVED 8/14: TOUCH of the .382 $63,650 → SL on the 193 to $62,600 (replaces the old re-anchor question; alert set). Early exit — the PO1 tell (4-hr close inside the zone) is a LIVE rule alongside BE, not replaced by it. Add SLs: under whatever the 3rd tap prints — under the .111 tap for PO2, under the tap low for PO1 — hard number set at placement, TV alert moves with it. The BMSB trail framework carries from the P02 (4-hr close below the BMSB = 50% out · distribution back above = rest out · 8-hr close below = FLAT, no discretion) — [ASK BRENDAN — confirm it still governs unchanged]. EXCHANGE MECHANICS (8/14): CDE has a daily maintenance hour (~5–6pm ET) — stops and TPs CANNOT fill during it while global BTC keeps trading; the reopen gaps, and a gap through the SL fills with slippage. Alerts keep firing off the chart regardless — an alert firing is not an order filling."
+          }
+        ],
+        notes: "GRADUATED 8/14 on the Limit 1 fill. LA travel Sat 8/15–Tue 8/18: the whole plan is resting orders + close-triggers — nothing needs a live chase. Conventions: R terms only on cards ($ live in /trade-sizing) · written invalidation lines BINDING, TV alerts at write time."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Exits pre-written — the fork resolves Monday and the rules already know what to do",
+        levels: [
+          { name: "SL — live on the 193",            value: "$62,150 → BE $62,600 after the .382 touch (alert set)" },
+          { name: "Early exit — the PO1 tell",       value: "4-hr close inside $62,832–$62,266 → exit the 193 · reload limit $62,030" },
+          { name: "PO2 rip-through guard",           value: "NO resting limit at the .111 — confirmation only (the 8/13 lesson)" },
+          { name: "3rd-tap failure",                 value: "closes back below the midline after the 3rd tap is in = the read is wrong — adds OFF" },
+          { name: "Deep-flush stand-down",           value: "a flush through $62,030 toward the old $61k = beyond the map → stand down, re-map, don't average" },
+          { name: "Trail — carried from the P02",    value: "4-hr close < BMSB = 50% out · 8-hr close below = FLAT [confirm unchanged]" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "The 3rd tap prints but price closes back below the midline → adds OFF — the early-exit rules govern the 193", status: "pending" },
+          { label: "Price flushes through the $62,030 reload toward $61k → stand down and re-map — do NOT chase or average the flush", status: "pending" }
+        ],
+        notes: "Position LIVE as of 8/14: 193 cts @ $62,600 · SL $62,150 · TP $68,500. The BE touch-move is deliberate — a PO2 wick below $62,600 BEs the long out flat before the bounce; accepted cost, the reload + confirmation path re-establish it."
+      }
+    },
+  ],
+  // -----------------------------------------------------------------
+  // TRADE PLANS — setups you're watching, not yet entered.
+  // Same structure as activeTrades. Status: "watching".
+  // -----------------------------------------------------------------
+  tradePlans: [
+    {
+      ticker: "CLSK",
+      direction: "long",
+      status: "watching",
+      plannedEntry: "$12.02–$12.14 — fib confluence + the −37.5% measured-move landing",
+      sizeNote: "[run /trade-sizing]",
+      thesisOneLiner: "CLSK repeating its OWN Oct-2025 fractal. Last cycle: a −34.7% dump ($13.29 → $8.61) into the fib cluster, BMSB confirmation, then the run to $23.00 — just under the 1.3 extension ($24.20). Now the same structure one cycle up: the −37.5% measured move off the ~$19.2 top lands at $12.02, right on the $12.14 fib confluence. Long the $12.02–$12.14 zone, SL $11.07 (below the .618 at $11.19), targeting $31.07 just under the 1.3 ($32.61) — time projection ~Sep 8 '26.",
+      scenarios: [
+        {
+          label: "Long",
+          side: "bull",
+          tag: "Watching",
+          analog: "CLSK — Oct 2025 (its own fractal, one cycle earlier)",
+          fractalLabel: "CLSK — Oct '25 analog",
+          currentLabel: "CLSK — live setup (7/14)",
+          current:  { src: "charts/CLSK/CLSK_2026-07-14_18-40-32.png", file: "charts/CLSK/CLSK_2026-07-14_18-40-32.png", caption: "CLSK live (7/14) — the −7.17 (−37.5%) measured move off the ~$19.2 top lands at $12.02, on the $12.14 fib confluence. Entry $12.02–$12.14, SL $11.07 (below the .618 at $11.19), target $31.07 / 1.3 = $32.61, projection ~Sep 8 '26. BMSB reclaim = confirmation." },
+          fractals: [
+            { src: "charts/CLSK/CLSK_2026-07-14_18-40-46.png", file: "charts/CLSK/CLSK_2026-07-14_18-40-46.png", caption: "CLSK Oct 2025 — same structure one cycle earlier: −4.68 (−34.7%) dump into the .382/.5237/.618 cluster, BMSB confirmation, then the run to $23.00 just under the 1.3 ($24.20)." }
+          ],
+          levels: [
+            { name: "Entry zone — fib confluence + measured-move landing", value: "$12.02 – $12.14" },
+            { name: "Stop",                                    value: "$11.07 (below the .618 at $11.19)" },
+            { name: "Confirmation",                            value: "BMSB reclaim" },
+            { name: "Target — just under the 1.3",             value: "$31.07 (1.3 = $32.61)" },
+            { name: "Time projection",                         value: "~Tue Sep 8 '26" },
+            { name: "R:R — $12.14 entry / $11.07 stop",        value: "17.7 : 1 to $31.07" },
+            { name: "Analog (Oct '25)",                        value: "−34.7% dump → BMSB reclaim → $23.00 vs the 1.3 at $24.20" }
+          ],
+          triggers: [
+            { label: "Price tags the $12.02–$12.14 entry zone (7/14 low was $12.80 — not filled; closed +8.8% at $13.45)", status: "pending" },
+            { label: "Run /trade-sizing before entry", status: "pending" },
+            { label: "BMSB reclaim → confirmation of the turn", status: "pending" },
+            { label: "Invalidation — below $11.07", status: "pending" },
+            { label: "Target $31.07 (just under the 1.3 at $32.61), ~Sep 8 '26", status: "pending" }
+          ],
+          notes: "[ASK BRENDAN — entry style: resting limits in the $12.02–$12.14 zone vs waiting for the BMSB confirmation. Today's +8.8% bounce came off $12.80 — the zone hasn't printed yet.]"
+        }
+      ]
+    },
+  ],
+
+  // -----------------------------------------------------------------
+  // CLOSED TRADES — the archive. When a trade finishes, MOVE it here from
+  // activeTrades (don't delete) with final P&L + post-mortem.
+  // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
+  // -----------------------------------------------------------------
+  closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-08-13",
+      outcome: "loss",
+      pnl: "−$1,408.55 pre-fees — SL $63,145 hit 8/13, ALL 394 cts (197 @ $63,350 = −$403.85 · 99+98 BOS brackets @ $63,655 = −$1,004.70) · exact fills + fees TBD at the CFM statement upload",
+      postmortem: "Brendan's postmortem written in Notion 8/13 — that is the convention (postmortems live in Notion; /monthly-close pulls the trade info from there at the full recap). Lesson carried to the P01 rework on the Trade Plans card: 3rd-tap entry only AFTER a confirmed close above the midline, not before — the ladder said a deeper tap = the P01 hunt, and that is exactly what printed.",
+      setupTag: "3-Tap Accum · P02",
+      entry: "8/12 — FILLED, limit half: 197 cts @ $63,350 avg (P02 $63,441.2 limit) · 8/13 11:09 — BOS half PLACED: 99 + 98 cts @ $63,655 limit (TPs $73,300 / $74,200) · 8/13 — SL UNIFIED: all 3 orders $63,145 · 8/13 — STOPPED OUT: SL $63,145 HIT — ALL 394 cts (the 99+98 BOS brackets had filled @ $63,655 first)",
+      plannedEntry: "half LIMIT $63,200 (P02 $63,441.2) · SL $62,725 · half on BOS > $63,619 · TPs $68,500 / $73,300 / $74,200",
+      sizeNote: "0.5 + 0.5 split · limit half ON: 197 cts (1.97 BTC) · BOS half PLACED 8/13: 99 + 98 cts @ $63,655 · TP alloc 197 / 99 / 98 cts (394 total)",
+      thesisOneLiner: "STOPPED OUT 8/13 at $63,145 — see the postmortem. The original read: long the 3rd tap of an accumulation inside the deviation limit — the structure the 8/10 post-mortem demanded. Half filled 8/12 on the resting limit; the BOS half was placed 8/13 as two brackets — 99 + 98 cts @ $63,655 — and the SL was then UNIFIED: all 3 orders at $63,145, below the 2nd-tap wick ($63,180), where the P02 structure actually breaks; a deeper tap = the ladder's P01 hunt, not a hold. TPs $68,500 / $73,300 / $74,200. The 4-hr BMSB trails everything — an 8-hr close below it and the trade is over.",
+      bull: {
+        label: "The plan — half on, half pending the BOS",
+        analog: "3-tap accumulation inside the deviation limit · the fill IS structure (a P01 read)",
+        openPosition: true,
+        position: [
+          { k: "Order 1 — P02 half · FILLED 8/12",   v: "197 cts @ $63,350 · SL $63,145 · TP $68,500", tone: "win" },
+          { k: "Order 2 — BOS bracket · PLACED 8/13", v: "99 cts @ $63,655 · SL $63,145 · TP $73,300" },
+          { k: "Order 3 — BOS bracket · PLACED 8/13", v: "98 cts @ $63,655 · SL $63,145 · TP $74,200" },
+          { k: "BE trigger — the .382 → SLs to BE", v: "$64,075" },
+          { k: "Failsafe — 8-hr close < 4-hr BMSB",  v: "FLAT" }
+        ],
+        levels: [
+          { name: "Entry 1 — P02 limit (half) — FILLED",      value: "$63,441.2 (the .111)" },
+          { name: "P01 original — new-low limit, not filled", value: "$63,200" },
+          { name: "Entry 2 — BOS brackets PLACED 8/13",        value: "99 + 98 cts @ $63,655 (BOS trigger was $63,619)" },
+          { name: "SL — UNIFIED 8/13, ALL 3 orders (394 cts)", value: "$63,145 (below the 2nd-tap wick $63,180)" },
+          { name: "BE trigger — the .382 prints → SLs to BE", value: "$64,075" },
+          { name: "TP1 — deviation-limit midpoint front-run", value: "$68,500 · 197 cts" },
+          { name: "TP2 / TP3",                                value: "$73,300 · 99 cts / $74,200 · 98 cts" },
+          { name: "P03 short TPs — stall at TP1 only",        value: "$62,000 / $61,700 / $61,500" },
+          { name: "P03 exit trail — 1-min close back above",  value: "$62,300" },
+          { name: "Trail alerts ARM — range high, or clear 4-hr close > BMSB", value: "$64,480 — NOT armed yet" },
+          { name: "Trail — 4-hr close < BMSB",                value: "50% out · 8-hr close below = FLAT" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/10 — book flat, margin free", status: "met" },
+          { label: "2. ✔ 8/12 — TV alerts set: $63,619 BOS · $64,075 BE (BMSB trail alerts NOT yet — they arm at step 6)", status: "met" },
+          { label: "3. ✔ 8/12 — half FILLED: 197 cts @ $63,350 avg · SL $62,725 resting", status: "met" },
+          { label: "4. ✔ 8/13 11:09 — BOS half PLACED @ $63,655: 99 cts (SL $63,200 · TP $73,300) + 98 cts (SL $63,200 · TP $74,200) · filled 197 keeps SL $62,725 · 1 ct short of plan (venue order glitch — placed 40, edited up to 98)", status: "met" },
+          { label: "5. ✔ 8/13 — SL UNIFIED: all 3 orders → $63,145 (below the 2nd-tap wick $63,180) · one thesis, one line — deeper tap = ladder's P01 hunt, not a hold", status: "met" },
+          { label: "6. ✘ 8/13 — SL $63,145 HIT — stopped out, loss booked. Re-entry = the ladder’s P01 hunt → see the Trade Plans card (P01 rework)", status: "failed" },
+          { label: "6. The .382 $64,075 prints → ALL SLs to BE (each order to its own entry: $63,350 / $63,655 / $63,655)", status: "pending" },
+          { label: "7. Price clears the range high $64,480 — or a clear 4-hr close above the BMSB (≈ same time) → ARM the BMSB trail alerts", status: "pending" },
+          { label: "8. TP1 $68,500 → 197 cts off — P03 short hunt ONLY on a stall in the zone (clean clear = idea gone)", status: "pending" },
+          { label: "9. TP2 $73,300 → 99 cts off · TP3 $74,200 → final 98 cts", status: "pending" },
+          { label: "10. Trail: 4-hr close < BMSB = 50% out · distribution back above = rest out · 8-hr close below = FLAT", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — HTF (daily): liquidity trails & accumulation bias",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-12_14-37-23.png", caption: "HTF — daily (8/12): the range & targets. Order lines on: entry $63,360.7 · SL $62,722.6 · TP1 $68,618 at the .49 · TP2/TP3 $73,343 / $74,499 at the .666/.705 with the deviation-limit band shaded above. Chart lines sit at the raw fibs; the card TPs ($68,500 / $73,300 / $74,200) are the front-run versions — the CARD governs. Targets originally derived from the fractal — structure and the 4-hr BMSB trail govern the exit, not the analog." },
+            body: "After a HTF accumulation P03, liquidity trails built on BOTH sides of the range. We expected the top of the range to be taken and front-ran it — so with liquidity resting on both sides, the expectation is an explosive move (one side or both). There is NO HTF distribution → the bias is accumulation; a 4th tap back at the HTF .666 ($60,673) stays possible before the move higher. BIAS: long, to take out the targets above BEFORE lower — the weekly is still a bear market, with time-cycle lows expected in October.<br><br>TARGETS: first the MIDPOINT of the Wyckoff range (TP1 $68,500 front-runs it). A P03 flush inside that zone is possible before continuation — the two-sided liquidity trails are the trigger. Ways it plays: ① flush to the HTF .666 first, THEN take the higher targets · ② into the deviation zone between the 0 and the −.3 ($67,251–$69,914), print a small-TF manipulation distribution, then dump — to the .666, or front-running it to take just part of the ~62k liquidity trail — before going higher. That dump would be FAST; the P03 short section below pre-defines what to do."
+          },
+          {
+            title: "The read — MTF (4-hr): the 3-tap P02 in the abundance pocket",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-12_14-29-07.png", caption: "MTF — 4-hr (8/12): the setup. The full ladder off the $64,477.6 swing — .236/.382 overhead, the accumulation taps landing in the .618/.666/.705 cluster ($63,476 / $63,318 / $63,190), and the SL anchor below the .85 ($62,715 here; card $62,725). Time-cycle arcs along the bottom; 15-min and 5-min BOS levels marked." },
+            body: "The MTF printed distribution structure that delivered price down to the MIDDLE of the two liquidity trails — the decision zone: the abundance pocket (the .666 area) + the MTF range from that distribution, inside the deviation limit. There, a 3-tap P02 is printing exactly where expected, into a 4-hr time-cycle low. THIS is what starts the HTF move higher.<br><br>ENTRY 1 DERIVATION — 50% wick-fill rule: the limit is the 50% fill of the 4-hr wick of the 3rd tap → $63,441.2 (the .111). The fill is structural, not anticipation — one of three P01 reads (the LTF 1-hr 3rd tap · the early 4-hr 3rd tap · the on-time tap in the window), satisfying the 8/10 wait-for-structure rule. R math: plan 716 pts ≈ 7.1R to TP1 · actual fill $63,350 → 625 pts ≈ 8.2R.<br><br>ALTERNATIVES: ① it plays as a P01 instead — the trendline — a tap around the 63k level and THEN the move starts; the ladder covers this (one new .5 trendline limit if the half stops out) · ② the 3-tap builds into a 3-tap DISTRIBUTION → lower. Less likely: the 2nd tap is lower than the 1st, reading more like an equal high — confluence that we eventually go higher."
+          },
+          {
+            title: "The read — LTF (1-hr): confirmation state & the tell",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-12_14-30-25.png", caption: "LTF — 1-hr (8/12): the entry. 3-tap sequence completing into the .111 $63,441.2 (the P02) above the 1.0 $63,198.9, with the 3rd tap landing in the time-cycle window (arcs — Wed 8/12 18:00 marker). 5-min BOS $63,619 drawn overhead for the confirmation half. Bybit chart — card numbers govern." },
+            body: "Same deal one level down — waiting on the 3rd tap to CONFIRM. Possibly already in (the 50% wick fill occurred), but the 1-hr wick wasn't as convincing as it should be, and if the time cycle is exact there is more time left in the window.<br><br>THE TELL: holding the .111 ($63,441) is the first sign we go higher NOW. We have NOT held it — already 3 one-hour closes under it. A 4-hr CLOSE below the .111 → skeptical the low is in → leans P01 (lower first) as the more likely path. That's the world the split entry is built for: no BOS, no second half — and the ladder re-arms the limit off the trendline if the filled half stops."
+          },
+          {
+            title: "P03 short at TP1 — arming & mechanics",
+            body: "Armed ONLY if price stalls inside the $68.5k zone — a clean clear that keeps moving = the idea is GONE. Trigger context from the HTF read: the two-sided liquidity trails — the dump either front-runs the ~62k trail (the written TPs $62,000 / $61,700 / $61,500) or extends to the HTF .666 $60,673 (context only — the written TPs govern). Entry: the BOS on the distribution, taken on the LOWEST timeframe where it's TRUE structure (break + close through the level). SL above the distribution high. TPs and the 1-min $62,300 exit trail are on the Key Levels sheet.<br><br>MECHANICS: on CDE a short nets against whatever long is still riding (the TP2/TP3 remnants) — size it knowing it reduces/hedges the long."
+          },
+          {
+            title: "Trail & ladder — exit rules in full",
+            body: "SL — UNIFIED 8/13 at $63,145, all 3 orders (below the 2nd-tap wick $63,180, where the P02 structure actually breaks). One thesis, one line: the original split (197 on the .85 $62,725, BOS brackets on $63,200) died on review — $63,200 sat INSIDE the still-valid retest pocket ($63,180–$63,251), and holding the 197 to $62,725 post-BOS meant riding a dead read lower. A deeper tap that could be a P01 3rd tap is NOT a hold — it's the ladder's re-entry, on its own structure.<br><br>BE: once the .382 ($64,075) prints, ALL SLs move to breakeven — each order to its own entry ($63,350 / $63,655 / $63,655).<br><br>ARMING: the BMSB trail alerts are NOT set at entry — arm them once price clears the range high ($64,480), OR on a clear 4-hr close above the BMSB (the two should land around the same time; either one arms). Until then the hard SL $63,145 (BE after the .382) is the only resting exit.<br><br>TRAIL: a 4-hr close BELOW the BMSB → exit 50%. Exit the other 50% on a distribution structure printing back ABOVE the BMSB. If that never prints: an 8-hr close under the BMSB = ABSOLUTE full close, failsafe — no discretion.<br><br>LADDER if the position stops out at $63,145: loss booked, back to hunting a P01 — one new .5 limit estimated off a trendline is allowed. The ladder is the plan — improvising past it isn't."
+          },
+          {
+            title: "Experiment flag — limit-estimate vs BOS-only",
+            body: "This trade deliberately tests limit-estimate entries against waiting for the BOS. The lesson MIGHT be wait-for-BOS-and-skip-limits, but that has to be learned from fills, not assumed — the alternative is always waiting for the BOS and market-ordering. Log the verdict (limit fill quality vs the BOS price) in the postmortem either way."
+          }
+        ],
+        notes: "Graduated from Trade Plans 8/12 on the first fill — levels set 8/11 off the forming 3-tap. Conventions: R terms only on cards ($ live in /trade-sizing) · pre-written invalidation lines BINDING, TV alerts at write time · no alarm entries — resting limits / defined close-triggers only."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Stops + the BMSB trail — exits are pre-written",
+        levels: [
+          { name: "Hard stop — all 3 orders, unified 8/13", value: "$63,145" },
+          { name: "Stop — UNIFIED, all 3 orders (394 cts)", value: "$63,145 (below the 2nd-tap wick $63,180) · BE after $64,075" },
+          { name: "SLs → BE — after the .382 prints",     value: "$64,075" },
+          { name: "Trail — 4-hr close < BMSB",            value: "50% out" },
+          { name: "Trail alerts",                         value: "NOT armed — arm at $64,480 or a clear 4-hr close > BMSB" },
+          { name: "Failsafe — 8-hr close < BMSB",         value: "FLAT — no discretion" },
+          { name: "Ladder — if the half stops out",       value: "one new .5 trendline limit allowed · BOS stays entry 2" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "SL $63,145 hits → loss booked (~$1.4k worst case, all 394 cts) · re-arm per the ladder — improvising past it isn't the plan", status: "met" },
+          { label: "8-hr close under the 4-hr BMSB at ANY point → absolute close, no discretion", status: "pending" }
+        ],
+        notes: "Until the BOS confirms, exposure is the filled half only — half-size max."
+      }
+    },
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-08-10",
+      outcome: "loss",
+      pnl: "−$1,692 pre-fees — auto-SL $64,600 hit 8/10 morning (393.5 pts × 4.3 BTC · 0.54% of AUM) · exact fill + fees TBD at the CFM statement upload",
+      postmortem: "STOPPED OUT 8/10, ~1 hr after fill — price dumped from the open, the exact opposite way. WB1 post-mortem (8/10 daily): the flip was bias looking for an excuse — the 65.8k short was already over (accumulation printed above the .666 target, held on hope), and the 2018 fractal match was recruited to justify the long. Context mismatch: both comparators followed a LARGE expansion move and held the BMSB; 2026 is a grind-up — and both still printed an accumulation + liquidity trail before turning, which the current tape never did. The LTF→HTF 3-tap distribution read at the .666 was CORRECT — the structure said down; the fractal overrode it. Done right: risk 0.54% of AUM (2.09% of the acct), SL honored — saved ~4x as price kept dumping — no re-entry improvisation (knife-catch impulse checked against structure, not fractals), and the loss fully funded by the short's +$2,647. RULES OUT OF THIS: ① a fractal match requires timeframe + regime (expansion / range / drawdown) + the preceding move — else it is not a match; ② real setups only — no structure, no trade; ③ pre-written invalidation lines are BINDING, same class as SLs/TPs (the short's .382-reclaim exit was written and then not taken 8/1–8/4 — four exits offered, ~+$7.6k at the written line vs +$2.6k actual); ④ a book flip requires a nameable HTF Wyckoff accumulation/distribution — otherwise exit to flat is the only move; ⑤ the next long is defined on SYSTEM terms (M&M .666 + Wyckoff deviation limit + liquidity trail) — see the Trade Plans card.",
+      entry: "8/10 ~6:58am — FILLED 430 cts LONG @ $64,993.51 avg (Lane A · plan $64,968 · 25.5 pts slip) · SL $64,600 ALL cts · TPs RESTING: 258 @ $67,650 · 107 @ $71,485 · 65 @ $73,355 (OCO LIMITs · entered TP2/TP3 differ slightly from the drafted $71,590/$73,350 — ENTERED levels govern) · BE after TP1 = $64,994 · SL HIT $64,600 later that morning — dump from the open",
+      plannedEntry: "gate PASSED (no 4-hr close below the BMSB by 7am) · original locked plan: entry $64,968 entry $64,968 · or the $65,200 retest · or the runaway path (well above without a fill, ~$66k+: wait for the 1-hr BMSB touch, tight SL below it) · SL $64,600 one-way ratchet · TPs $67,650 / $71,590 / $73,350 split 60/25/15 · ARMS at 7am 8/10 if NO 4-hr closes below the BMSB overnight",
+      sizeNote: "430 cts (4.3 BTC · $279,586 ntl · CDE · exp 12/20/30) · margin 75% of acct · liq est $60,304 · risk at SL −$1,692 (2.09%) · TP ladder +$6,854 / +$6,946 / +$5,435 · full run ≈ +$19,235 · TP1-then-BE +$6,854 · NO ADDS before TP1 (margin headroom) · pre-fill scenarios: at $64,968/$64,600 ($3.68/ct): 2% = 440 cts ($286k ntl · $28.6k margin) · 1% fallback = 220 · at the $65,200 retest ($6.00/ct): 2% = 270 · 1% = 135 · 75% util (935 cts, 4.2% risk) priced but OUTSIDE the tactical band",
+      thesisOneLiner: "STOPPED OUT 8/10 — see the postmortem. As planned: the 8/7 flip-long checklist GRADUATED 8/9 — levels locked. Distribution keeps failing to breach the 4-hr BMSB; if the overnight holds it (no 4-hr closes below by 7am), the book flips long. Entry $64,968 direct, or the $65,200 retest if price runs first (.236 / .382 / above-.666 paths — pre-decide which level converts before 7am). SL $64,600, tighten-only ratchet under any clear pre-7am higher low. TPs locked and RESTING from entry: 60% at $67,650 (bottom of topping zone 1 — fills before the zone rejects; SL→BE on fill), 25% at $71,590, 15% at $73,350, each upper TP with a pre-committed zone-override rule instead of live distribution-reading. Follow-through has been weak — that is WHY the split front-loads, not why the targets shrink: TP1-then-BE worst case still banks ≈ +4.4R on the whole position.",
+      bull: {
+        label: "The plan — locked levels, pre-set orders",
+        analog: "2018 Wyckoff re-accumulation (.666 anchor) → 2026 (.49 anchor) — comparator unchanged from the 8/7 checklist",
+        position: [
+          { k: "Entry A — direct",            v: "$64,968 · SL $64,600 = 368 pts (0.57%) · $3.68/ct" },
+          { k: "Entry B — the $65,200 retest", v: "SL default $64,600 = 600 pts · $6.00/ct · a clear pre-7am higher low → SL under THAT wick instead — tighten only, NEVER widen for the higher entry" },
+          { k: "Entry C — runaway (~$66k+ without a fill)", v: "NO chase — wait for the 1-hr BMSB touch → enter AT the touch · tight SL just below the touch wick · risk/ct = entry − wick low; re-derive contract count for the same 1–2% risk $ at fill" },
+          { k: "Sizing @ A ($81k acct, 10x)",  v: "1% = 220 cts ($143k ntl · $14.3k margin) · 2% = 440 ($286k · $28.6k) · 75% util = 935 ($607k · $60.7k margin · risk $3,441 = 4.2% — needs an explicit tier call)" },
+          { k: "Sizing @ B",                   v: "1% = 135 cts · 2% = 270" },
+          { k: "TP1 — 60% @ $67,650",          v: "+$26.82/ct · 7.3R (A) / 4.1R (B) → ALL SLs to BE on fill", tone: "win" },
+          { k: "TP2 — 25% @ $71,590",          v: "+$66.22/ct · 18.0R (A)", tone: "win" },
+          { k: "TP3 — 15% @ $73,350",          v: "+$83.82/ct · 22.8R (A)", tone: "win" },
+          { k: "220-ct example (1% @ A)",      v: "risk −$810 · TP1 +$3,540 · TP2 +$3,642 · TP3 +$2,766 · full run ≈ +$9,950 · TP1-then-BE ≈ +$3,540" }
+        ],
+        levels: [
+          { name: "Arming gate",       value: "by 7am 8/10: NO 4-hr closes below the BMSB → trade is ON" },
+          { name: "Time check — set 8/10 morning", value: "held the BMSB overnight · perfect 7am retest: higher low off the .236 into the BMSB · USDT 4-hr closed below the .382 again — setup identical, tight invalidation · the move should print TODAY with premarket opening higher · a day that ends WITHOUT the move = something is WRONG → reassess, don't rationalize" },
+          { name: "Entry",             value: "$64,968 direct · the $65,200 retest (.236 / .382 / above-.666 overnight paths — pre-decide which converts) · runaway ~$66k+: NO chase — 1-hr BMSB touch entry, tight SL below the touch wick" },
+          { name: "SL — one-way ratchet", value: "default $64,600 · clear bottom low before 7am → under that wick · tighten only, never widen" },
+          { name: "TPs — LOCKED",      value: "$67,650 (60%) · $71,590 (25%) · $73,350 (15%) — resting LIMITs placed AT entry, not discretionary" },
+          { name: "Topping zones (4-hr + USDT confluence)", value: "$67.6–68.2k · $70.7–71.7k · $72–74.5k — TP1 sits at zone-1 BOTTOM (highest-probability fill) · TP2 near zone-2 TOP (the override below covers the front-run miss)" },
+          { name: "Zone overrides — pre-committed, binary", value: "TP2: tag $70.7k+ then a 4-hr close back below $70.7k with no fill → market out the 25% · TP3: tag $72k+ then a 4-hr close back below $72k with no fill → market out the 15% · rule doesn't fire → the limit stands" },
+          { name: "ADD SEQUENCE — the turn (refined 8/10)", value: "LTF 3-drive → HTF 3-drive distribution: ① SHORT the 3rd drive — the REAL trade there (pays if the BMSB does NOT stall) · ② TP1 the short AT the BMSB stall · ③ stall confirmed, can't get below → cover + FLIP: that is the long-ADD area, next levels above as targets · no stall (BMSB breaks) → the short rides to lower levels · MECHANICS FLAG: on CDE a short nets against the open long — size the 3rd-drive short knowing it reduces/hedges whatever long remains at the time" },
+          { name: "Change of character", value: "4-hr close BELOW the BMSB then a close BACK ABOVE → CHoCH: no adds — hunt the SHORT structure through math & matrix" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/10 — gate PASSED: no 4-hr close below the BMSB overnight", status: "met" },
+          { label: "2. ✔ 8/10 — short closed → 430 cts locked (2% tier · $1,692 at the 393.5-pt actual stop)", status: "met" },
+          { label: "3. ✔ Lane A direct — filled $64,993.51 avg", status: "met" },
+          { label: "4. ✔ ALL orders resting: SL $64,600 + TPs 258/$67,650 · 107/$71,485 · 65/$73,355 (OCO LIMITs)", status: "met" },
+          { label: "5. TP1 $67,650 fills (+$6,854) → ALL SLs to BE $64,994 (actual avg, NOT $64,968)", status: "pending" },
+          { label: "6. TP2/TP3: limits stand unless a zone-override fires (binary rule — no live distribution-reading, no 2am tea leaves)", status: "pending" },
+          { label: "7. ADD SEQUENCE: LTF→HTF 3-drive distribution → SHORT the 3rd drive → TP1 at the BMSB stall → stall holds = flip long, that's the ADD (next levels above) · BMSB breaks = short rides lower — new sizing each leg, SL per the wick rule · NOT before TP1 (margin at 75%)", status: "pending" },
+          { label: "8. CHoCH: close below the BMSB → close back above → flip the hunt to the math & matrix short structure", status: "pending" }
+        ],
+        notes: "Graduated 8/9 from the 8/7 watch-only checklist — the 2018 comparator and the perp-OI trap note (flip on CONDITIONS, not capitulation) still govern the read. Split logic: follow-through has been weak → 60% front-loaded at the zone-1 bottom; a 50/30/20 split only banks +3.6R in the TP1-then-BE case vs +4.4R here — worse insurance for a weak-follow-through view. The 75%-utilization line is priced for reference but sits OUTSIDE the tactical band (4.2% risk vs the 1–2% cap) — going there is a tier decision, not a bigger ticket. Slippage at size: every 100 pts through the stop ≈ +$1/ct extra (935 cts → $935). Fees excluded from all figures. Assumption to verify on the ticket: nano contract 0.01 BTC · ~10x margin. Runaway-entry note: TPs stay LOCKED, so a ~$66k entry leaves only ~1,650 pts to TP1 — the 60% tranche only keeps its edge if the touch-wick stop is genuinely tight; run the R:R gate at fill before committing size."
+      },
+      bear: {
+        label: "What kills / flips it",
+        analog: "The 4-hr BMSB is the switch — below it, the short cards govern",
+        levels: [
+          { name: "No-arm",  value: "ANY 4-hr close below the BMSB before 7am 8/10 → no trade, nothing rests · the 318 short + accumulation-bottom cards govern" },
+          { name: "Stop",    value: "$64,600 (or the ratcheted wick) — the stop IS the exit, no discretionary holds below it" },
+          { name: "CHoCH",   value: "close below the BMSB then back above = change of character → math & matrix SHORT structure hunt · long adds OFF" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "4-hr close below the BMSB pre-7am → stand down — the old short-side checklist (1 of 5 fired 8/7) resumes governing", status: "pending" },
+          { label: "✔ 8/10 — SL HIT → flat, −$1,692. Re-entry/knife-catch impulse checked against structure — no improvisation", status: "met" },
+          { label: "CHoCH sequence prints → draw the short structure (math & matrix) → new card if a setup forms", status: "pending" }
+        ],
+        notes: "The 8/7 short-side checklist is superseded as the decision gate — by 7am the only switch that matters is the 4-hr BMSB close. Its conditions stay useful as reads if the no-arm branch fires."
+      }
+    },
+    {
+      ticker: "BTC",
+      direction: "short",
+      closed: "2026-08-10",
+      outcome: "win",
+      pnl: "+$2,647.35 pre-fees — covered $64,972.50 manual 8/10 · fees/funding/cost totals TBD after the CFM statement upload",
+      postmortem: "Covered manually 8/10 @ $64,972.50 — +832.5 pts off the $65,805 blended (starter leg +$1,816.58 · E2 leg +$830.78 = +$2,647.35 pre-fees). The $60,672 cover never printed: the short was closed ABOVE target because the other side of the switch fired — distribution kept failing at the 4-hr BMSB, the flip-long gate passed at 7am 8/10, and this book's margin funds the 430-ct long. Zero-risk since 8/4 (SLs at BE) — ends as a paid bridge, not a thesis failure. Fees/funding update owed at statement upload.",
+      plannedEntry: "CLOSED 8/10 @ $64,972.50 (+$2,647.35 pre-fees) — margin rolled into the 430-ct flip-long · was: FULL BOOK 7/23 — starter 159 @ $66,115 (7/22) + E2 159 @ $65,495 (door iii: 4-hr close under the BMSB) · 8/4: ALL SLs AT BE $65,805 (zero-risk) · next: trail arms on 4-hr close > $63,251 · cover $60,672",
+      sizeNote: "318 cts (3.18 BTC · ~$209k notional) · blended $65,805 · book at the $66,100 stop: −$938 · as-built 8/4: SLs at BE — book at stop $0 · at cover: +$16,323",
+      thesisOneLiner: "E2 fired through the default door — the 4-hr close under the BMSB — filled $65,495, better than the $65,400–64,800 band the card priced. Book is FULL (318) and management is now mechanical: consolidate every SL at $66,100 — the stop IS the exit (a 4-hr reclaim close above the BMSB is a warning read, not an exit order — clarified 7/23). The .382 ($63,251) prints → all SLs to BE; break through → flips to resistance → trail on a 4-HR close back above. Cover $60,672 (the .666). Whipsaw rule stands: stopped at $66,100 with NO new high → 1-hr rejection wick off the .111 + next 1-hr close back below $65,846 = full 318 back on.",
+      bull: {
+        label: "Starter LIVE · E2 = midnight fork (3 variants)",
+        analog: "Sweep the wick highs if the hug is obvious · retest the .111 if the .236 prints first · BMSB close as the default",
+        thesisOneLiner: "One add, three doors — whichever the tape opens by midnight. Every variant lands the same book: 318 cts, stops consolidated at $66,100 once the breakdown is in, riding the .382 flip to the .666.",
+        position: [
+          { k: "Starter — FILLED 7/22",  v: "SHORT 159 @ $66,115 · at the $66,100 drag: +$24" },
+          { k: "E2 — FILLED 7/23 (door iii: 4-hr close < BMSB)", v: "SHORT 159 @ $65,495 · at $66,100: −$962" },
+          { k: "Doors i (sweep $66,500) & ii (.111 retest)", v: "expired unfilled — iii delivered" },
+          { k: "DO NOW — consolidate stops", v: "ALL SLs → $66,100 · book at the stop: −$938" },
+          { k: "Full book at cover $60,672", v: "+$16,323", tone: "win" },
+          { k: "BE trigger — the .382",  v: "$63,251 prints → all SLs to BE" },
+          { k: "Trail after the flip",   v: ".382 broken → resistance · trailing SL = 4-HR close back above $63,251" }
+        ],
+        charts: [
+          { src: "charts/BTC%20Current/BTCUSDT.P_2026-07-22_12-49-37.png", caption: "Live map (7/22, Bybit perp 4h) — the full structure: starter short ~$66,110 under the SL box top $67,150.9; .382 $66,279 overhead; the .111 hug (~$65,850 on Bybit) with the CONFIRMATION ADD marker at the BMSB; sweep box drawn $66,566.7 (card says $66,500 — chart-drag drift, card numbers govern); ladder down through the .236 ($64,647) to the TP box $60,697.5 sitting just above the .666 ($60,673 — fills before the level). Bybit levels drift a few dollars vs the Coinbase numbers on this card — the card governs." },
+          { src: "charts/BTC%20Current/BTCUSD_2026-07-15_11-57-40.png", caption: "June-2018 fractal (10x, replay) — still the operative analog (unchanged from the last trade): price rejected under the .111 (6,695) and unwound the whole ladder to the .618/.666 (6,105–6,150). The current .111 hug is the same shape one leg higher — the shaded box is this short in 2018 terms." }
+        ],
+        levels: [
+          { name: "Starter",       value: "$66,115 · 159 cts · SL $67,150 — LIVE" },
+          { name: "Midnight fork", value: "hug holds 3 closes + 3rd wick low → sweep $66,500 · .236 tags → .111 retest · else BMSB close" },
+          { name: ".111 / .236",   value: "$65,846 / $64,636 — confirmed off chart 7/22" },
+          { name: "Full-book rule", value: "below the BMSB: NO 4-hr close back above it · reclaim close = exit · hard stop $66,100" },
+          { name: "BE trigger",    value: ".382 = $63,251" },
+          { name: "Cover",         value: "$60,672 (the .666)" },
+          { name: "Stand down",    value: "new high through $67,150" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 7/22 — starter FILLED: SHORT 159 @ $66,115 market · SL $67,150 · TP $60,672 (OCO, LIMIT not MARKET)", status: "met" },
+          { label: "2. ✔ 7/23 — fork resolved via door iii: 4-hr close under the BMSB → E2 SHORT 159 FILLED @ $65,495 (doors i & ii expired unfilled)", status: "met" },
+          { label: "3. ✔ superseded — .382 printed first; SLs moved straight to BE $65,805 (confirmed 8/4)", status: "met" },
+          { label: "4. ✔ superseded 8/4 — the hard stop moved with step 5: ALL SLs consolidated at BE $65,805. The stop is still THE exit — no discretionary exits above it (4-hr reclaim close above the BMSB = warning read only, clarified 7/23)", status: "met" },
+          { label: "5. ✔ .382 printed → ALL SLs at BE $65,805 (zero-risk position; +$9,238.50 OTE at 7/31)", status: "met" },
+          { label: "6. Break THROUGH the .382 → flips to resistance → trailing SL = 4-HR close back above $63,251", status: "pending" },
+          { label: "7. Cover $60,672 (the .666) → hand to the $60k long brackets below", status: "pending" },
+          { label: "8. Stopped at $66,100 with NO new high → whipsaw re-entry rule (1-hr wick + close < $65,846 = full 318 back on) · WITH a new high → stand down, thesis dead", status: "pending" }
+        ],
+        notes: "Starter math: $1,035/BTC × 1.59 = −$1,646 · TP $5,443/BTC = +$8,654 (5.3:1). E2·i sweep $66,500: risk $650/BTC = −$1,034 · TP $5,828 = +$9,267 (9.0:1) — SL SHARED at $67,150 (confirmed 7/22) until the BMSB close drags everything to $66,100; note the book carries −$2,680 (~1.8R) in the window between sweep fill and breakdown. E2·ii retest $65,846: risk $254/BTC = −$404 · TP $5,174 = +$8,227 (20.4:1) — SL $66,100. E2·iii as originally planned. Fib levels CONFIRMED by Brendan 7/22: .111 $65,846 · .236 $64,636 · .382 $63,251 · .666 $60,672. TYPO FLAG: Brendan’s recap wrote “65500” twice but the setup description says the sweep fills as price comes UP — card uses $66,500; correct if wrong. Deadlines: sweep arming AND the .236 exception both EXPIRE at midnight tonight (7/22→23). Mechanics: SL = wick not body · LIMIT not MARKET (OCO) · fibs fixed (a new high IS the stand-down). SETTLED 7/22: sweep SL shared $67,150 · retest SL $66,100 · trailing stop = 4-HR close back above the .382. SBIT: CONDITIONAL — the Schwab book may take the miner-breakout longs instead; decide at/before E2. WHIPSAW RE-ENTRY (settled 7/22): the $66,100 SL sits ~$300 above the .111 by design, so an overshoot-and-turn is rare — and in most paths it happens BEFORE tranche 2 is on (that's the .236→.111 retest world, where the midnight rule already governs). If the full book IS stopped at $66,100 with no new high: 1-HR chart — hard rejection wick off the .111, next 1-hr candle CLOSING back below $65,846 = re-entry, FULL trade back on, new SL just above the 1-hr rejection wick high. Charts wired 7/22 (live Bybit map + 2018 fractal). Suggest TV alerts: 4-hr BMSB close · .236 $64,636 tag · $66,500 touch.",
+      },
+      bear: {
+        label: "Stand Down — new high",
+        analog: "The flip read: a new high through $67,150 kills the short",
+        thesisOneLiner: "All stops now consolidated at $66,100 — the stop is the exit (a 4-hr reclaim close above the BMSB is a warning read, not an exit order). A whipsaw stop at $66,100 with NO new high is NOT stand-down — RE-ENTRY RULE (settled 7/22): drop to the 1-HR — hard rejection wick off the .111, next 1-hr candle CLOSES back below $65,846 → FULL 318 back on, new SL just above the 1-hr rejection wick high. No pre-built opposite trade: reassess off whatever structure the new high prints.",
+        levels: [
+          { name: "Stand down",          value: "new high > $67,150 · −$1,646 (starter) / −$2,680 (with sweep)" },
+          { name: "Reclaim close",       value: "4-hr close back above the BMSB = warning read only — the $66,100 stop is the exit (clarified 7/23)" },
+          { name: "Whipsaw (post-drag)", value: "book stops $66,100 → 1-HR re-entry rule (see triggers)" },
+          { name: "Then",                value: "no re-entry ladder · reassess the new structure" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "New high through $67,150 → flat, stand down, no chase", status: "pending" },
+          { label: "Stopped at $66,100 with NO new high → 1-HR chart: hard rejection wick off the .111 + next 1-hr CLOSE back below $65,846 = RE-ENTER the full 318 · new SL just above the 1-hr rejection wick", status: "pending" },
+          { label: "Reassess: fibs redraw off the new high → new plan card if a setup forms", status: "pending" }
+        ],
+        notes: "Kept deliberately light — it’s a read, not a staged trade. The $60k long brackets below are a separate thesis and keep their own card."
+      }
+    },
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-08-06",
+      outcome: "scratch",
+      pnl: "no fill — RETIRED 8/6, all brackets canceled",
+      plannedEntry: "RETIRED 8/6 (Brendan): NO live orders remain — the 410-ct brackets are CANCELED and the $60k/.666 levels are STALE. Long re-entry re-plans from scratch once price prints an ACCUMULATION STRUCTURE. Full original plan preserved below.",
+      sizeNote: "was: 410 cts Coinbase nano perp PLACED 7/9 (4.1 BTC · $246,000 notional · 3 GTC limit brackets, shared SL $58,715) — 70 / 270 / 70 (TP2 bracket trimmed 280→270 after placement) · margin ~$63,767 = 75.3% of the $84,645 acct (~$20.9k buffer)",
+      thesisOneLiner: "RETIRED 8/6 — never filled; orders canceled; levels stale. Original plan for the record: Pullback re-load: LONG $60,000, where the local-move .666 and the HTF fib (May high → June low) overlap. 410 cts Coinbase perp — brackets PLACED 7/9, resting GTC (levels recalibrated to the Coinbase chart). SL $58,715 (the .85, below the .82). TP1 $66,255 (the .382 — 70 cts small, SL → BE). TP2 $73,415 — the meat, 270 cts. 70-ct runners to TP3 $83,695, trailed post-TP2 on a 4-hr close below the BMSB + diagonal break. Confluence stack: Math & Matrix on two timeframes + MU swing EH4 dump-to-first-red zone ($60,239–$58.1k) + the June-2018 fractal (top live MU comparator match, 10x price symmetry: 6.7k→5.7k then, 67k→57k now).",
+      bull: {
+        label: "Execution Playbook",
+        analog: "When $60k prints — run this top to bottom",
+        thesisOneLiner: "Brackets resting: three GTC limit buys at $60,000 sharing SL $58,715. 70 cts off at TP1 $66,255 (.382) → drag SLs to breakeven. The meat — 270 cts — off at TP2 $73,415. 70-ct runners to TP3 $83,695, trailed post-TP2 on the 4-hr BMSB + diagonal.",
+        position: [
+          { k: "Entry",                       v: "$60,000 (local .666 × HTF overlap) — RESTING" },
+          { k: "Size",                        v: "410 cts nano = 4.1 BTC ($246k notional)" },
+          { k: "Stop — the .85",              v: "$58,715 → max risk −$5,269", tone: "loss" },
+          { k: "TP1 — .382 · 70 cts",         v: "$66,255 → +$4,379 · SL → BE", tone: "win" },
+          { k: "TP2 — meat · 270 cts",        v: "$73,415 → +$36,221", tone: "win" },
+          { k: "TP3 — runners · 70 cts",      v: "$83,695 → +$16,587", tone: "win" },
+          { k: "All targets hit",             v: "+$57,186", tone: "win" },
+          { k: "Margin @ ~4.1x",              v: "~$63,767 = 75.3% of $84,645 acct (25% buffer)" },
+          { k: "Post-TP2 trail on runners",   v: "4-hr close < BMSB + diagonal break = exit" }
+        ],
+        charts: [
+          { src: "charts/BTC%20Current/BTCUSDT.P_2026-07-09_13-27-41.png", caption: "Live execution map (7/9) — entry $60k where the local .666 and the HTF fib overlap; SL $58,748 (.85, below the .82); TP1 $66,279 (.382). Projected path: reject the .236, pull back into the entry, then the leg up." },
+          { src: "charts/BTC%20Current/BTCUSD_2026-07-09_13-27-36.png", caption: "June 2018 fractal — top live MU comparator match. Same structure at 10x the price (6.7k→5.7k then, 67k→57k now), same June-bottom-into-late-July window. In 2018 the move blew past the .382 and ran to the .49, then the .66/.705 golden pocket." }
+        ],
+        levels: [
+          { name: "Entry — local .666 × HTF overlap",      value: "$60,000 (resting GTC)" },
+          { name: "Stop — the .85 (below the .82)",        value: "$58,715" },
+          { name: "TP1 — the .382 (70 cts, SL → BE)",      value: "$66,255" },
+          { name: "TP2 — the meat (270 cts)",              value: "$73,415" },
+          { name: "TP3 — runners (70 cts)",                value: "$83,695" },
+          { name: "Post-TP2 trail — 4-hr BMSB + diagonal", value: "close below / break = exit runners" },
+          { name: "Watch — liq-trail end / June-high SFP", value: "$68,000 (above the .425)" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. Brackets PLACED 7/9 17:46–17:50 — three GTC limit buys @ $60,000, shared SL $58,715: 70 (TP 66,255) / 270 (TP 73,415) / 70 (TP 83,695); TP2 bracket trimmed 280→270 to hold the 75% margin cap", status: "met" },
+          { label: "2. RETIRED 8/6 — $60,000 never filled; all brackets CANCELED (levels stale; long re-entry re-plans off an accumulation structure, superseding the old cover→long handoff)", status: "failed" },
+          { label: "3. TP1 $66,255 (.382) fills → drag SLs on the two remaining brackets to breakeven $60,000 (TV alert set at 66,255)", status: "pending" },
+          { label: "4. TP2 $73,415 → 280 cts off (the meat) — the trailing stop ARMS here", status: "pending" },
+          { label: "5. Post-TP2: 4-hr close below the BMSB + diagonal break → exit the 70-ct runners (overrides TP3)", status: "pending" },
+          { label: "6. TP3 $83,695 → runners off (only if the trail never fires)", status: "pending" }
+        ],
+        notes: "TP1 stays at the tested .382 ($66,255) per Math & Matrix — NOT stretched to $68k. The blow-past case is real: wickless candles ~$67k above the .382 usually blow past, and the liquidity trail ends at $68k just above the .425 / June high (a $68k tag would read as an SFP of the June high). But 2018's .49 stall had heavy PA structure that doesn't exist here, the .425 already faked out once, and the whole debate is worth ~$1.7k — align with safety and what's tested. Levels recalibrated to the Coinbase perp chart at placement (SL 58,715 / TP1 66,255 / TP2 73,415)."
+      },
+      bear: {
+        label: "Confluence & Open Items",
+        analog: "Why this trade — and what's left before it's executable",
+        thesisOneLiner: "Four independent reads point at the same entry: Math & Matrix on both timeframes, the MU swing EH4 dump zone, the June-2018 fractal (top live MU comparator match), and the 10x price symmetry. What remains is execution detail, not thesis.",
+        levelsLabel: "Confluence Stack",
+        levels: [
+          { name: "M&M — local TF",                     value: "high → .236 → .111 → .382 done; next leg = the .666 ($60k). (The short leg wasn't taken — would already be 1 TP + BE — but it confirms the .666 move.)" },
+          { name: "M&M — high TF (May high → June low)", value: ".236 just hit; reject → back to the .111. The .236 and the .111/.666 align across BOTH timeframes" },
+          { name: "MU swing — EH4",                      value: "dump to first red of the move: $60,239–$58.1k — brackets the entry" },
+          { name: "Fractal — June 2018",                 value: "top live MU comparator match; blew past the .382 → .49 → .66/.705 golden pocket" },
+          { name: "10x price symmetry",                  value: "6.7k→5.7k then, 67k→57k now — both June-bottom into end of July" },
+          { name: "LTF 1.91 fib extension",              value: "aligns with the HTF .666" }
+        ],
+        triggersLabel: "Decisions locked 7/9 · remaining gates",
+        triggers: [
+          { label: "PLACED 7/9 17:46–17:50: Coinbase perp, 410 cts as 3 GTC limit brackets (70/270/70), shared SL $58,715 — initially 420, TP2 bracket trimmed to 270 same day to hold the 75% margin cap (75.3% of $84,645)", status: "met" },
+          { label: "SL $58,715 (the .85, recalibrated to the Coinbase chart) despite the EH4 floor at $58.1k — a dump that deep negates the trade anyway. DECIDED", status: "met" },
+          { label: "Prior BIP-20DEC30 runners already closed (archived) — no sequencing overlap. CLEAR", status: "met" },
+          { label: "Post-TP2 trail on the runners: 4-hr close below the BMSB + diagonal break = exit. LOCKED", status: "met" },
+          { label: "/trade-sizing — NOT run before placement; Brendan closed the item 7/9 (R:R + margin cap validated inline instead). Log the pre-commit checkbox accordingly in the postmortem", status: "met" }
+        ],
+        notes: "R:R off the $58,715 stop (risk $1,285/unit): 4.9:1 to TP1, 10.4:1 to TP2, 18.4:1 to the runners — clears every gate tier. Accepted risk: the EH4 first-red zone bottoms at $58.1k, $615 below the stop — a full-zone dump tags the SL before reversing; Brendan's call is that a move that deep negates the trade. Perp mechanics: stops fire intrabar on last-trade price and convert to aggressive limits; longs pay funding in contango; margin (~$65,323) is reserved while the orders rest; auto-sweep into futures margin is one-way — sweep profits back to spot manually."
+      },
+      postmortem: "RETIRED 8/6 without a fill (resting 7/9–8/6). The margin those brackets reserved (~$63.8k) is released. The thesis levels ($60k entry, .666/.85 fibs, EH4 zone) are STALE — do not resurrect this card's numbers. The PLAN survives: a numberless standing card was re-added to Trade Plans 8/7 (long after the short resolves, levels redrawn off the actual accumulation structure). The 318-ct short's cover at $60,672 hands off to THAT card, not these brackets."
+    },
+    {
+      ticker: "MINERS",
+      direction: "long",
+      entry: "2026-07-23",
+      closed: "2026-07-27",
+      outcome: "loss",
+      pnl: "−$12,779.60 campaign",
+      plannedEntry: "CLOSED 7/27 before Gate 1 — full stop-out (CIFR first 7/24; RIOT/CLSK option remnants closed manually 7/29 open — their SLs were never re-placed in the 7/24 12:52 restructure). NO re-entry per plan.",
+      sizeNote: "~$82k spot + $9.6k calls as-built",
+      thesisOneLiner: "CLOSED 7/27 — full stop-out before Gate 1; campaign −$12,779.60. Original thesis for the record: Oct-2021 analog miner breakout. Add to winners (by breakout strength); laggards get options only, on their own BMSB close — MARA in 7/23, KEEL cut. SPOT is the weak-rally book: no expiry, ~+$45k even at the weak targets (corrected levels 7/24). OPTIONS are the strong-rally kicker and are 40-DAY instruments: 3 drives lands ~Aug 26, and the exact same weak rally held to Sep 18 (expiry) pays ~$0 on them. Four dates run this trade: 7/31 · ~8/6 · 8/7 · 8/26.",
+      bull: {
+        label: "Live Book & Watch Board",
+        analog: "Steps are open · click any other section to expand",
+        openLevels: true,
+        position: [
+          { k: "CIFR", v: "873 sh @ 25.21 + 10× 35C @ 2.31 · SL 23.50 (−$2.4k) · TP 44.29/49.90 (+$28.4k) · weak 39.70" },
+          { k: "CLSK", v: "1,353 sh @ 15.54 + 65× 25C @ 0.49 · SL 13.95 (−$3.6k) · TP 32.34/34.27 (+$72.6k) · weak 22.70" },
+          { k: "RIOT", v: "679 sh @ 23.61 + 30× 37C @ 0.88 · SL 22.00 (−$2.1k) · TP 48.22/56.83 (+$62.1k) · weak 40.40" },
+          { k: "HUT",  v: "202 sh @ 113.69 · SL 103.45 (−$2.1k) · TP 199.90 all-in (+$17.4k) · weak 169" },
+          { k: "MARA", v: "69× 23C @ 0.21 only · SL 11.45 (−$1.0k) · TP 26.52/33.18 (+$46.1k) · weak 19.65" },
+          { k: "Stopped",   v: "−$11.1k all stops · gap-max −$16.4k", tone: "loss" },
+          { k: "Weak rally", v: "+$82k sold ~8/6 · +$50k at expiry", tone: "win" },
+          { k: "Full plan",  v: "+$227k at the order floors (option fills only improve it)", tone: "win" }
+        ],
+        levelsLabel: "Watching — weak levels = drive-1 waypoints: above by ~8/6 = on plan, short = Gate 2 fires",
+        levels: [
+          { name: "The tell",     value: "CIFR + HUT lead · laggards stalling under weak lvls = weak shape" },
+          { name: "Date > level", value: "weak lvls by ~8/6 = options +$37k · same lvls at expiry = +$5k" },
+          { name: "Weak world",   value: "no resting TP ever fires — the gates do ALL the exits" },
+          { name: "Fragile legs", value: "CLSK + MARA opts = time value only · CIFR + RIOT survive expiry" },
+          { name: "On pace ≠ at level", value: "mid-drive at +40% is fine — judge shape, not the calendar" }
+        ],
+        triggersLabel: "Gate calendar",
+        triggers: [
+          { label: "✔ 7/23 positions on · ✔ 7/24 all exits resting (GTC, TPs front-run 3%)", status: "met" },
+          { label: "CAMPAIGN CLOSED before Gate 1: full stop-out 7/27 (CIFR 7/24); RIOT/CLSK option SLs were never re-placed in the 7/24 12:52 restructure (TP-only) — closed manually 7/29 open, −$1,785 census failure. Campaign −$12,779.60 vs planned all-stop ~−$11.1k. Postmortem: July close report", status: "met" },
+          { label: "GATE 2 — moot (campaign closed 7/27)", status: "met" },
+          { label: "AUG 7 stop-mark refresh — moot", status: "met" },
+          { label: "GATE 3 — moot (campaign closed 7/27; no options remain)", status: "met" },
+          { label: "✔ Postmortem complete — July close report §Execution Analysis (no separate /trade-postmortem; reflections + close report are the record, Brendan 8/4)", status: "met" }
+        ],
+        notes: "TP prices shown are the resting orders (front-run 3%); the analytical chart levels are CIFR 44.74/52.25 · CLSK 32.67/35.33 · RIOT 48.71/58.59 · HUT 201.96 · MARA 27.34/34.21. Order detail (verified in TOS 7/24): opt TP limits CIFR 8.40/14.90 · CLSK 6.69/9.27 (qtys 33/32 as-built) · RIOT 10.25/19.83 · MARA 3.52/10.18; opt SL limits ~1.45 / 0.26 / ~0.55 / ~0.07; spot TP splits 436/437 · 676/677 · 339/340 · HUT 202 all-in. Spot stops are intraday STPs — a wick ejects RIOT/HUT (no healthy-touch allowance); switch to a 3:50pm close-check if that matters. No more positions (MARA spot & KEEL cut). Stopped leg re-entry = fresh /strike + /trade-sizing.",
+      },
+      bear: {
+        label: "Failure Modes",
+        analog: "How this loses, and what each loss costs",
+        thesisOneLiner: "Fast fail → stops fire early: ~−$10.9k, the base failure case (all names are one BTC trade). Slow bleed → the 7/31, ~8/6 and 8/26 gates amputate it. Gap-through → ~−$16.4k tail. The one mistake to avoid: holding a green options book past 8/26 because the rally is 'still alive' — that hold costs ~$25k in the weak world.",
+        levels: [
+          { name: "Early stop-out", value: "~−$10.9k (spot −$6.8k + options salvage ~−$4.1k incl. MARA stop widened to 11.45)" },
+          { name: "Gap-max",        value: "~−$16.4k" },
+          { name: "Re-entry",       value: "stopped leg re-closes above its band → fresh /strike + /trade-sizing, nothing automatic" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "✔ FIRED 7/24–7/27 — all spot stops filled (CIFR 7/24 first, full stop-out 7/27); fast-fail base case realized", status: "met" },
+          { label: "moot — campaign closed 7/27; no re-entry per plan", status: "met" }
+        ]
+      },
+      postmortem: "COMPLETE — July close report §Execution Analysis (8/6). Forensic finding: the 7/24 12:52–12:54 restructure re-placed RIOT/CLSK option TPs WITHOUT stop legs — no downside orders on those legs 7/24→7/29 (resting-order census failure, −$1,785; NOT a limit-level issue). Campaign −$12,779.60 vs planned all-stop ~−$11.1k (within ~15% of plan). MARA/CLSK never broke out = laggard-in-breakout evidence for the 3rd-tap filter. Breakout-continuation exit rule SHELVED deliberately. Rules installed at close: TIF verification at stop placement + resting-order census after any order-maintenance session. NO re-entry."
+    },
+    {
+      ticker: "BTC",
+      direction: "short",
+      entry: "2026-07-15",
+      closed: "2026-07-20",
+      outcome: "loss",
+      pnl: "−$3,958.68 thesis total (perp −$1,500.90 + SBIT −$2,457.78)",
+      sizeNote: "318 cts perp (lot 1 159 @ $64,890 · lot 2 159 @ $63,510) + SBIT as-built 1,642 sh @ 58.25 (halved 7/17: sold 822 @ ~57.06 · held 820 sold 7/20)",
+      thesisOneLiner: "Bridge short into the $60k long — stopped flat on the break above $65,600. Lot 1 in early 7/15 on the red-candle day ($64,890, SL walked to BE at the .382); lot 2 filled 7/16 on the last-resort 4-hr BMSB close ($63,510) with the SL consciously moved to a cost-stop at $64,450. The break above $65,600 took the cost-stop (−$1,495) then lot 1’s BE. TP $60,230 never printed. Re-established as “Plan 2 · Main” in Trade Plans (entry 1 $66,225 · entry 2 on the 4-hr BMSB close).",
+      bull: {
+        label: "How it closed",
+        analog: "Cost-stop taken on the break · BE floor did its job on lot 1",
+        thesisOneLiner: "The position never reached the payout side: price broke up through $65,600 instead of unwinding the ladder — lot 2’s $64,450 cost-stop went first (−$1,495), then lot 1 stopped at breakeven. Total perp damage −$1,495 on a structure that at one point risked nothing.",
+        position: [
+          { k: "Lot 1 (7/15)",        v: "SHORT 159 @ $64,890 · stopped BE 7/20 → +$693 statement FIFO (card est. $0 — FIFO reassigns fills across lots)" },
+          { k: "Lot 2 (7/16)",        v: "SHORT 159 @ $63,510 · stopped $64,450 7/20 → −$2,194 statement FIFO (card est. −$1,495)", tone: "loss" },
+          { k: "SBIT — sold half",   v: "822 @ ~57.06 (7/17, weekend de-risk) → −$977 as-built", tone: "loss" },
+          { k: "SBIT — held half",   v: "820 @ 58.25 as-built · sold 7/20 09:30 @ 56.445 → −$1,480", tone: "loss" },
+          { k: "TP $60,230",          v: "never printed" }
+        ],
+        charts: [
+          { src: "charts/archive/BTCUSDT.P_2026-07-15_12-00-23.png", caption: "Live map as traded (7/15, Bybit perp 4h) — the Scenario 1 box under $65,600: entry $65,400.2, SL $65,767.3, TP $60,286.5. The break above $65,600 invalidated it instead." },
+          { src: "charts/archive/BTCUSD_2026-07-15_11-57-40.png", caption: "June-2018 fractal (10x, replay) — the analog that framed the trade: rejection under the .111 unwinding to the .618/.666. This time the ladder didn’t unwind — price reclaimed instead." }
+        ],
+        levels: [
+          { name: "Lot 1", value: "$64,890 → BE stop 7/20 · +$693 FIFO" },
+          { name: "Lot 2", value: "$63,510 → $64,450 cost-stop 7/20 · −$2,194 FIFO" },
+          { name: "SBIT",  value: "−$2,457.78 total: sold half −$977 (7/17) · held half 820 @ 56.445 −$1,480 (7/20)" }
+        ],
+        triggersLabel: "How it closed",
+        triggers: [
+          { label: "7/15 — lot 1 in early: 159 @ $64,890 (red-candle day)", status: "met" },
+          { label: ".382 tagged → lot 1 SL walked to BE — risked nothing from there", status: "met" },
+          { label: "7/16 — lot 2 filled @ $63,510 on the last-resort 4-hr BMSB close; SL moved to the $64,450 cost-stop (the day’s key decision)", status: "met" },
+          { label: "7/17 — SBIT halved into the Friday close: sold 822 @ ~57.06 (−$977) to cap the weekend gap (as-built per TOS)", status: "met" },
+          { label: "Break above $65,600 → lot 2 stopped $64,450 (−$1,495), lot 1 stopped BE", status: "met" },
+          { label: "Pre-planned re-entry ladder ($64,600 / $65,000) never used — superseded by the Plan 2 card in Trade Plans", status: "met" }
+        ],
+        notes: "The cost-stop vs thesis-stop trade-off (7/16) is THE postmortem item: lot 2’s stop was moved from the $65,800 thesis level to the $64,450 dollar level at fill time — the stop that then got hit. Second item: the 7/16 lesson (every branch carries its own entry → stop → risk → payout → R:R row) is already built into the replacement card. Reconcile fills + fees + funding vs TradesViz at monthly close."
+      },
+      bear: {
+        label: "Carry-forward",
+        analog: "Thesis intact, level wrong — re-established higher",
+        thesisOneLiner: "The bottoming thesis didn’t die with the stop — the entry level did. The short re-establishes as Plan 2 · Main in Trade Plans: entry 1 $66,225 (SL $67,150 = the stand-down), entry 2 on a 4-hr close back under the BMSB, cover $60,672 on the redrawn .666.",
+        levels: [
+          { name: "Replacement", value: "Plan 2 · Main — Trade Plans" },
+          { name: "Fibs redrawn", value: ".382 $63,251 · .666 $60,672" }
+        ],
+        triggersLabel: "Carry-forward",
+        triggers: [
+          { label: "Plan 2 card live in Trade Plans (entry 1 $66,225 · entry 2 4-hr BMSB close · cover $60,672)", status: "met" },
+          { label: "✔ Postmortem captured at the July close walkthrough (July_2026_Trading_Summary.docx) — no separate /trade-postmortem; reflections + close report are the record (Brendan 8/4)", status: "met" },
+          { label: "✔ ANSWERED (July close): bridge stop-out 7/20 (lot 1 BE +$693 FIFO, lot 2 cost-stop −$2,194); SBIT held-half 820 sh sold 7/20 09:30 @ 56.445 (−$1,480). Thesis total −$3,958.68", status: "met" }
+        ],
+        notes: "/trade-sizing was consciously waived 7/15 (margin-capped, >4:1) — log the pre-commit as a reasoned waiver in the postmortem, not a skip."
+      },
+      postmortem: "COMPLETE at the July close walkthrough (July_2026_Trading_Summary.docx, 8/6). Final: thesis total −$3,958.68 = perp −$1,500.90 FIFO + SBIT −$2,457.78. Key records: cost-stop vs thesis-stop was the day's decision and the stop that got hit; the unpriced-branch lesson is institutionalized on the Plan 2 card (every branch carries entry → stop → risk → payout → R:R); defined-risk framing per Brendan — the gross perp+SBIT exposure is NOT a lesson; SBIT invalidation/risk-alignment rule installed 7/20 (invalidation level and % risk must align — else no trade or size down)."
+    },
+    {
+      ticker: "IREN",
+      // no single direction — three scenarios spanned long + short
+      status: "archived",
+      closed: "2026-07-15",
+      outcome: "scratch",
+      pnl: "no fill — bear trigger fired, entry missed",
+      sizeNote: "no position taken",
+      postmortem: "Archived 7/15 — the BEAR scenario fired (strong loss of the .49) while Brendan was out of town; the short entry was missed and no position was ever on. Color for the record: if IREN\u2019s decline aligns with the BTC bottoming window, this is likely NOT the MARA bear fractal \u2014 a bounce off the .111 is more likely than a straight dump. No action attached.",
+      thesisOneLiner: "IREN is this cycle's MARA — it led and tracked MARA through the 2021 analog (initial top Nov 2025; 2nd top projecting mid–late July, ~265d later, mirroring MARA's timing). The .49 is the case-switch pivot across all three scenarios: lose-and-regain = Bull, strong loss with no regain = Bear, and a daily close above the 1.3 fib ($101.18) = Mega Bull continuation. Entry is the channel retest (~$45.97, between the .49 and .382).",
+      macroBackdrop: "The bigger picture: macro looks to be in its final blow-off leg. The S&P appears to be putting in a ranging / topping structure, and — importantly — the miners are NOT following BTC lower the way they normally do. That divergence reads as an AI premium now attached to the miners. If AI is in its own final blow-off while macro melts up, this IREN move makes sense. The macro tape agrees: IWM at new highs, Transports moving higher, ISM above 54, and IWM RSI above 70 — most of my macro signals say this is the window for this move to happen.",
+      fractalRationale: {
+        why: "These three fractals were chosen specifically — this is the continuation of the same fractal setup that has resolved in these three ways before, and IREN has printed a very similar structure again: a channel with fibs drawn from the top to the bottom of the range. In all three cases — regardless of which way it resolves — the setup is the same, and the resolution is a strong, clean move.",
+        baseCase: "Base case = <b>Bull</b>, given how closely IREN has tracked the MARA 2021 cycle."
+      },
+      setupNote: "Across all three scenarios the structure is the same: one channel, with fibs drawn from the top to the bottom of the range. Only the resolution differs — and in every case it's a strong, clean move. Below, the live IREN chart sits directly next to the historical analog (MARA for the bull and bear, RIOT for the mega-bull) so the rhyme is judge-able at a glance. Base case is the Bull, given the MARA-cycle similarity.",
+      scenarios: [
+        {
+          label: "Bull",
+          side: "bull",
+          tag: "Base case",
+          analog: "MARA — 2021 cycle (IREN = this cycle's MARA)",
+          fractalLabel: "MARA — bull fractal",
+          thesisOneLiner: "IREN is this cycle's MARA — it led and tracked MARA through the 2021 analog. Initial top Nov 2025; the 2nd top projects to mid–late July (~265 days later, matching MARA's timing). Enter the retest of the channel boundary between the .49 and .382 (~$45.97). The .49 is the case-switch pivot: a loss-and-regain = Bull. Runs to TP1 = the 1.3 fib ($101.18).",
+          currentLabel: "IREN — bull setup (.49 pivot · decision @ 1.3 fib)",
+          current:  { src: "charts/IREN/IREN_2026-06-05_18-11-02.png", file: "charts/IREN/IREN_2026-06-05_18-11-02.png", caption: "IREN — bull setup. Enter the channel retest (~$45.97, btwn .49/.382). .49 lose+regain = Bull. TP1 = 1.3 fib ($101.18): close above = continuation, fail to close = full exit." },
+          fractals: [
+            { src: "charts/IREN/Mara%20Bull.png", file: "charts/IREN/Mara Bull.png", caption: "MARA fractal — bull analog (initial top → 2nd top ~265d later; the move ran 41 days)" }
+          ],
+          levels: [
+            { name: "Entry — channel retest (.49/.382)",   value: "~$45.97" },
+            { name: ".49 — case-switch pivot",             value: "[ASK BRENDAN — .49 price]" },
+            { name: "2nd-top window (~265d from Nov '25)", value: "mid–late July" },
+            { name: "Stop — daily close: lose .49 + below channel + below May 19 low", value: "< $46.00" },
+            { name: "TP1 — 1.3 fib",                       value: "$101.18" },
+            { name: "Bull-move duration",                  value: "~35–40 days from entry" },
+            { name: "MARA fractal move (analog)",          value: "41 days" },
+            { name: "Trailing exit",                       value: "daily close below BMSB" }
+          ],
+          triggers: [
+            { label: ".49 lost then REGAINED → Bull confirmed (the case-switch pivot)",                                          status: "pending" },
+            { label: "Enter the retest of the channel boundary (.49/.382), ~$45.97",                                            status: "pending" },
+            { label: "TP1 = 1.3 fib ($101.18): daily CLOSE above → continuation (Mega Bull); fail to close above → full 100% exit", status: "pending" },
+            { label: "Trail the remainder — exit on a daily close below the BMSB",                                              status: "pending" }
+          ],
+          notes: "The .49 is the hinge for ALL three scenarios: a strong loss = Bear, a loss-and-regain = Bull. SL = a DAILY CLOSE that loses the .49, closes below the channel, AND loses the May 19 low ($46). At TP1 (1.3 fib, $101.18): close above = continuation into Mega Bull (RIOT fractal); failure to close above = full 100% exit. Otherwise trail and exit on a daily close below the BMSB. [ASK BRENDAN — exact .49 price + 2nd MARA fractal.]"
+        },
+        {
+          label: "Mega Bull",
+          side: "bull",
+          analog: "RIOT fractal",
+          fractalLabel: "RIOT — 1 fractal",
+          thesisOneLiner: "Same setup as Bull — but at the 1.3 fib ($101.18) price CLOSES ABOVE instead of stalling, confirming continuation. Extends per the RIOT fractal. [ASK BRENDAN — extension target.]",
+          currentLabel: "IREN — same chart as Bull",
+          current:  { src: "charts/IREN/IREN_2026-06-05_18-11-02.png", file: "charts/IREN/IREN_2026-06-05_18-11-02.png", caption: "IREN — same setup as Bull. Mega Bull = a daily CLOSE above the 1.3 fib ($101.18), extending per the RIOT fractal." },
+          fractals: [
+            { src: "charts/IREN/Mega%20bull%20riot.png", file: "charts/IREN/Mega bull riot.png", caption: "RIOT fractal — mega-bull continuation analog (the move ran 99 days)" }
+          ],
+          levels: [
+            { name: "Trigger — daily close above 1.3 fib",    value: "$101.18" },
+            { name: "Invalidation — fail to close above 1.3", value: "full exit" },
+            { name: "Trailing exit",                          value: "daily close below BMSB" },
+            { name: "Move duration",                          value: "~80–90 days (mid-July → early Sept)" },
+            { name: "RIOT fractal move (analog)",             value: "99 days" },
+            { name: "Ext target",                             value: "[ASK BRENDAN]" }
+          ],
+          triggers: [
+            { label: "Daily CLOSE above the 1.3 fib ($101.18) → continuation confirmed → Mega Bull / RIOT extension", status: "pending" },
+            { label: "Fail to close above the 1.3 fib → full 100% exit (reverts to the Bull take-profit)",            status: "pending" },
+            { label: "Trail the remainder — exit on a daily close below the BMSB",                                    status: "pending" }
+          ],
+          notes: "Diverges from Bull only at the 1.3 fib ($101.18) — a daily close above = Mega Bull continuation, failure to close above = full 100% exit. [ASK BRENDAN — RIOT-fractal extension target.]"
+        },
+        {
+          label: "Bear",
+          side: "bear",
+          analog: "MARA fractal (bear)",
+          fractalLabel: "MARA — bear fractal",
+          thesisOneLiner: "The .49 fails decisively — a strong loss with NO regain → Bear. Lose the channel on a close and fail to regain within one day → full exit of longs and FLIP the book short. [ASK BRENDAN — downside target via the MARA bear fractal.]",
+          currentLabel: "IREN — bear setup (.49 fails)",
+          current:  { src: "charts/IREN/Bear%20case%20IREN_2026-06-05_17-34-23.png", file: "charts/IREN/Bear case IREN_2026-06-05_17-34-23.png", caption: "IREN — bear setup. Strong loss of .49 (no regain) / close below the channel not regained in 1 day = full exit + flip short." },
+          fractals: [
+            { src: "charts/IREN/Bear%20MARA_2026-06-05_17-38-09.png", file: "charts/IREN/Bear MARA_2026-06-05_17-38-09.png", caption: "MARA fractal — bear analog (the move ran 56 days)" }
+          ],
+          levels: [
+            { name: "Trigger — strong loss of .49 / channel close, no regain in 1 day", value: "full exit + flip short" },
+            { name: "Add — close below May 19 low (low to the left)",                  value: "$46" },
+            { name: "Stop — regain / close back above the channel",                    value: "full exit" },
+            { name: "Bear-leg duration",                                               value: "~70–90 days (2–3 months)" },
+            { name: "MARA fractal move (analog)",                                       value: "56 days" },
+            { name: "TP1",                                                             value: "[ASK BRENDAN]" }
+          ],
+          triggers: [
+            { label: "Strong loss of .49 (no regain) OR close below the channel not regained in one day → full exit longs + FLIP short", status: "pending" },
+            { label: "Close below the low-to-the-left (May 19 low, $46) → add size to the downside",                                     status: "pending" },
+            { label: "Invalidation — regain of / daily close back above the channel → full exit",                                        status: "pending" }
+          ],
+          notes: "Bear is the mirror of the .49 pivot — a strong loss with no regain is the trigger. Lose the channel on a close and fail to regain within one day = full exit + flip book. Add on a close below the May 19 low ($46). SL = price reclaims / closes back above the channel → full exit. [ASK BRENDAN — downside target + bear thesis specifics.]"
+        }
+      ]
+    },
+    {
+      ticker: "BTC",
+      direction: "long",
+      entry: "[ASK BRENDAN — fill date]",
+      closed: "2026-07-08",
+      outcome: "win",
+      pnl: "+~$8,655 (TP1 +$4,385 · runners +$4,270)",
+      sizeNote: "300 nano (3 BTC) @ $59,815 avg ($59.1k–$61k zone) · BIP-20DEC30-CDE — TP1 100 nano filled $64,200 · 200 nano exited $61,950 via repositioned TP/SL, 7/8",
+      thesisOneLiner: "CLOSED 7/8 — EL2/EL3 → RH1 long on the 2018-June fractal. Entered 300 nano at a $59,815 avg, TP1 $64,200 filled (+$4,385), stops moved to $59,500. TP2 $68,000 / TP3 $70,500 never printed; on 7/8 the runner brackets were replaced with a 200-ct TP/SL at $61,950 / $59,000 and the TP side filled at $61,950 (+$4,270) — runners taken off in profit ahead of the anticipated pullback that is now the $60,000 re-load in Trade Plans. Total ≈ +$8,655 pre-fees.",
+      bull: {
+        label: "Execution",
+        analog: "TP1 banked · runners repositioned out at $61,950 (7/8)",
+        thesisOneLiner: "Entered on the RL1 close, TP1 filled, stops to breakeven. With TP2/TP3 never printing and the $60k pullback thesis forming, the runner brackets were repositioned 7/8 (TP/SL $61,950 / $59,000) and filled at $61,950 — both exits in profit.",
+        position: [
+          { k: "Entry",                     v: "avg $59,815" },
+          { k: "Size — entered",            v: "300 nano = 3 BTC" },
+          { k: "TP1 $64,200 — 100 nano",    v: "+$4,385 FILLED", tone: "win" },
+          { k: "Runners $61,950 — 200 nano", v: "+$4,270 FILLED 7/8 (TP/SL 61,950 / 59,000)", tone: "win" },
+          { k: "Runner notional · fee",     v: "$123,900 · ~$108.54" },
+          { k: "TP2 $68,000 / TP3 $70,500", v: "never reached" },
+          { k: "TOTAL",                     v: "+~$8,655 pre-fees", tone: "win" }
+        ],
+        charts: [
+          { src: "charts/archive/BTCUSD_2026-06-23_21-49-37.png", caption: "BTC plan map (6/23) — entry zone filled below RL1; TP1 $64.2k hit; TP2 $68k / TP3 $70.5k never printed; runners repositioned out at $61,950 on 7/8 ahead of the $60k re-load" }
+        ],
+        levels: [
+          { name: "Entry — avg fill",                value: "$59,815 (zone $59.1k–$61k)" },
+          { name: "TP1 — RH1 / diagonal",            value: "$64,200 ✓ FILLED" },
+          { name: "Runners — repositioned TP (7/8)", value: "$61,950 ✓ FILLED" },
+          { name: "TP2 / TP3",                       value: "$68,000 / $70,500 — not reached" }
+        ],
+        triggersLabel: "How it closed",
+        triggers: [
+          { label: "Hard daily close below RL1 (~$61k) → entered 300 nano in the zone", status: "met" },
+          { label: "TP1 $64,200 filled → 100 nano off (+$4,385)",                       status: "met" },
+          { label: "Brackets 2 & 3 stops dragged to $59,500 breakeven",                 status: "met" },
+          { label: "7/8 12:09 — runner brackets replaced with 200-ct TP/SL $61,950 / $59,000 (GTC)", status: "met" },
+          { label: "7/8 12:40 — TP side filled: 200 cts @ $61,950 ($123,900 notional, ~$108.54 fee)", status: "met" }
+        ],
+        notes: "Exit order 0ed2c1b9-5f85-4f89-b79b-3ca31f8095a8 (venue CDE): placed 7/08 12:09:24, filled 7/08 12:40:49 — 200 contracts @ $61,950, 100% executed. NOTE for /trade-postmortem: this was a mid-trade bracket change (original plan held TP2 $68k / TP3 $70.5k on BE stops) — capture the reasoning (de-risk into the $60k re-load thesis) and log it against the 'plan unchanged after entry' checkbox honestly. Avg entry $59,815 (confirmed by Brendan) — note the $59,500 'BE' stops actually sat $315 below avg, so a stop-out would have been −$630 on the runners, not a true scratch. Reconcile fills + fees + funding carry vs TradesViz at monthly close."
+      },
+      bear: {
+        label: "Context",
+        analog: "Risk-free structure did its job",
+        thesisOneLiner: "After the BE move the position had zero downside — and the runners were ultimately taken off in profit at $61,950 ahead of the same $60k pullback the re-load plan now targets.",
+        levelsLabel: "Mechanics (as held)",
+        levels: [
+          { name: "Contract",            value: "BIP-20DEC30-CDE (5-yr dated — no roll risk)" },
+          { name: "Funding — paid long", value: "~0.0086%/day in contango" },
+          { name: "Stop mechanics",      value: "fired intrabar on last trade" }
+        ],
+        triggersLabel: "Carry-forward",
+        triggers: [
+          { label: "Sweep futures profits back to spot manually (auto-sweep is one-way IN)", status: "pending" },
+          { label: "Re-load at $60,000 lives in Trade Plans — the follow-on graduated to its own card per convention", status: "met" }
+        ],
+        notes: "Both exits landed in profit: TP1 at $64,200 per plan, runners at $61,950 via the 7/8 reposition. The BE floor was never needed. The bracket change is the one process item to examine in the postmortem — profitable ≠ automatically in-plan."
+      },
+      postmortem: "[RUN /trade-postmortem — TP1 +$4,385 + runners +$4,270 = +~$8,655 pre-fees off $59,815 avg entry; runners exited $61,950 via a 7/8 mid-trade bracket reposition (was TP 68k/70.5k on $59,500 stops). Capture the reasoning + MFE/MAE.]"
+    },
+    {
+      ticker: "RIOT",
+      direction: "short",
+      entry: "2026-06-23",
+      closed: "2026-07-08",
+      outcome: "win",
+      pnl: "+$10,798 (both TPs; final fill 7/8 16:36 UTC per TradesViz)",
+      sizeNote: "34 cts Jul17 $25P @ ~$1.03 (~$3,500 prem · Inherited IRA) — all 34 closed via TP1/TP2 OCOs",
+      thesisOneLiner: "CLOSED — played out exactly. Short RIOT via Jul 17 $25P (34 cts): wick-top 4th-tap rejection off the HTF diagonal in the .666–.705 golden pocket, stacked with the BTC time-cycle low (Jul 6–13), sector signal (HUT < BMSB), and the Sept-2021 RIOT fractal targeting the channel midline / .382. TP1 $21.00 filled 20 cts, TP2 $20.50 filled 14 cts. Stop never threatened.",
+      bull: {
+        label: "Targets · Execution",
+        analog: "26-day analog → resolved before 7/17 expiry",
+        thesisOneLiner: "Scaled 20 cts at TP1 $21.00, rode 14 cts to TP2 $20.50 (channel midline / .382 / ~30% correction). Both fills per the resting OCO limits — no expiry exit needed.",
+        position: [
+          { k: "Entry",                 v: "$28.69 spot" },
+          { k: "Size",                  v: "34 cts · Jul17 $25P @ ~$1.03" },
+          { k: "Premium",               v: "~$3,500 (Inherited IRA)" },
+          { k: "TP1 — 20 cts @ $21.00", v: "+$5,940 FILLED", tone: "win" },
+          { k: "TP2 — 14 cts @ $20.50", v: "+$4,858 FILLED", tone: "win" },
+          { k: "Total",                 v: "+$10,798", tone: "win" },
+          { k: "R:R realized @ plan",   v: "5.25 : 1 gate cleared" }
+        ],
+        charts: [
+          { src: "charts/RIOT/RIOT_2026-06-23_20-55-59.png", caption: "RIOT — short setup as planned: 5.9% wick-top on the 4th tap of the HTF diagonal, .666–.705 golden pocket / .75 channel line; resolved to the channel midline target" }
+        ],
+        levels: [
+          { name: "Entry — spot",       value: "$28.69" },
+          { name: "TP1 — 20 cts",       value: "$21.00 (LMT 4.00) ✓" },
+          { name: "TP2 — 14 cts",       value: "$20.50 (LMT 4.50) ✓" },
+          { name: "Stop — close above", value: "$31.37 (never hit)" }
+        ],
+        triggers: [
+          { label: "RIOT ≤ 21.00 → TP1 OCO sold 20 cts @ LMT 4.00", status: "met" },
+          { label: "RIOT ≤ 20.50 → TP2 OCO sold 14 cts @ LMT 4.50", status: "met" },
+          { label: "Stop $31.37 — never fired", status: "pending" },
+          { label: "Closed via TP fills before the 7/14 pre-expiry checkpoint", status: "met" }
+        ],
+        notes: "P&L figures are the planned LMT fills (resting OCOs) — reconcile actual fills vs TradesViz/Schwab at monthly close. Calibration log T8."
+      },
+      bear: {
+        label: "Confluence",
+        analog: "Sept 2021 RIOT fractal — retrace to channel midline (played out)",
+        thesisOneLiner: "The stacked confluence resolved as read: 4th-tap diagonal rejection out of the golden pocket, sector-confirmed by HUT < BMSB, fractal target (channel midline / .382 / ~30% correction) reached.",
+        levelsLabel: "Confluence",
+        levels: [
+          { name: "Top — wick retrace",       value: "5.9% wick top" },
+          { name: "Diagonal — 4th tap",       value: "broke, as they usually do" },
+          { name: "HTF golden pocket",        value: ".666–.705" },
+          { name: "Sector — lead miner HUT",  value: "closed < BMSB" },
+          { name: "Fractal — Sept 2021 RIOT", value: "→ channel midline ✓ hit" }
+        ],
+        triggersLabel: "What Confirmed It",
+        triggers: [
+          { label: "Lost the diagonal + retest from below → short confirmed", status: "met" },
+          { label: "BTC time-cycle low window Jul 6–13 → downside catalyst", status: "met" },
+          { label: "HUT < BMSB + peer wick-retraces → sector confluence in", status: "met" }
+        ],
+        notes: "Fractal target = channel midline = the .382 = gap close = ~30% correction — the Sept-2021 analog delivered."
+      },
+      postmortem: "[RUN /trade-postmortem — capture same-day context: both TPs filled per plan, full commitment honored, no manual intervention. MFE/MAE capture + actual fills vs planned LMTs pending.]"
+    },
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-06-11",
+      outcome: "scratch",
+      pnl: "exit @ $63,514",
+      sizeNote: "1.32658405 BTC spot — sold @ $63,514.28 (planned dump-trigger), ~$83,583 net",
+      thesisOneLiner: "Holding 1.32598852 BTC spot. Exit trigger: ANY daily close below $63,500 → sell at $63,500 (dump), regardless of day. If instead we HOLD above $63,500 by 6/6, sell the retest into ~$71.4k (the live BMSB / diagonal).",
+      bull: {
+        label: "Scenario 1 · Hold",
+        analog: "Scenario 1 · Hold → exit the retest (~$71.4k)",
+        thesisOneLiner: "If BTC holds above $63,500 by 6/6, sell into a retest of the live BMSB / diagonal (~.236, $71.4k). Same trigger as the BTC scenario — the alert level is the exit, not the static number.",
+        charts: [
+          { src: "charts/active/BTCUSD_2026-06-04_19-05-10.png", caption: "BTC active exit map — green zone = retest exit ~$71.4k (live BMSB / diagonal) if we hold above $63.5k; $60k take-out below" }
+        ],
+        levels: [
+          { name: "Hold gate — 6/6 close",         value: "above $63,500" },
+          { name: "Exit — retest BMSB / diagonal", value: "~$71,449" },
+          { name: "Position",                      value: "1.32598852 BTC" }
+        ],
+        triggers: [
+          { label: "6/6 daily close ABOVE $63,500 → retest-exit path confirmed", status: "pending" },
+          { label: "Retest of live BMSB / diagonal (~.236, $71.4k) → SELL",  status: "pending" }
+        ],
+        notes: "Exit level tracks the live BMSB / diagonal off the chart — the $71,449 is a 6/4 snapshot and drifts. Trust the TradingView alert for the actual level."
+      },
+      bear: {
+        label: "Scenario 2 · Dump",
+        analog: "Scenario 2 · Dump → exit at $63,500",
+        thesisOneLiner: "If BTC closes below $63,500 (any day), sell the position at $63,500 — get out ahead of the straight-dump leg into the $60k / $51.5k target zone.",
+        charts: [
+          { src: "charts/active/BTCUSD_2026-06-04_19-05-10.png", caption: "BTC active exit map — any daily close below $63.5k triggers the sell; the straight-dump leg targets the $60k low" }
+        ],
+        levels: [
+          { name: "Exit trigger — any daily close", value: "below $63,500" },
+          { name: "Exit",                       value: "$63,500" },
+          { name: "Position",                   value: "1.32598852 BTC" }
+        ],
+        triggers: [
+          { label: "Any daily close BELOW $63,500 → SELL the position at $63,500", status: "pending" }
+        ],
+        notes: "Confirm the DAILY CLOSE (not an intraday wick) before selling. The SOPR window 6/18–22 favors this path."
+      },
+      postmortem: "Exit plan executed as designed — daily close below $63,500 fired the sell; filled 1.32658405 BTC @ $63,514.28 (limit $63,500) on 6/11, $84,257 subtotal − $674 fee = $83,583 net. Defensive de-risk per the Local Top model; both scenarios above are the live plan as it stood. Cost-basis P&L vs entry tracked in the Master Workbook / track record. [ASK BRENDAN — entry cost basis for true P&L + outcome label.]"
+    },
+    // {
+    //   ticker: "IREN", direction: "short",
+    //   opened: "2026-05-28", closed: "2026-06-04",
+    //   outcome: "scratch", pnl: "flat",
+    //   sizeNote: "21 cts Jun18 $53P @ ~$2.11",
+    //   thesis: "Bearish IREN via Jun18 $53P — BTC bear-relief local top.",
+    //   postmortem: "One-liner or link from /trade-postmortem."
+    // }
+  ]
+};
+// =============================================================
+
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const data = DATA;
+
+  // header
+  $('asof').textContent = 'As of ' + (data.asOf || '—');
+
+  // probability bar (now lives inside the verdict banner)
+  const overall = (SIGNALS && SIGNALS.overall) || {};
+  const bullPct = Number(overall.bull ?? data.probability.bull) || 0;
+  const bearPct = Number(overall.bear ?? data.probability.bear) || 0;
+  $('bullPct').textContent = bullPct;
+  $('bearPct').textContent = bearPct;
+  $('probBar').style.setProperty('--split', bullPct + '%');
+  $('probSplit').style.left = bullPct + '%';
+  const mostLikely = bullPct >= bearPct ? 'bull' : 'bear';
+
+  // VERDICT BANNER
+  const verdict = $('verdict');
+  if (overall.stateClass) verdict.classList.add(overall.stateClass);
+  $('verdictEmoji').textContent = overall.stateEmoji || '';
+  $('verdictLabel').textContent = overall.stateShort || (data.probability.note || '—');
+  $('verdictAction').textContent = (data.actionByState && overall.stateLabel && data.actionByState[overall.stateLabel])
+    || 'No action mapping defined for this state.';
+  $('verdictNext').textContent = 'Next: ' + (overall.nextMilestone || '—');
+  { const s = $('secRegimeSub'); if (s) s.textContent = overall.stateShort || (data.probability.note || ''); }
+
+  // KEY DATES — compact strip. Strong + Weak are partitions of the same signals,
+  // so they roll up into a single "Confirms" line.
+  const groups = (SIGNALS && SIGNALS.groups) || [];
+  const datesRoot = $('verdictDates');
+  const fmt = (iso) => {
+    if (!iso) return '—';
+    const d = new Date(iso + 'T00:00:00');
+    return (d.getMonth()+1) + '/' + d.getDate();
+  };
+  // Friendlier display names for the dates strip
+  const DISPLAY_NAME = {
+    'Gate (BTC 50 SMA 2W)': 'Gate (50 SMA 2W)',
+    'BMSB Daily Lost':      'BMSB Daily',
+    'Additional Watchlist': 'Additional',
+  };
+  const VERB = {
+    'Gate (BTC 50 SMA 2W)': 'hit',
+    'BMSB Daily Lost':      'lost',
+    'Additional Watchlist': 'fired',
+  };
+  // Per-category rendering helper — handles missing date when firing
+  function renderGroupChip(g, name) {
+    const verb = VERB[name] || 'fired';
+    const isFired = g.firing > 0 || g.status === 'met';
+    let dateStr;
+    if (g.inDate) {
+      dateStr = `${verb} ${fmt(g.inDate)}`;
+    } else if (isFired) {
+      dateStr = `${verb}`;                       // firing but no Last-Triggered date set in Notion
+    } else if (g.status === 'partial') {
+      dateStr = `${g.firing}/${g.required}`;
+    } else {
+      dateStr = 'not yet';
+    }
+    return `<span class="vd ${isFired ? 'met' : 'miss'}">${DISPLAY_NAME[name] || name}: <b>${dateStr}</b></span>`;
+  }
+
+  if (groups.length) {
+    const byName = Object.fromEntries(groups.map(g => [g.name, g]));
+    const parts = [];
+    // Order: Gate → BMSB → Confirms → Fully Confirmed → Additional (last/right)
+    for (const name of ['Gate (BTC 50 SMA 2W)', 'BMSB Daily Lost']) {
+      const g = byName[name];
+      if (g) parts.push(renderGroupChip(g, name));
+    }
+    // Combined Confirms — Strong/Weak vocabulary
+    if (overall.confirmsThreshold) {
+      const fired = overall.confirmsFired || 0;
+      const total = overall.confirmsThreshold;
+      const strong = overall.counts?.strong || 0;
+      const weak   = overall.counts?.weak  || 0;
+      const since  = overall.confirmsInDate ? ` · first fired ${fmt(overall.confirmsInDate)}` : '';
+      parts.push(`<span class="vd ${fired > 0 ? 'met' : 'miss'}">Confirms: <b>${fired} of ${total} fired</b>${since} (${strong} Strong + ${weak} Weak)</span>`);
+    }
+    // Fully Confirmed marker
+    const isFull = overall.stateLabel === 'Local Top Fully Confirmed';
+    const fcText = isFull
+      ? (overall.confirmsConfirmDate ? `<b>HIT ${fmt(overall.confirmsConfirmDate)} (${overall.confirmsThreshold}/${overall.confirmsThreshold})</b>` : `<b>HIT (${overall.confirmsThreshold}/${overall.confirmsThreshold})</b>`)
+      : `<b>pending (${overall.confirmsFired || 0}/${overall.confirmsThreshold || '?'})</b>`;
+    parts.push(`<span class="vd ${isFull ? 'met' : 'miss'}">Fully Confirmed: ${fcText}</span>`);
+    // Additional Watchlist — last/right
+    const add = byName['Additional Watchlist'];
+    if (add) parts.push(renderGroupChip(add, 'Additional Watchlist'));
+    datesRoot.innerHTML = parts.join('<span class="vd-sep">·</span>');
+  } else {
+    datesRoot.textContent = 'No signal data — run sync.py';
+  }
+
+  // ============ SOPR / Next Regime Watch card ============
+  const nr = data.nextRegime;
+  if (nr && nr.targetDate) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const firedIso = nr.triggerFiredDate || nr.anchorDate;  // fallback for old DATA shape
+    const fired   = firedIso ? new Date(firedIso + 'T00:00:00') : today;
+    const target  = new Date(nr.targetDate + 'T00:00:00');
+    const totalDays   = Math.max(1, Math.round((target - fired) / 86400000));
+    const elapsedDays = Math.max(0, Math.round((today  - fired) / 86400000));
+    const remainDays  = Math.max(0, Math.round((target - today) / 86400000));
+    const pct = Math.min(100, Math.max(0, Math.round((elapsedDays / totalDays) * 100)));
+    $('soprLabel').textContent = nr.label || 'Next Regime';
+    $('soprFill').style.width = pct + '%';
+    $('soprCount').innerHTML = `<span>${remainDays}d</span> <span class="target">to ${fmt(nr.targetDate)}</span>`;
+    const firedTag = (nr.triggerNote && firedIso)
+      ? `✓ ${nr.triggerNote} fired ${fmt(firedIso)} · `
+      : (nr.triggerNote ? nr.triggerNote + ' · ' : '');
+    $('soprMeta').innerHTML = firedTag + `target ${fmt(nr.targetDate)} · ${pct}% through · ${elapsedDays}/${totalDays}d elapsed`;
+  } else {
+    $('soprCard').classList.add('hidden');
+  }
+
+  // ============ LOCAL BOTTOM ENTRY READ ============
+  (function renderLocalBottom() {
+    const root = $('lbRead');
+    if (!root) return;
+    const R = (typeof LB_READ !== 'undefined') && LB_READ;
+    if (!R) { root.innerHTML = '<div class="sig-empty">No Local Bottom read — run <code>python sync_local_bottom.py</code>.</div>'; return; }
+
+    const met = {
+      'Gate T1S': g => g.fired >= (g.testable - 1),
+      'Gate T1C': g => g.pct >= 43,
+      'E1E T1':   g => g.fired >= 1,
+      'E1E T2':   g => g.fired >= 2,
+      'Conf T1S': g => g.pct >= 80,
+      'Leading':  g => g.fired >= 1,
+    };
+    const el3 = R.swing && R.swing.el3Fired;
+    const el2 = R.swing && R.swing.el2Fired;
+
+    // headline swing trigger
+    let html = `
+      <div class="lb-header">
+        <h3>📉→📈 Local Bottom — Entry Read</h3>
+        <span class="lb-asof">${R.cycle || ''} · as of ${fmt(R.asOf)}</span>
+      </div>
+      <div class="lb-swing ${el3 ? 'go' : ''}">
+        <div class="lb-swing-title">Swing model — the trigger</div>
+        <div class="lb-swing-verdict">${R.swing ? R.swing.verdict : ''}</div>
+        <div class="lb-swing-meta">
+          EL2 <span class="lb-el3 ${el2 ? 'fired' : 'pending'}">${el2 ? '✓ ' + fmt(el2) : 'pending'}</span>
+          &nbsp; EL3 <span class="lb-el3 ${el3 ? 'fired' : 'pending'}">${el3 ? '✓ ' + fmt(el3) : 'pending'}</span>
+        </div>
+      </div>`;
+
+    // readiness gauge
+    html += `
+      <div class="lb-gauge-track"><div class="lb-gauge-fill" style="--v:${R.readiness}%"></div></div>
+      <div class="lb-gauge-cap"><b>${R.readiness}%</b> to a Path B entry · conviction <b>${R.conviction}</b> · ${R.entered ? '<b style="color:var(--bull)">ENTRY TRIGGERED</b>' : 'no path passed yet'}</div>`;
+
+    // path chips
+    html += '<div class="lb-paths">';
+    for (const key of ['A', 'B', 'B2']) {
+      const p = R.paths[key];
+      html += `<div class="lb-path ${p.pass ? 'pass' : ''}"><span class="lbp-name">Path ${key} ${p.pass ? '✓' : '✗'}</span><span class="lbp-rule">${p.rule}</span></div>`;
+    }
+    html += '</div>';
+
+    // group tallies
+    html += '<table class="lb-groups"><thead><tr><th>Group</th><th>Fired</th><th>State</th></tr></thead><tbody>';
+    for (const name of ['Gate T1S', 'Gate T1C', 'E1E T1', 'E1E T2', 'Conf T1S', 'Leading']) {
+      const g = R.groups[name]; if (!g) continue;
+      const hot = met[name] && met[name](g);
+      const fired = (g.firedNames || []).length ? `<div class="lbg-fired">✓ ${g.firedNames.join(' · ')}</div>` : '';
+      const warn = (g.warnNames || []).length ? `<div class="lbg-warn">⚠ close: ${g.warnNames.join(' · ')}</div>` : '';
+      const pend = (g.pendingNames || []).length ? `<div class="lbg-pending">pending: ${g.pendingNames.length}</div>` : '';
+      html += `<tr>
+        <td class="lbg-name">${name}</td>
+        <td class="lbg-count ${hot ? 'hot' : ''}">${g.fired}/${g.testable}${g.pct ? ' · ' + g.pct + '%' : ''}</td>
+        <td>${fired}${warn}${pend || (!fired && !warn ? '<span class="lbg-pending">—</span>' : '')}</td>
+      </tr>`;
+    }
+    html += '</tbody></table>';
+
+    // what needs to fire
+    if ((R.needs || []).length) {
+      html += '<div class="lb-needs"><div class="lb-needs-title">What still needs to fire (closest = Path B)</div><ul>';
+      for (const n of R.needs) html += `<li>${n}</li>`;
+      html += '</ul></div>';
+    }
+
+    html += `<div class="lb-caveat">Signals classified live off Market Signals (Role · Structural/Conditional · Tier · Entry-1-Eligible), so EL2/EL3 land in Gate T1S automatically. Note: the DB counts EL2 and EL3 as two separate Gate T1S members (d=${R.groups['Gate T1S'] ? R.groups['Gate T1S'].testable : '?'}); if body-retest is meant as one slot, that bar drops by one. The verdict banner above still reflects the archived Local Top — reframing it to the bottom is the deferred Stage 2. Refresh: <code>python sync_local_bottom.py</code>.</div>`;
+
+    root.innerHTML = html;
+
+    // update the section sub-label
+    const sub = $('secSignalsSub');
+    if (sub) sub.textContent = `Local Bottom · ${R.readiness}% to entry · EL3 ${el3 ? 'fired ' + fmt(el3) : 'pending'}`;
+  })();
+
+  // ============ REFRAME THE TOP BANNER TO LOCAL BOTTOM ============
+  // Overrides the archived Local-Top verdict banner + prob bar + dates strip using LB_READ.
+  (function reframeTopForLocalBottom() {
+    const R = (typeof LB_READ !== 'undefined') && LB_READ;
+    if (!R) return;
+    const s = R.swing || {};
+    const gr = R.groups || {};
+    const el3 = s.el3Fired;
+
+    let emoji, label;
+    if (R.entered)   { emoji = '🔵'; label = 'BEAR LOCAL BOTTOM — ENTRY TRIGGERED'; }
+    else if (el3)    { emoji = '🔵'; label = 'BEAR LOCAL BOTTOM — EL3 CONFIRMED → GO LONG'; }
+    else             { emoji = '🟡'; label = 'BEAR LOCAL BOTTOM — FORMING · no entry yet'; }
+
+    const verdict = $('verdict');
+    ['full','strong','weak','pending','close','not_in'].forEach(c => verdict.classList.remove(c));
+    verdict.classList.add((R.entered || el3) ? 'weak' : 'pending');  // weak = blue-ish accent, pending = amber
+    $('verdictEmoji').textContent = emoji;
+    $('verdictLabel').textContent = label;
+
+    const pctEl = document.querySelector('.verdict-pct');
+    if (pctEl) pctEl.innerHTML = `<b>${R.readiness}%</b> to entry · conviction ${R.conviction}`;
+    $('probBar').style.setProperty('--split', R.readiness + '%');
+    $('probSplit').style.left = R.readiness + '%';
+
+    $('verdictAction').textContent = el3
+      ? 'EL3 fired — SAFE bottom confirmed (EH3 + EH4 already in). Execute the long per the entry read below.'
+      : 'Bottom forming — no entry yet. SOPR (5/18) put the expected low at 6/18; that window has elapsed with the low still forming. Watch EL3 (= SAFE bottom) and Path B gate completion. Full read in Live Signals below.';
+
+    const chip = (name, val, on) => `<span class="vd ${on ? 'met' : 'miss'}">${name}: <b>${val}</b></span>`;
+    const gt = (k) => gr[k] ? `${gr[k].fired}/${gr[k].testable}` : '—';
+    const dparts = [
+      chip('SOPR', s.sopr ? fmt(s.sopr) : '—', !!s.sopr),
+      chip('Low exp (SOPR+30)', s.soprBottom ? fmt(s.soprBottom) : '—', false),
+      chip('EH3', s.eh3 ? fmt(s.eh3) : '—', !!s.eh3),
+      chip('EL2', s.el2Fired ? fmt(s.el2Fired) : 'pending', !!s.el2Fired),
+      chip('EH4', s.eh4 ? fmt(s.eh4) : '—', !!s.eh4),
+      chip('EL3', s.el3Fired ? fmt(s.el3Fired) : 'pending', !!s.el3Fired),
+      chip('Gate T1S', gt('Gate T1S'), gr['Gate T1S'] && gr['Gate T1S'].fired > 0),
+      chip('Conf T1S', gt('Conf T1S'), gr['Conf T1S'] && gr['Conf T1S'].fired > 0),
+    ];
+    $('verdictDates').innerHTML = dparts.join('<span class="vd-sep">·</span>');
+
+    const gtsF = gr['Gate T1S'] ? gr['Gate T1S'].fired : 0;
+    const gtsNeed = gr['Gate T1S'] ? (gr['Gate T1S'].testable - 1) : 5;
+    $('verdictNext').textContent = 'Next: ' + (el3
+      ? 'EL3 in — deploy the long, then E2 at the next swing low.'
+      : `EL3 = SAFE bottom → go long (EH3 + EH4 in). Signal-model Path B needs Gate T1S ${gtsF}→${gtsNeed} + a conditional.`);
+
+    const rsub = $('secRegimeSub'); if (rsub) rsub.textContent = label;
+  })();
+
+  // helpers
+  function renderLevels(target, levels) {
+    target.innerHTML = (levels || []).map(l => `
+      <div class="level">
+        <span class="name">${l.name}</span>
+        <span class="val">${l.value}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderTriggers(target, triggers) {
+    target.innerHTML = (triggers || []).map(t => {
+      const status = (t.status || 'pending').toLowerCase();
+      const dotClass = status === 'met' || status === 'ok' ? 'ok'
+        : status === 'failed' || status === 'fail' ? 'fail'
+        : 'pending';
+      return `
+        <div class="trigger">
+          <div class="dot ${dotClass}"></div>
+          <div class="trigger-label">${t.label}</div>
+          <div class="trigger-status">${status}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderCharts(target, charts) {
+    if (!charts || charts.length === 0) {
+      target.innerHTML = '<div class="chart-empty">No charts yet — drop screenshots into <code>charts/</code> and add to <code>DATA</code></div>';
+      return;
+    }
+    target.innerHTML = charts.map(c => `
+      <div class="chart-card">
+        <img src="${c.src}" alt="${(c.caption || '').replace(/"/g, '&quot;')}" data-zoom="1" />
+        ${c.caption ? `<div class="chart-caption">${c.caption}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // Bull
+  const bull = data.scenarios.bull;
+  $('bullAnalog').textContent = bull.analog;
+  $('bullThesis').textContent = bull.thesisOneLiner;
+  renderCharts($('bullCharts'), bull.charts);
+  renderLevels($('bullLevels'), bull.levels);
+  renderTriggers($('bullTriggers'), bull.triggers);
+  $('bullNotes').textContent = bull.notes || '';
+
+  // Bear
+  const bear = data.scenarios.bear;
+  $('bearAnalog').textContent = bear.analog;
+  $('bearThesis').textContent = bear.thesisOneLiner;
+  renderCharts($('bearCharts'), bear.charts);
+  renderLevels($('bearLevels'), bear.levels);
+  renderTriggers($('bearTriggers'), bear.triggers);
+  $('bearNotes').textContent = bear.notes || '';
+
+  // Position Sizing & Execution (nested dropdown inside Current Scenario)
+  (function renderSizing() {
+    const ps = data.positionSizing;
+    const root = $('sizingRoot');
+    if (!ps || !root) return;
+    const steps = (ps.onTrigger || []).map((s, i) =>
+      `<div class="trigger"><div class="dot pending"></div><div class="trigger-label"><b>${i + 1}.</b> ${s}</div></div>`).join('');
+    const cards = (ps.scenarios || []).map(s => `
+      <div class="sizing-card">
+        <div class="sizing-card-name">${s.name}</div>
+        <div class="levels">
+          <div class="level"><span class="name">Instrument</span><span class="val">${s.instrument}</span></div>
+          <div class="level"><span class="name">Size</span><span class="val">${s.size}</span></div>
+          <div class="level"><span class="name">Risk</span><span class="val">${s.risk}</span></div>
+          <div class="level"><span class="name">Expiry</span><span class="val">${s.expiry}</span></div>
+        </div>
+      </div>`).join('');
+    root.innerHTML =
+      '<div class="section-h">On Trigger — do this</div>' + steps +
+      '<div class="section-h">Pre-Staged Size (per scenario)</div>' + cards +
+      (ps.note ? `<div class="notes">${ps.note}</div>` : '');
+  })();
+
+  // Click-to-zoom on chart images
+  const zoomOverlay = $('zoomOverlay');
+  const zoomImg = $('zoomImg');
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.matches('img[data-zoom="1"]')) {
+      zoomImg.src = e.target.src;
+      zoomOverlay.classList.add('open');
+    } else if (e.target === zoomOverlay || e.target === zoomImg) {
+      zoomOverlay.classList.remove('open');
+      zoomImg.src = '';
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { zoomOverlay.classList.remove('open'); zoomImg.src = ''; }
+  });
+
+  // Tabs
+  const btnBull = $('btnBull'), btnBear = $('btnBear');
+  const panelBull = $('panelBull'), panelBear = $('panelBear');
+  function show(which) {
+    const sub = $('secScenarioSub');
+    if (which === 'bull') {
+      btnBull.classList.add('active'); btnBear.classList.remove('active');
+      panelBull.classList.remove('hidden'); panelBear.classList.add('hidden');
+      if (sub) sub.textContent = (data.scenarios.bull.label || '');
+    } else {
+      btnBear.classList.add('active'); btnBull.classList.remove('active');
+      panelBear.classList.remove('hidden'); panelBull.classList.add('hidden');
+      if (sub) sub.textContent = (data.scenarios.bear.label || '');
+    }
+  }
+  btnBull.addEventListener('click', () => show('bull'));
+  btnBear.addEventListener('click', () => show('bear'));
+  // default to Scenario 1 (retest) — both legs are bearish, this is just left-to-right order
+  show('bull');
+
+  // Notion link-out buttons (no more iframes — Notion blocks external embeds)
+  if (data.notionDashboardUrl) $('openDashboard').href = data.notionDashboardUrl;
+  if (data.notionSignalsViewUrl) $('openSignals').href = data.notionSignalsViewUrl;
+
+  // --- Signal grid renderers (data from SIGNALS, written by sync.py) ---
+  function formatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    return (d.getMonth() + 1) + '/' + d.getDate();
+  }
+  const STATUS_LABEL = { met: 'Met', partial: 'Partial', not_met: 'Not Met', none: '—' };
+
+  function renderSummary(groups) {
+    const root = $('signalSummary');
+    if (!groups.length) { root.innerHTML = ''; return; }
+    const rows = groups.map(g => `
+      <tr>
+        <td class="col-cat">${g.name}</td>
+        <td class="col-tier">${g.tier || ''}</td>
+        <td><span class="status ${g.status}">${STATUS_LABEL[g.status] || '—'}</span></td>
+        <td class="num">${g.firing} / ${g.required || '—'}</td>
+        <td class="num" style="opacity:0.6">${g.total}</td>
+        <td class="num" style="color: var(--bear)">${formatDate(g.inDate) || '—'}</td>
+        <td class="num" style="color: var(--bear)">${formatDate(g.confirmDate) || '—'}</td>
+      </tr>
+    `).join('');
+    root.innerHTML = `
+      <table>
+        <thead><tr>
+          <th>Category</th><th>Tier</th><th>Status</th>
+          <th class="num">Firing / Need</th><th class="num">Total</th>
+          <th class="num">In Date</th><th class="num">Confirmed</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  function renderSignalGrid() {
+    const root = $('signalGrid');
+    const groups = (SIGNALS && SIGNALS.groups) || [];
+    $('signalsAsOf').textContent = 'As of ' + (SIGNALS.asOf || '—');
+    { const s = $('secSignalsSub'); if (s) s.textContent = 'as of ' + (SIGNALS.asOf || '—'); }
+    renderSummary(groups);
+    if (!groups.length) {
+      root.innerHTML = '<div class="sig-empty">No signals yet — run <code>python sync.py</code> to populate.</div>';
+      return;
+    }
+    root.innerHTML = groups.map(g => {
+      const items = (g.signals || []).map(s => `
+        <div class="sig-item ${s.firing ? 'firing' : ''}">
+          <span class="sig-dot"></span>
+          <a href="${s.url}" target="_blank" rel="noopener" title="${s.currentRead ? s.currentRead.replace(/"/g, '&quot;') : (s.firing ? 'Firing' : 'Not firing')}">${s.name}</a>
+          <span class="sig-item-date">${formatDate(s.lastTriggered)}</span>
+        </div>
+      `).join('');
+      return `
+        <div class="sig-group">
+          <div class="sig-group-head">
+            <div class="sig-group-name">${g.name}</div>
+            <div class="sig-group-count ${g.status}">${g.firing} / ${g.total} firing · need ${g.required || '—'}</div>
+          </div>
+          <div class="sig-list">${items || '<div class="sig-empty">No signals in this group</div>'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderSignalGrid();
+
+  // ============ TRADE CARDS (Active Trades / Trade Plans) ============
+  function renderTradeScenario(panel, side, scenario) {
+    if (!scenario) {
+      panel.innerHTML = `<div class="sig-empty">No ${side} scenario defined.</div>`;
+      return;
+    }
+    const hasCharts = scenario.charts && scenario.charts.length;
+    const hasLevels = scenario.levels && scenario.levels.length;
+    const hasTrig   = scenario.triggers && scenario.triggers.length;
+    panel.innerHTML = `
+      <h2>${scenario.label || (side === 'bull' ? 'Bullish' : 'Bearish')}</h2>
+      ${scenario.analog ? `<div class="analog">Analog: ${scenario.analog}</div>` : ''}
+      ${scenario.thesisOneLiner ? `<div class="thesis">${scenario.thesisOneLiner}</div>` : ''}
+      ${scenario.position ? `<details class="subsection position-sub"${scenario.openPosition ? ' open' : ''}><summary><span class="sec-title">Position &amp; Sizing</span></summary><div class="section-body"><div class="position-root"></div></div></details>` : ''}
+      ${hasCharts ? `<details class="subsection"><summary><span class="sec-title">Charts</span></summary><div class="section-body"><div class="charts"></div></div></details>` : ''}
+      ${hasLevels ? `<details class="subsection"${scenario.openLevels ? ' open' : ''}><summary><span class="sec-title">${scenario.levelsLabel || 'Key Levels'}</span></summary><div class="section-body"><div class="levels"></div></div></details>` : ''}
+      ${hasTrig ? `<details class="subsection" open><summary><span class="sec-title">${scenario.triggersLabel || 'What Has to Happen'}</span></summary><div class="section-body"><div class="triggers-root"></div></div></details>` : ''}
+      ${(scenario.details || []).map(d => `<details class="subsection"><summary><span class="sec-title">${d.title}</span></summary><div class="section-body">${d.chart ? `<div class="chart-card" style="margin-top:10px"><img src="${d.chart.src}" alt="${(d.chart.caption || '').replace(/"/g, '&quot;')}" data-zoom="1" />${d.chart.caption ? `<div class="chart-caption">${d.chart.caption}</div>` : ''}</div>` : ''}<div class="notes" style="margin-top:10px">${d.body}</div></div></details>`).join('')}
+      ${scenario.notes ? `<details class="subsection"><summary><span class="sec-title">Notes</span></summary><div class="section-body"><div class="notes" style="margin-top:10px">${scenario.notes}</div></div></details>` : ''}
+    `;
+    if (scenario.position) renderPosition(panel.querySelector('.position-root'), scenario.position);
+    if (hasCharts) renderCharts(panel.querySelector('.charts'), scenario.charts);
+    if (hasLevels) renderLevels(panel.querySelector('.levels'), scenario.levels);
+    if (hasTrig) renderTriggers(panel.querySelector('.triggers-root'), scenario.triggers);
+  }
+
+  // Position & Sizing — compact stat table for the actual option / spot position
+  function renderPosition(target, rows) {
+    if (!target || !rows || !rows.length) return;
+    target.innerHTML = `<div class="position-box">` + rows.map(r => `
+      <div class="position-row">
+        <span class="pk">${r.k}</span>
+        <span class="pv ${r.tone || ''}">${r.v}</span>
+      </div>`).join('') + `</div>`;
+  }
+
+  // ----- Fractal comparison: IREN setup (left) vs analog fractal(s) (right) -----
+  function renderFractalCompare(root, s) {
+    if (!root) return;
+    const slot = (c, fallback) => {
+      if (c && c.src) {
+        return `<div class="chart-card">
+          <img src="${c.src}" alt="${(c.caption || '').replace(/"/g, '&quot;')}" data-zoom="1" />
+          ${c.caption ? `<div class="chart-caption">${c.caption}</div>` : ''}
+        </div>`;
+      }
+      const cap  = (c && c.caption) || fallback;
+      const file = c && c.file ? `<span class="fc-ph-file">save as <code>${c.file}</code></span>` : '';
+      return `<div class="fc-placeholder">${cap}${file}</div>`;
+    };
+    const fractals = s.fractals && s.fractals.length ? s.fractals : [null];
+    root.innerHTML = `
+      <div class="fractal-compare">
+        <div class="fc-col current">
+          <div class="fc-label"><span class="fc-tag">Now</span>${s.currentLabel || (root.closest('[data-ticker]')?.dataset.ticker || 'Setup') + ' — setup'}</div>
+          ${slot(s.current, 'Drop the live setup chart')}
+        </div>
+        <div class="fc-col analog">
+          <div class="fc-label"><span class="fc-tag">Fractal</span>${s.fractalLabel || 'Analog'}</div>
+          ${fractals.map(f => slot(f, 'Drop the fractal chart')).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Render one scenario panel for a multi-scenario trade (e.g. IREN: Bull / Mega Bull / Bear)
+  function renderScenarioPanel(panel, s) {
+    if (!s) { panel.innerHTML = '<div class="sig-empty">No scenario defined.</div>'; return; }
+    panel.innerHTML = `
+      <h2>${s.label || 'Scenario'}${s.tag ? ` <span class="scn-tag">${s.tag}</span>` : ''}</h2>
+      ${s.analog ? `<div class="analog">Analog: ${s.analog}</div>` : ''}
+      ${s.thesisOneLiner ? `<div class="thesis">${s.thesisOneLiner}</div>` : ''}
+      <div class="section-h">Fractal Comparison</div>
+      <div class="fractal-root"></div>
+      <div class="section-h">Key Levels</div>
+      <div class="levels"></div>
+      <div class="section-h">What Has to Happen</div>
+      <div class="triggers-root"></div>
+      ${s.notes ? `<div class="notes">${s.notes}</div>` : ''}
+    `;
+    renderFractalCompare(panel.querySelector('.fractal-root'), s);
+    renderLevels(panel.querySelector('.levels'), s.levels);
+    renderTriggers(panel.querySelector('.triggers-root'), s.triggers);
+  }
+
+  function renderTrade(trade) {
+    const card = document.createElement('div');
+    card.className = 'trade-card';
+    card.dataset.ticker = trade.ticker;
+    const dirCls = (trade.direction || '').toLowerCase();
+    const statCls = (trade.status || '').toLowerCase();
+    const statLabel = (trade.status || '').toUpperCase();
+    const metaParts = [];
+    if (trade.entry)         metaParts.push(`entered ${trade.entry}`);
+    if (trade.plannedEntry)  metaParts.push(`plan: ${trade.plannedEntry}`);
+    if (trade.sizeNote)      metaParts.push(trade.sizeNote);
+    let expBadge = '';
+    if (trade.expiry) {
+      const _exp = new Date(trade.expiry + 'T16:00:00');
+      const _days = Math.ceil((_exp - new Date()) / 86400000);
+      const _cls = _days <= 0 ? 'loss' : _days <= 5 ? 'watching' : 'scaled';
+      const _txt = _days <= 0 ? 'EXPIRED' : _days + 'd to ' + (_exp.getMonth()+1) + '/' + _exp.getDate() + ' exp';
+      expBadge = `<span class="trade-status ${_cls}" title="Days to option expiry">⏳ ${_txt}</span>`;
+    }
+
+    // --- Multi-scenario path: N-way toggle (Bull / Mega Bull / Bear), each with fractal comparison ---
+    if (Array.isArray(trade.scenarios) && trade.scenarios.length) {
+      const header = `
+        <div class="trade-header">
+          <span class="trade-ticker">${trade.ticker || '?'}</span>
+          ${trade.direction ? `<span class="trade-direction ${dirCls}">${trade.direction.toUpperCase()}</span>` : ''}
+          ${trade.setupTag ? `<span class="trade-setup">${trade.setupTag}</span>` : ''}
+          <span class="trade-meta">${metaParts.join(' · ')}</span>
+          ${trade.status ? `<span class="trade-status ${statCls}">${statLabel}</span>` : ''}
+        ${expBadge}
+        </div>
+        ${trade.thesisOneLiner ? `<div class="section-h">The thesis</div><div class="trade-thesis">${trade.thesisOneLiner}</div>` : ''}
+        ${trade.macroBackdrop ? `<div class="section-h">Why now — the macro backdrop</div><div class="trade-thesis">${trade.macroBackdrop}</div>` : ''}
+        ${trade.fractalRationale ? `<div class="fractal-why"><div class="fw-label">Why these fractals</div><div class="fw-body">${trade.fractalRationale.why}</div>${trade.fractalRationale.baseCase ? `<div class="fw-base">${trade.fractalRationale.baseCase}</div>` : ''}</div>` : ''}
+        ${trade.setupNote ? `<div class="section-h">The setup — the same in all three cases</div><div class="trade-thesis">${trade.setupNote}</div>` : ''}`;
+      const toggle = trade.scenarios.map((s, i) =>
+        `<button class="${(s.side || 'bull').toLowerCase()} ${i === 0 ? 'active' : ''}" data-idx="${i}">${s.label || ('Scenario ' + (i + 1))}</button>`).join('');
+      const panels = trade.scenarios.map((s, i) =>
+        `<div class="panel ${(s.side || 'bull').toLowerCase()} ${i === 0 ? '' : 'hidden'}" data-idx="${i}"></div>`).join('');
+      card.innerHTML = header + `<div class="trade-toggle" role="tablist">${toggle}</div>` + panels;
+      trade.scenarios.forEach((s, i) => renderScenarioPanel(card.querySelector(`.panel[data-idx="${i}"]`), s));
+      const btns = card.querySelectorAll('.trade-toggle button');
+      btns.forEach(btn => btn.addEventListener('click', () => {
+        const idx = btn.dataset.idx;
+        btns.forEach(b => b.classList.toggle('active', b.dataset.idx === idx));
+        card.querySelectorAll('.panel[data-idx]').forEach(p => p.classList.toggle('hidden', p.dataset.idx !== idx));
+      }));
+      return card;
+    }
+
+    const bullLabel = (trade.bull && trade.bull.label) || 'Bullish';
+    const bearLabel = (trade.bear && trade.bear.label) || 'Bearish';
+    card.innerHTML = `
+      <div class="trade-header">
+        <span class="trade-ticker">${trade.ticker || '?'}</span>
+        ${trade.direction ? `<span class="trade-direction ${dirCls}">${trade.direction.toUpperCase()}</span>` : ''}
+        ${trade.setupTag ? `<span class="trade-setup">${trade.setupTag}</span>` : ''}
+        <span class="trade-meta">${metaParts.join(' · ')}</span>
+        ${trade.status ? `<span class="trade-status ${statCls}">${statLabel}</span>` : ''}
+        ${expBadge}
+      </div>
+      ${trade.thesisOneLiner ? `<div class="trade-thesis">${trade.thesisOneLiner}</div>` : ''}
+      <div class="trade-toggle" role="tablist">
+        <button class="bull active" data-side="bull">${bullLabel}</button>
+        <button class="bear"        data-side="bear">${bearLabel}</button>
+      </div>
+      <div class="panel bull"        data-panel="bull"></div>
+      <div class="panel bear hidden" data-panel="bear"></div>
+    `;
+    const bullPanel = card.querySelector('[data-panel="bull"]');
+    const bearPanel = card.querySelector('[data-panel="bear"]');
+    renderTradeScenario(bullPanel, 'bull', trade.bull);
+    renderTradeScenario(bearPanel, 'bear', trade.bear);
+
+    card.querySelectorAll('.trade-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const side = btn.dataset.side;
+        card.querySelectorAll('.trade-toggle button').forEach(b =>
+          b.classList.toggle('active', b.dataset.side === side));
+        bullPanel.classList.toggle('hidden', side !== 'bull');
+        bearPanel.classList.toggle('hidden', side !== 'bear');
+      });
+    });
+    return card;
+  }
+
+  function renderTradeList(root, trades, emptyHint, collapsible) {
+    root.innerHTML = '';
+    if (!trades || !trades.length) {
+      root.innerHTML = `<div class="trade-empty">${emptyHint}</div>`;
+      return;
+    }
+    trades.forEach((t, idx) => {
+      if (!collapsible) { root.appendChild(renderTrade(t)); return; }
+      const details = document.createElement('details');
+      details.className = 'section plan-collapse';
+      if (idx === 0) details.open = true;
+      const dirCls = (t.direction || '').toLowerCase();
+      const statCls = (t.status || '').toLowerCase();
+      const meta = [];
+      if (t.plannedEntry) meta.push('plan: ' + t.plannedEntry);
+      else if (t.entry) meta.push('entered ' + t.entry);
+      if (t.sizeNote) meta.push(t.sizeNote);
+      const summary = document.createElement('summary');
+      summary.innerHTML = `
+        <span class="sec-title">${t.ticker || '?'}</span>
+        ${t.direction ? `<span class="trade-direction ${dirCls}">${t.direction.toUpperCase()}</span>` : ''}
+        ${t.setupTag ? `<span class="trade-setup">${t.setupTag}</span>` : ''}
+        <span class="sec-sub">${meta.join(' · ')}</span>
+        ${t.status ? `<span class="trade-status ${statCls}">${t.status.toUpperCase()}</span>` : ''}
+      `;
+      const body = document.createElement('div');
+      body.className = 'section-body';
+      body.appendChild(renderTrade(t));
+      details.appendChild(summary);
+      details.appendChild(body);
+      root.appendChild(details);
+    });
+  }
+
+  // Closed trades — archive: collapsible, date in the summary; full original plan preserved inside
+  function renderClosedTrade(trade) {
+    const details = document.createElement('details');
+    details.className = 'section closed-archive';
+    const dirCls  = (trade.direction || '').toLowerCase();
+    const outcome = (trade.outcome || 'scratch').toLowerCase();
+    const when = [];
+    if (trade.opened) when.push('opened ' + trade.opened);
+    if (trade.closed) when.push('closed ' + trade.closed);
+    const summary = document.createElement('summary');
+    summary.innerHTML = `
+      <span class="sec-title">${trade.ticker || '?'}</span>
+      ${trade.direction ? `<span class="trade-direction ${dirCls}">${trade.direction.toUpperCase()}</span>` : ''}
+      ${trade.setupTag ? `<span class="trade-setup">${trade.setupTag}</span>` : ''}
+      <span class="sec-sub">${when.join(' · ')}</span>
+      ${trade.pnl ? `<span class="trade-pnl ${outcome}">${trade.pnl}</span>` : ''}
+      <span class="trade-status ${outcome}">${outcome.toUpperCase()}</span>
+    `;
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.appendChild(renderTrade(trade));
+    if (trade.postmortem) {
+      const pm = document.createElement('div');
+      pm.className = 'notes';
+      pm.innerHTML = '<b>Post-mortem:</b> ' + trade.postmortem;
+      body.appendChild(pm);
+    }
+    details.appendChild(summary);
+    details.appendChild(body);
+    return details;
+  }
+  function renderClosedList(root, trades, emptyHint) {
+    root.innerHTML = '';
+    if (!trades || !trades.length) { root.innerHTML = `<div class="trade-empty">${emptyHint}</div>`; return; }
+    trades.forEach(t => root.appendChild(renderClosedTrade(t)));
+  }
+
+  renderTradeList($('activeTradesRoot'), data.activeTrades,
+    'No active trades. Add an entry to <code>DATA.activeTrades</code> in <code>index.html</code>.', true);
+  renderTradeList($('tradePlansRoot'),  data.tradePlans,
+    'No trade plans. Add an entry to <code>DATA.tradePlans</code> in <code>index.html</code>.', true);
+  renderClosedList($('closedTradesRoot'), data.closedTrades,
+    'No archived trades yet. When a trade finishes, move it here from <code>DATA.activeTrades</code> with final P&amp;L + post-mortem.');
+
+  // Tab counts (only show if non-zero)
+  const setCount = (id, n) => { $(id).textContent = n ? `(${n})` : ''; };
+  setCount('activeCount', (data.activeTrades || []).length);
+  setCount('plansCount',  (data.tradePlans  || []).length);
+  setCount('closedCount', (data.closedTrades || []).length);
+
+  // ============ TOP-LEVEL TAB SWITCHING ============
+  const topButtons  = document.querySelectorAll('.top-tabs button');
+  const topSections = { btc: $('tabBtc'), active: $('tabActive'), plans: $('tabPlans'), closed: $('tabClosed') };
+  function showTopTab(name) {
+    topButtons.forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    Object.entries(topSections).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+  }
+  topButtons.forEach(b => b.addEventListener('click', () => showTopTab(b.dataset.tab)));
+})();
+</script>
+</body>
+</html>
