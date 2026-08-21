@@ -1250,105 +1250,6 @@ const DATA = {
   // (dollars live in /trade-sizing). Realized $ shows once, at close, in closedTrades.
   // -----------------------------------------------------------------
   activeTrades: [
-    {
-      ticker: "BTC",
-      direction: "long",
-      status: "active",
-      setupTag: "3-Tap Accum · PO1/PO2 fork",
-      entry: "8/14 — FILLED · 193 cts @ $62,600 (Limit 1, to the tick) · SL $62,150 resting · BE→$62,600 on TOUCH of the .382 $63,650 (alert set)",
-      plannedEntry: "Adds 96 + 96 cts at the 3rd tap (~Mon 8/17): PO1 limit $62,030 (rests once the .382 tags) OR PO2 by confirmation ONLY · add SL under the 3rd tap (set at placement) · add TPs $73,300 / $74,200",
-      sizeNote: "SIZED 8/13 · FILLED 8/14: 193 of 385 cts on (sizing basis: 74.58% util · acct $70,790) · remaining 96 + 96 = the 3rd-tap adds · live risk 450 pts to SL $62,150 (13.1R to TP1) — goes to ZERO at the BE move",
-      thesisOneLiner: "Same campaign, now LIVE: 193 cts filled at $62,600 — the 2nd-tap sweep front-run printed to the tick. The 8/14 HLC recount moved the map: the original 1st tap is disqualified, so this entry is the 2ND 4-hr tap, not the 3rd — a lower 3rd tap is still owed and time cycles put it ~Mon 8/17. Both configs are back on the table: PO2 if the 3rd tap lands at the .111 $62,835 (outside the demand zone), PO1 if it is the deeper 50%-fill at $62,030. The tell: a 4-hr close back inside the demand zone ($62,832–$62,266) = PO1 lean → exit the 193 early and reload at $62,030. Adds (96+96) go on at the 3rd tap — PO1 by resting limit, PO2 by confirmation only (the 8/13 lesson). TPs unchanged: $68,500 / $73,300 / $74,200.",
-      bull: {
-        label: "Live 193 + the 8/17 3rd-tap fork",
-        analog: "3-tap accumulation off the 4-hr demand zone · HLC tap-count governs — taps read off the HLC area, not candles (8/14)",
-        openPosition: true,
-        position: [
-          { k: "Order 1 — 2nd-tap sweep · FILLED 8/14", v: "193 cts @ $62,600 · SL $62,150 · TP $68,500", tone: "win" },
-          { k: "BE move — pre-committed · alert set",    v: "TOUCH of the .382 $63,650 → SL on the 193 → $62,600" },
-          { k: "Order 2 — PO1 3rd-tap reload · arms at the .382 tag", v: "96 + 96 cts limit @ $62,030 · SL under the tap low (set at placement) · TP $73,300 / $74,200" },
-          { k: "Order 2-alt — PO2 3rd tap · confirmation ONLY, no resting limit", v: "96 + 96 cts on a 1-hr close above the $63,650 BOS (or a clean LTF 3-tap accumulation above demand) · SL under the .111 tap (set at placement) · TP $73,300 / $74,200" },
-          { k: "Early exit — the PO1 tell",              v: "4-hr close inside the demand zone ($62,832–$62,266) → exit the 193 early · reload = the $62,030 limit" }
-        ],
-        levels: [
-          { name: "The .382 — BE trigger (TOUCH) + the confirmation BOS", value: "$63,650" },
-          { name: "The .111 — PO2 3rd-tap level (outside the zone)",      value: "$62,835" },
-          { name: "PO1 50%-fill inefficiency — reload/add limit",          value: "$62,030" },
-          { name: "Demand zone (4-hr) — top / bottom",                     value: "$62,832 – $62,266" },
-          { name: "SL — live on the 193, below the zone",                  value: "$62,150 → BE $62,600 after the .382 touch" },
-          { name: "3rd-tap window — time cycles",                          value: "~Mon Aug 17" },
-          { name: "R @ fill — $62,600 / SL $62,150 (450 pts)",             value: "13.1R to TP1 $68,500 · 23.8R to TP2" },
-          { name: "TP1 / TP2 / TP3 — unchanged",                           value: "$68,500 × 193 · $73,300 × 96 · $74,200 × 96" },
-          { name: "P03 short TPs — stall at TP1 only",                     value: "$62,000 / $61,700 / $61,500 · 1-min exit trail $62,300" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. ✔ 8/13 — P02 stopped $63,145 (−$1,408.55 pre-fees, all 394 cts) → archived with the loss on record; this card resets to the P01 hunt", status: "met" },
-          { label: "2. ✔ 8/13 — SL LOCKED: $62,150 (below the demand zone · revised from $62,200 pre-placement) · TV alert at the line — set at write time", status: "met" },
-          { label: "3. ✔ 8/13 — SIZED: 385 cts (74.58% util · acct $70,790) · orders = the TP brackets 193/96/96 (no entry-half split — Brendan 8/13) · gates pass: 2.45% acct / ≈0.55% AUM", status: "met" },
-          { label: "4. ✔ 8/13 — Limit 1 RESTING: 193 cts @ $62,600 · SL $62,150 · TP $68,500 · decision: placed ahead of structure — a sweep can't be alarm-chased, and the ladder allows this one estimated limit", status: "met" },
-          { label: "5. ✔ 8/14 — FILLED: Limit 1, 193 cts @ $62,600 to the tick — the drawn path PRINTED (the LTF PO1 distribution was the 3rd LTF tap into the demand midline = tap 2 of the HTF Wyckoff) → card GRADUATED to Active", status: "met" },
-          { label: "6. ✔ 8/14 — HLC RECOUNT: the original 1st tap disqualified → this entry = the 2ND 4-hr tap · a lower 3rd tap is owed, time cycles say ~Mon 8/17 · PO1 AND PO2 both back on the table · Limit 2 (96+96 @ ~$63,000 midline) CANCELLED — superseded by the 3rd-tap add plan", status: "met" },
-          { label: "7. TOUCH of the .382 $63,650 → move SL on the 193 to BE $62,600 AND place the PO1 reload limit 96+96 @ $62,030 (one alert fires both actions)", status: "pending" },
-          { label: "8. THE TELL: a 4-hr close inside the demand zone ($62,832–$62,266) → PO1 lean → exit the 193 early · the $62,030 limit is the reload", status: "pending" },
-          { label: "9. PO2 add — confirmation ONLY: a 1-hr close above the $63,650 BOS (re-mark the BOS lower if the PO1 tap prints first) or a clean LTF 3-tap accumulation above demand → 96+96 · SL under the 3rd tap · NO resting limit at the .111 — that is the 8/13 stop-out shape", status: "pending" },
-          { label: "10. TV alerts at write time: .382 $63,650 touch · 4-hr close inside the zone · 1-hr close above $63,650 — written lines BINDING", status: "pending" }
-        ],
-        details: [
-          {
-            title: "The read — HTF (daily): thesis unchanged",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_14-35-23.png", caption: "HTF — daily (8/13): the range & targets, unchanged. TP ladder $68,618 (the .49) / $73,343 (the .666) / $74,498 (the .705) with the deviation band above — the card TPs ($68,500 / $73,300 / $74,200) are the front-runs, the CARD governs. Below price: the .382 $63,269 · the .85 $62,725 · the .49 $62,269 — the down-leg projection points at $62,722.5. Bybit chart — card numbers govern." },
-            body: "The HTF read carries over from the P02 whole: after the HTF accumulation P03, liquidity trails sit on BOTH sides of the range, there is NO HTF distribution, and the bias is accumulation — the targets above get taken BEFORE lower, with the weekly still a bear market and time-cycle lows expected in October. The stop-out changed the ENTRY structure, not the thesis: the deeper tap into the demand zone is one of the ways the same move starts."
-          },
-          {
-            title: "The read — MTF (4-hr): delivery into the demand zone",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-10-49.png", caption: "MTF — 4-hr (8/15): the ladder off the $65,573.4 swing — the .705 $63,190 / .786 $62,924 / .82 $62,813, demand zone shaded below with the −0.3 $62,485 line inside it. Price basing just under the .786 after the 8/14 sweep-and-fill. Overhead: the .382 $64,259 · the .666 $65,331. Bybit chart — the CARD governs." },
-            body: "The P02 broke exactly the way the ladder priced it: price swept the old .618/.666/.705 cluster, took the $63,145 stop, and delivered into the shelf that caps the 4-hr demand zone. The trade now is the P01/P02 version of the same 3-tap: the zone got tapped, swept, and the front-run filled — the fork above (the recount section) is what resolves next."
-          },
-          {
-            title: "The read — LTF (1-hr): the entry that printed",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-11-22.png", caption: "LTF map (8/15, shot on the 4-hr): the entry structure post-fill. The 1.0 $62,820 held after the sweep to the 1.15 $62,574; 1.3 $62,328 below caps the zone. Overhead: the .236 $63,210 · the .382 / 1-hr BOS $63,650 — the BE-arm trigger. 6-hr BOS $64,488 above. Bybit chart — the CARD governs." },
-            body: "This was the chart the entry was hunted on, and it delivered: the LTF distribution wicked the 5-min BOS three times on the 1-hr, led into the 2nd tap, and the 3rd LTF tap — the 1-hr PO1 — landed exactly on the demand midline + Wyckoff deviation zone, which was tap 2 of the HTF structure. Limit 1 filled at $62,600 to the tick. Not luck: it was the mapped confluence. From here the 1-hr is watched for the 8/17 3rd-tap sequence — the fork rules in the recount section govern."
-          },
-          {
-            title: "The path — what I'm looking for (visual reminder)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-09-04.png", caption: "PATH VIEW (8/15, drawn on the 4-hr): the visual playbook, NOT a prediction. The 8/17 fork drawn out — red = 3-tap distribution under the .382 $63,650 then dump into the Monday 3rd tap (Mon 8/17 04:00 time marker); blue = the tap sequence into the 1.15/1.3 and the reclaim. Note on chart: cross the .5 after 3 taps = hold on the 4-hr. The written levels and rules govern — the path invalidates; the trade doesn't." },
-            body: "USAGE RULE — this section exists so the expectation is labeled AS an expectation. 8/14 UPDATE: the drawn sequence played out exactly — sweep, fill, bounce off the midline. That validates the METHOD, not the next guess: the new expectation (3-tap distribution into the .382, dump into the Monday 3rd tap) lives in the recount section under the same rule — entries fire on WRITTEN rules only, the tape governs, and if price prints a different shape that still satisfies the written rules, the trade is ON and the path is redrawn."
-          },
-          {
-            title: "The recount + the 8/17 fork (8/14)",
-            body: "THE DISCOVERY: taps read off the HLC area, not candles — night-and-day clearer. On HLC the original 1st tap is DISQUALIFIED, so the count is: one sure tap, a sneaky maybe-2nd, and the entry tap — making the fill the 2ND 4-hr tap, not the 3rd. A lower 3rd tap is owed, and the time-cycle alignment from the last 3-tap puts it ~Mon Aug 17. THE FORK: (a) 3rd tap at the .111 $62,835, outside the demand zone → PO2 — preferred lean, because a 3rd entry INTO the zone would demand a 100%+ move of the zone; (b) 3rd tap at the 50%-fill $62,030 → PO1 — a new low under the zone; (c) deep flush toward the old $61k — unlikely with 2 taps already in, treated as stand-down territory. THE TELL: a 4-hr close back inside the zone ($62,832–$62,266) = PO1 lean → exit the 193 early (BE protects it by then) and the $62,030 reload limit does the work. THE EXPECTED PATH INTO IT: a 3-tap distribution into the .382 $63,650 (also the range .5 and the 1-hr BOS), likely a wick above, then the dump into the 3rd tap. ENTRY DISCIPLINE AT THE FORK: PO1 = resting limit (front-running a deep tap is the ladder's job — it is how this fill worked); PO2 = confirmation ONLY (a resting limit at the .111 is exactly the 8/13 stop-out shape). KNOWN COST, ACCEPTED: BE is a TOUCH trigger — a PO2 tap wicking below $62,600 BEs the long out flat before the bounce (the .111 clears BE by only ~235 pts); the reload limit + confirmation path re-establish the position if that happens."
-          },
-          {
-            title: "P03 short at TP1 — carried from the P02",
-            body: "Unchanged. Armed ONLY if price stalls inside the $68.5k zone — a clean clear that keeps moving = the idea is GONE. The dump either front-runs the ~62k trail (written TPs $62,000 / $61,700 / $61,500) or extends to the HTF .666 $60,673 (context only — the written TPs govern). Entry: the BOS on the distribution, on the lowest timeframe where it is TRUE structure. SL above the distribution high. 1-min exit trail: close back above $62,300. MECHANICS: on CDE a short in the SAME contract nets against whatever long is still riding — size it knowing it reduces/hedges the long."
-          },
-          {
-            title: "Trail & exits",
-            body: "TPs unchanged: $68,500 × 193 · $73,300 × 96 · $74,200 × 96. BE — RESOLVED 8/14: TOUCH of the .382 $63,650 → SL on the 193 to $62,600 (replaces the old re-anchor question; alert set). Early exit — the PO1 tell (4-hr close inside the zone) is a LIVE rule alongside BE, not replaced by it. Add SLs: under whatever the 3rd tap prints — under the .111 tap for PO2, under the tap low for PO1 — hard number set at placement, TV alert moves with it. The BMSB trail framework carries from the P02 (4-hr close below the BMSB = 50% out · distribution back above = rest out · 8-hr close below = FLAT, no discretion) — [ASK BRENDAN — confirm it still governs unchanged]. EXCHANGE MECHANICS (8/14): CDE has a daily maintenance hour (~5–6pm ET) — stops and TPs CANNOT fill during it while global BTC keeps trading; the reopen gaps, and a gap through the SL fills with slippage. Alerts keep firing off the chart regardless — an alert firing is not an order filling."
-          }
-        ],
-        notes: "GRADUATED 8/14 on the Limit 1 fill. LA travel Sat 8/15–Tue 8/18: the whole plan is resting orders + close-triggers — nothing needs a live chase. Conventions: R terms only on cards ($ live in /trade-sizing) · written invalidation lines BINDING, TV alerts at write time."
-      },
-      bear: {
-        label: "What kills it",
-        analog: "Exits pre-written — the fork resolves Monday and the rules already know what to do",
-        levels: [
-          { name: "SL — live on the 193",            value: "$62,150 → BE $62,600 after the .382 touch (alert set)" },
-          { name: "Early exit — the PO1 tell",       value: "4-hr close inside $62,832–$62,266 → exit the 193 · reload limit $62,030" },
-          { name: "PO2 rip-through guard",           value: "NO resting limit at the .111 — confirmation only (the 8/13 lesson)" },
-          { name: "3rd-tap failure",                 value: "closes back below the midline after the 3rd tap is in = the read is wrong — adds OFF" },
-          { name: "Deep-flush stand-down",           value: "a flush through $62,030 toward the old $61k = beyond the map → stand down, re-map, don't average" },
-          { name: "Trail — carried from the P02",    value: "4-hr close < BMSB = 50% out · 8-hr close below = FLAT [confirm unchanged]" }
-        ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "The 3rd tap prints but price closes back below the midline → adds OFF — the early-exit rules govern the 193", status: "pending" },
-          { label: "Price flushes through the $62,030 reload toward $61k → stand down and re-map — do NOT chase or average the flush", status: "pending" }
-        ],
-        notes: "Position LIVE as of 8/14: 193 cts @ $62,600 · SL $62,150 · TP $68,500. The BE touch-move is deliberate — a PO2 wick below $62,600 BEs the long out flat before the bounce; accepted cost, the reload + confirmation path re-establish it."
-      }
-    },
   ],
   // -----------------------------------------------------------------
   // TRADE PLANS — setups you're watching, not yet entered.
@@ -1402,6 +1303,109 @@ const DATA = {
   // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
   // -----------------------------------------------------------------
   closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-08-21",
+      outcome: "win",
+      pnl: "+$28,573.00 pre-fees — ALL 3 TPs HIT to the tick: 192 cts @ $62,600 → TP1 $68,500 (+$11,328.00) · PO2 adds 96 + 86 cts @ $64,250 → TP2 $73,300 × 96 (+$8,688.00) · TP3 $74,200 × 86 (+$8,557.00) · [ASK BRENDAN — confirm the add split was 96 @ TP2 / 86 @ TP3, not reversed — swapping moves the total ±$90] · exact fills + fees TBD at the CFM statement upload",
+      postmortem: "Brendan's postmortem lives in Notion (same-day, in the daily reflection) — /monthly-close pulls it at the full recap. Lesson carried forward: [ASK BRENDAN — one lesson for the next card]. Execution note for the record: Coinbase's multi-order bug (won't accept multiple resting orders on the same position) cost 10 cts on the adds — fix found and now STANDARD: place ONE order, then split the TPs/SLs inside the position afterward; no more pre-split bracket orders for multi-target trades.",
+      setupTag: "3-Tap Accum · PO2",
+      entry: "8/14 — FILLED · 192 cts @ $62,600 (Limit 1, to the tick; count corrected 8/21 — card previously said 193) · SL $62,150 → BE $62,600 on the .382 touch → trailed UP behind structure through the trade · PO2 CONFIRMED: adds 96 + 86 cts FILLED @ $64,250 (10 cts missed — Coinbase multi-order bug) · ALL 3 TPs HIT to the tick: $68,500 × 192 · $73,300 × 96 · $74,200 × 86 — FLAT, campaign closed · [ASK BRENDAN — PO2 fill date + each TP hit date]",
+      plannedEntry: "Adds 96 + 96 cts at the 3rd tap (~Mon 8/17): PO1 limit $62,030 (rests once the .382 tags) OR PO2 by confirmation ONLY · add SL under the 3rd tap (set at placement) · add TPs $73,300 / $74,200",
+      sizeNote: "SIZED 8/13 · FILLED 8/14: 193 of 385 cts on (sizing basis: 74.58% util · acct $70,790) · remaining 96 + 96 = the 3rd-tap adds · live risk 450 pts to SL $62,150 (13.1R to TP1) — goes to ZERO at the BE move",
+      thesisOneLiner: "ALL 3 TPs HIT — closed flat at the full ladder $68,500 / $73,300 / $74,200, PO2 config; see the postmortem in Notion. The original read: same campaign, now LIVE: 193 cts filled at $62,600 — the 2nd-tap sweep front-run printed to the tick. The 8/14 HLC recount moved the map: the original 1st tap is disqualified, so this entry is the 2ND 4-hr tap, not the 3rd — a lower 3rd tap is still owed and time cycles put it ~Mon 8/17. Both configs are back on the table: PO2 if the 3rd tap lands at the .111 $62,835 (outside the demand zone), PO1 if it is the deeper 50%-fill at $62,030. The tell: a 4-hr close back inside the demand zone ($62,832–$62,266) = PO1 lean → exit the 193 early and reload at $62,030. Adds (96+96) go on at the 3rd tap — PO1 by resting limit, PO2 by confirmation only (the 8/13 lesson). TPs unchanged: $68,500 / $73,300 / $74,200.",
+      bull: {
+        label: "The campaign record — full TP ladder taken (PO2)",
+        analog: "3-tap accumulation off the 4-hr demand zone · HLC tap-count governs — taps read off the HLC area, not candles (8/14)",
+        openPosition: true,
+        position: [
+          { k: "Order 1 — 2nd-tap sweep · FILLED 8/14 · TP1 HIT", v: "192 cts @ $62,600 (corrected from 193) · SL $62,150 → trailed · TP $68,500 HIT to the tick", tone: "win" },
+          { k: "BE move — FIRED, then trailed",          v: "the .382 $63,650 touched → SL to BE $62,600 → walked UP to each higher invalidation through the trade" },
+          { k: "Order 2 — PO1 3rd-tap reload · NEVER ARMED (PO2 path printed)", v: "96 + 96 cts limit @ $62,030 — cancelled with the campaign close" },
+          { k: "Order 2 — PO2 3rd tap · CONFIRMED + FILLED · TP2/TP3 HIT", v: "96 + 86 cts @ $64,250 (10 cts missed — Coinbase multi-order bug) · TP $73,300 × 96 HIT · TP $74,200 × 86 HIT", tone: "win" },
+          { k: "Early exit — the PO1 tell",              v: "never fired — clean hold to the ladder" }
+        ],
+        levels: [
+          { name: "The .382 — BE trigger (TOUCH) + the confirmation BOS", value: "$63,650" },
+          { name: "The .111 — PO2 3rd-tap level (outside the zone)",      value: "$62,835" },
+          { name: "PO1 50%-fill inefficiency — reload/add limit",          value: "$62,030" },
+          { name: "Demand zone (4-hr) — top / bottom",                     value: "$62,832 – $62,266" },
+          { name: "SL — live on the 193, below the zone",                  value: "$62,150 → BE $62,600 after the .382 touch" },
+          { name: "3rd-tap window — time cycles",                          value: "~Mon Aug 17" },
+          { name: "R @ fill — $62,600 / SL $62,150 (450 pts)",             value: "13.1R to TP1 $68,500 · 23.8R to TP2" },
+          { name: "TP1 / TP2 / TP3 — unchanged",                           value: "$68,500 × 193 · $73,300 × 96 · $74,200 × 96" },
+          { name: "P03 short TPs — stall at TP1 only",                     value: "$62,000 / $61,700 / $61,500 · 1-min exit trail $62,300" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/13 — P02 stopped $63,145 (−$1,408.55 pre-fees, all 394 cts) → archived with the loss on record; this card resets to the P01 hunt", status: "met" },
+          { label: "2. ✔ 8/13 — SL LOCKED: $62,150 (below the demand zone · revised from $62,200 pre-placement) · TV alert at the line — set at write time", status: "met" },
+          { label: "3. ✔ 8/13 — SIZED: 385 cts (74.58% util · acct $70,790) · orders = the TP brackets 193/96/96 (no entry-half split — Brendan 8/13) · gates pass: 2.45% acct / ≈0.55% AUM", status: "met" },
+          { label: "4. ✔ 8/13 — Limit 1 RESTING: 193 cts @ $62,600 · SL $62,150 · TP $68,500 · decision: placed ahead of structure — a sweep can't be alarm-chased, and the ladder allows this one estimated limit", status: "met" },
+          { label: "5. ✔ 8/14 — FILLED: Limit 1, 193 cts @ $62,600 to the tick — the drawn path PRINTED (the LTF PO1 distribution was the 3rd LTF tap into the demand midline = tap 2 of the HTF Wyckoff) → card GRADUATED to Active", status: "met" },
+          { label: "6. ✔ 8/14 — HLC RECOUNT: the original 1st tap disqualified → this entry = the 2ND 4-hr tap · a lower 3rd tap is owed, time cycles say ~Mon 8/17 · PO1 AND PO2 both back on the table · Limit 2 (96+96 @ ~$63,000 midline) CANCELLED — superseded by the 3rd-tap add plan", status: "met" },
+          { label: "7. ✔ FIRED — the .382 $63,650 touched → SL on the 192 to BE $62,600; the stop was then WALKED UP behind structure to each higher invalidation through the whole trade — never hit", status: "met" },
+          { label: "8. THE TELL: a 4-hr close inside the demand zone ($62,832–$62,266) → PO1 lean → exit the 193 early · the $62,030 limit is the reload", status: "pending" },
+          { label: "9. ✔ FIRED — PO2 confirmation add: 96 + 86 cts FILLED @ $64,250 (plan was 96+96 — 10 cts missed to Coinbase's multi-order bug; fix found: ONE order, split TPs/SLs inside the position afterward) · [ASK BRENDAN — fill date]", status: "met" },
+          { label: "10. ✔ TV alerts at write time: .382 $63,650 touch · 4-hr close inside the zone · 1-hr close above $63,650 — written lines BINDING", status: "met" },
+          { label: "11. ✔ ALL 3 TPs HIT to the tick — $68,500 × 192 · $73,300 × 96 · $74,200 × 86 → FLAT, +$28,573.00 pre-fees · P03 short NEVER ARMED (price blasted through the $68.5k zone, no stall) · card ARCHIVED 8/21", status: "met" }
+        ],
+        details: [
+          {
+            title: "The read — HTF (daily): thesis unchanged",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-13_14-35-23.png", caption: "HTF — daily (8/13): the range & targets, unchanged. TP ladder $68,618 (the .49) / $73,343 (the .666) / $74,498 (the .705) with the deviation band above — the card TPs ($68,500 / $73,300 / $74,200) are the front-runs, the CARD governs. Below price: the .382 $63,269 · the .85 $62,725 · the .49 $62,269 — the down-leg projection points at $62,722.5. Bybit chart — card numbers govern." },
+            body: "The HTF read carries over from the P02 whole: after the HTF accumulation P03, liquidity trails sit on BOTH sides of the range, there is NO HTF distribution, and the bias is accumulation — the targets above get taken BEFORE lower, with the weekly still a bear market and time-cycle lows expected in October. The stop-out changed the ENTRY structure, not the thesis: the deeper tap into the demand zone is one of the ways the same move starts."
+          },
+          {
+            title: "The read — MTF (4-hr): delivery into the demand zone",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-10-49.png", caption: "MTF — 4-hr (8/15): the ladder off the $65,573.4 swing — the .705 $63,190 / .786 $62,924 / .82 $62,813, demand zone shaded below with the −0.3 $62,485 line inside it. Price basing just under the .786 after the 8/14 sweep-and-fill. Overhead: the .382 $64,259 · the .666 $65,331. Bybit chart — the CARD governs." },
+            body: "The P02 broke exactly the way the ladder priced it: price swept the old .618/.666/.705 cluster, took the $63,145 stop, and delivered into the shelf that caps the 4-hr demand zone. The trade now is the P01/P02 version of the same 3-tap: the zone got tapped, swept, and the front-run filled — the fork above (the recount section) is what resolves next."
+          },
+          {
+            title: "The read — LTF (1-hr): the entry that printed",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-11-22.png", caption: "LTF map (8/15, shot on the 4-hr): the entry structure post-fill. The 1.0 $62,820 held after the sweep to the 1.15 $62,574; 1.3 $62,328 below caps the zone. Overhead: the .236 $63,210 · the .382 / 1-hr BOS $63,650 — the BE-arm trigger. 6-hr BOS $64,488 above. Bybit chart — the CARD governs." },
+            body: "This was the chart the entry was hunted on, and it delivered: the LTF distribution wicked the 5-min BOS three times on the 1-hr, led into the 2nd tap, and the 3rd LTF tap — the 1-hr PO1 — landed exactly on the demand midline + Wyckoff deviation zone, which was tap 2 of the HTF structure. Limit 1 filled at $62,600 to the tick. Not luck: it was the mapped confluence. From here the 1-hr is watched for the 8/17 3rd-tap sequence — the fork rules in the recount section govern."
+          },
+          {
+            title: "The path — what I'm looking for (visual reminder)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-15_09-09-04.png", caption: "PATH VIEW (8/15, drawn on the 4-hr): the visual playbook, NOT a prediction. The 8/17 fork drawn out — red = 3-tap distribution under the .382 $63,650 then dump into the Monday 3rd tap (Mon 8/17 04:00 time marker); blue = the tap sequence into the 1.15/1.3 and the reclaim. Note on chart: cross the .5 after 3 taps = hold on the 4-hr. The written levels and rules govern — the path invalidates; the trade doesn't." },
+            body: "USAGE RULE — this section exists so the expectation is labeled AS an expectation. 8/14 UPDATE: the drawn sequence played out exactly — sweep, fill, bounce off the midline. That validates the METHOD, not the next guess: the new expectation (3-tap distribution into the .382, dump into the Monday 3rd tap) lives in the recount section under the same rule — entries fire on WRITTEN rules only, the tape governs, and if price prints a different shape that still satisfies the written rules, the trade is ON and the path is redrawn."
+          },
+          {
+            title: "The recount + the 8/17 fork (8/14)",
+            body: "THE DISCOVERY: taps read off the HLC area, not candles — night-and-day clearer. On HLC the original 1st tap is DISQUALIFIED, so the count is: one sure tap, a sneaky maybe-2nd, and the entry tap — making the fill the 2ND 4-hr tap, not the 3rd. A lower 3rd tap is owed, and the time-cycle alignment from the last 3-tap puts it ~Mon Aug 17. THE FORK: (a) 3rd tap at the .111 $62,835, outside the demand zone → PO2 — preferred lean, because a 3rd entry INTO the zone would demand a 100%+ move of the zone; (b) 3rd tap at the 50%-fill $62,030 → PO1 — a new low under the zone; (c) deep flush toward the old $61k — unlikely with 2 taps already in, treated as stand-down territory. THE TELL: a 4-hr close back inside the zone ($62,832–$62,266) = PO1 lean → exit the 193 early (BE protects it by then) and the $62,030 reload limit does the work. THE EXPECTED PATH INTO IT: a 3-tap distribution into the .382 $63,650 (also the range .5 and the 1-hr BOS), likely a wick above, then the dump into the 3rd tap. ENTRY DISCIPLINE AT THE FORK: PO1 = resting limit (front-running a deep tap is the ladder's job — it is how this fill worked); PO2 = confirmation ONLY (a resting limit at the .111 is exactly the 8/13 stop-out shape). KNOWN COST, ACCEPTED: BE is a TOUCH trigger — a PO2 tap wicking below $62,600 BEs the long out flat before the bounce (the .111 clears BE by only ~235 pts); the reload limit + confirmation path re-establish the position if that happens."
+          },
+          {
+            title: "P03 short at TP1 — carried from the P02",
+            body: "Unchanged. Armed ONLY if price stalls inside the $68.5k zone — a clean clear that keeps moving = the idea is GONE. The dump either front-runs the ~62k trail (written TPs $62,000 / $61,700 / $61,500) or extends to the HTF .666 $60,673 (context only — the written TPs govern). Entry: the BOS on the distribution, on the lowest timeframe where it is TRUE structure. SL above the distribution high. 1-min exit trail: close back above $62,300. MECHANICS: on CDE a short in the SAME contract nets against whatever long is still riding — size it knowing it reduces/hedges the long."
+          },
+          {
+            title: "Trail & exits",
+            body: "TPs unchanged: $68,500 × 193 · $73,300 × 96 · $74,200 × 96. BE — RESOLVED 8/14: TOUCH of the .382 $63,650 → SL on the 193 to $62,600 (replaces the old re-anchor question; alert set). Early exit — the PO1 tell (4-hr close inside the zone) is a LIVE rule alongside BE, not replaced by it. Add SLs: under whatever the 3rd tap prints — under the .111 tap for PO2, under the tap low for PO1 — hard number set at placement, TV alert moves with it. The BMSB trail framework carries from the P02 (4-hr close below the BMSB = 50% out · distribution back above = rest out · 8-hr close below = FLAT, no discretion) — [ASK BRENDAN — confirm it still governs unchanged]. EXCHANGE MECHANICS (8/14): CDE has a daily maintenance hour (~5–6pm ET) — stops and TPs CANNOT fill during it while global BTC keeps trading; the reopen gaps, and a gap through the SL fills with slippage. Alerts keep firing off the chart regardless — an alert firing is not an order filling."
+          }
+        ],
+        notes: "ARCHIVED 8/21 — full TP ladder hit, +$28,573.00 pre-fees, no bear-side rule ever fired. GRADUATED 8/14 on the Limit 1 fill. LA travel Sat 8/15–Tue 8/18: the whole plan is resting orders + close-triggers — nothing needs a live chase. Conventions: R terms only on cards ($ live in /trade-sizing) · written invalidation lines BINDING, TV alerts at write time."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Exits pre-written — the fork resolves Monday and the rules already know what to do",
+        levels: [
+          { name: "SL — live on the 193",            value: "$62,150 → BE $62,600 after the .382 touch (alert set)" },
+          { name: "Early exit — the PO1 tell",       value: "4-hr close inside $62,832–$62,266 → exit the 193 · reload limit $62,030" },
+          { name: "PO2 rip-through guard",           value: "NO resting limit at the .111 — confirmation only (the 8/13 lesson)" },
+          { name: "3rd-tap failure",                 value: "closes back below the midline after the 3rd tap is in = the read is wrong — adds OFF" },
+          { name: "Deep-flush stand-down",           value: "a flush through $62,030 toward the old $61k = beyond the map → stand down, re-map, don't average" },
+          { name: "Trail — carried from the P02",    value: "4-hr close < BMSB = 50% out · 8-hr close below = FLAT [confirm unchanged]" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "The 3rd tap prints but price closes back below the midline → adds OFF — the early-exit rules govern the 193", status: "pending" },
+          { label: "Price flushes through the $62,030 reload toward $61k → stand down and re-map — do NOT chase or average the flush", status: "pending" }
+        ],
+        notes: "CLOSED 8/21 — nothing on this side ever fired: the trail did the risk work (BE on the .382 touch, then walked up), and the exits were the written TP ladder. Kept as the record of the pre-written kill rules."
+      }
+    },
     {
       ticker: "BTC",
       direction: "long",
