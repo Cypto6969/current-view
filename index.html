@@ -1256,7 +1256,7 @@ const DATA = {
       status: "active",
       setupTag: "PO3 · Range High → HTF .236",
       entry: "8/24 12:15 — SHORT 175 cts @ $79,570 (limit at the rectangle retest, range high) · 8/24 13:30 — ADD 175 cts @ $78,610 (15-min confirmation) · 350 cts avg $79,090 · SL $79,285 both brackets — above the 15-min BMSB",
-      plannedEntry: "Short the range high $79,570 (half) + 15-min confirmation $78,610 (half) · SL $79,285 above the 15-min BMSB · TP $75,200 × 175 at the lower .236 · add-TP [ASK BRENDAN]",
+      plannedEntry: "Short the range high $79,570 (half) + 15-min confirmation $78,610 (half) · SL $79,285 above the 15-min BMSB · TP1 $75,200 × 175 (lower .236) · TP2 $72,460 × 100 (the .382) · junk bid $70,680 × 75 (HTF .49) — all resting, shared SL",
       sizeNote: "350 cts = 3.50 BTC · avg $79,090 · $276,815 notional · net risk at the shared SL $79,285 = −$682.50 (entry 1 locked +$498.75 · add −$1,181.25) — the ~$650 he can lose here, vs the −$3k the written plan would have run (see the un-written-plan section)",
       thesisOneLiner: "PO3 back down to the .236 on the HTF — not a fractal trade, just how ranges work (2019 and 2018 printed the same unwind, kept below as CONTEXT). Entered in two tranches: half at the rectangle retest at the range high ($79,570, the fib 0 zone), half on the 15-min confirmation ($78,610). SL moved above the 15-min BMSB at $79,285 — in 2019 the 15-min BMSB loss was the dump trigger. We're DIVERGING from that script: no straight dump, price hanging at the .236 $78,911 — the read (plus the body signal) says we likely need to go HIGHER to go lower first. The tell to wait for: ETH hasn't made its new high yet while BTC did — expect ETH to print it at the midpoint of its 0→−0.15, putting in a LOWER high on BTC (possibly the .111 $79,475 retest), and the dump comes from there. If the SL takes it, it's only ~−$650 and the re-entry waits for that ETH confluence.",
       bull: {
@@ -1265,14 +1265,17 @@ const DATA = {
         openPosition: true,
         position: [
           { k: "Order 1 — rectangle-retest limit · FILLED 8/24 12:15", v: "175 cts @ $79,570 · SL $79,285 (locked, +285 pts) · TP $75,200", tone: "win" },
-          { k: "Order 2 — 15-min confirmation · FILLED 8/24 13:30 (market)", v: "175 cts @ $78,610 · SL $79,285 (−675 pts) · TP [ASK BRENDAN — none attached on the ticket; same $75,200 zone?]", tone: "win" },
+          { k: "Order 2 — 15-min confirmation · FILLED 8/24 13:30 (market)", v: "175 cts @ $78,610 · SL $79,285 (−675 pts) · TP2 $72,460 × 100 + junk bid $70,680 × 75, both RESTING", tone: "win" },
           { k: "Net at the shared SL $79,285", v: "−$682.50 — the ~$650 the trade can lose" }
         ],
         levels: [
           { name: "Entry 1 — the rectangle retest / fib 0", value: "$79,570 (fib 0 = $79,555.9)" },
           { name: "Entry 2 — the 15-min confirmation", value: "$78,610" },
           { name: "SL — shared, above the 15-min BMSB", value: "$79,285 · TV alert at the line [ASK BRENDAN — confirm set]" },
-          { name: "TP — the lower .236 $75,156 / under the 1.3 $75,238.9", value: "$75,200 × 175 · add exit [ASK BRENDAN]" },
+          { name: "TP1 — the lower .236 $75,156 / under the 1.3 $75,238.9", value: "$75,200 × 175 — then the DECISION POINT (see the TP1 tree)" },
+          { name: "TP2 — the .382 (HTF)", value: "$72,460 × 100 · resting · confirmed on by an HOURLY close under the .236" },
+          { name: "Junk bid — the HTF .49, extreme-dump case", value: "$70,680 × 75 · resting · the 2019 scenario, unlikely — just in case" },
+          { name: "Range low at close — the false-3-tap ref", value: "$75,550 (noted, but resolves pre-TP1 — no impact on the plan)" },
           { name: "The grid down", value: ".236 $78,911 (price here now) · .382 $78,257 · golden pocket $77,212–$76,830 · 1.0 $76,213.9" },
           { name: "The expected lower high — the ETH tell", value: "ETH's new high at its 0→−0.15 midpoint = BTC lower high, possibly the .111 $79,475 retest" },
           { name: "Overhead — beyond the SL", value: "swing high $79,822.7 · −0.15 $80,069.7 · −0.3 $80,586.8" },
@@ -1285,8 +1288,10 @@ const DATA = {
           { label: "3. ✔ 8/24 13:30 — 15-MIN CONFIRMATION → add: 175 cts by market @ $78,610 · shares the $79,285 SL", status: "met" },
           { label: "4. ✔ SL moved to $79,285 — ABOVE the 15-min BMSB (2019: the 15-min BMSB loss was the dump trigger) · net risk ~−$650", status: "met" },
           { label: "5. WATCH — the divergence: no straight dump like 2019; higher-to-go-lower is the expected path. The ETH new-high / BTC lower-high confluence (possibly the .111 $79,475) is the tell that the dump window opens", status: "pending" },
-          { label: "6. TP $75,200 × 175 resting at the lower .236 — let it work · add exit [ASK BRENDAN]", status: "pending" },
-          { label: "7. If stopped: −$650, STAND DOWN and re-evaluate — the re-entry waits for the ETH confluence, no chase", status: "pending" }
+          { label: "6. TP1 $75,200 × 175 resting at the lower .236 — let it work", status: "pending" },
+          { label: "7. AT TP1 — OBSERVE, then the tree: (a) new range low + HOURLY close back ABOVE the .236 + it counts as tap 2/3 of a PO1/PO2 → FULL EXIT all legs + FLIP LONG (see the TP1 tree) · (b) HOURLY close UNDER the .236 → the .382 is confirmed on, TP2 stays", status: "pending" },
+          { label: "8. TP2 $72,460 × 100 (the .382) · junk bid $70,680 × 75 (HTF .49, extreme-dump case) — both RESTING with the shared $79,285 SL", status: "pending" },
+          { label: "9. If stopped: −$650, STAND DOWN and re-evaluate — the re-entry waits for the ETH confluence, no chase", status: "pending" }
         ],
         details: [
           {
@@ -1302,6 +1307,10 @@ const DATA = {
           {
             title: "The tell — ETH's missing new high",
             body: "BTC made its new range high; ETH has NOT made its equivalent new high yet. The expected sequence: ETH goes up and prints it at the midpoint of its 0 → −0.15, and that move puts in a LOWER HIGH on BTC — possibly the .111 $79,475 retest — and the dump comes from there. That is the confluence being waited for, in-trade and, if stopped, for the re-entry. GUARD: this is a labeled expectation, not a prediction — the written SL $79,285 governs the position, and the expectation costs nothing to be wrong about (~−$650 at the stop). If stopped: stand down, re-evaluate, wait for the ETH confluence — no chase, no re-short into the extension zone."
+          },
+          {
+            title: "The TP1 decision tree — observe at the .236",
+            body: "TP1 $75,200 × 175 fills, then OBSERVE — the .236 is a decision point, not just an exit. BRANCH A — FULL EXIT + FLIP LONG, all of these together: price tags the .236 AND puts in a new low of the range AND closes back ABOVE on the HOURLY, AND the tap counts as tap 2 or tap 3 of a PO1/PO2 accumulation. That is nameable structure (the flip rule requires it), so the flip is allowed: full exit all remaining legs there and go long — the new long's tranche 2 comes as tap 3 of a PO2, or on confirmation of a level break. BRANCH B — CONTINUATION: an HOURLY close UNDER the .236 confirms the .382 tags next — TP2 $72,460 × 100 stays on, and the junk bid $70,680 × 75 covers the 2019-style extreme dump (unlikely; just in case). CONSIDERED AND DISMISSED: a 'false 3-tap' where the 3rd tap holds above the range low at close $75,550 as a fakeout — written out, then recognized it resolves BEFORE TP1 and has no impact on this plan; kept here as the record of the thought. AFTER THIS TRADE, either branch: the next long is hunted as a 3-tap PO1/PO2 around the .382 — written out and sized through /trade-sizing BEFORE the ticket this time."
           },
           {
             title: "The un-written plan — the $3k lesson (process record)",
