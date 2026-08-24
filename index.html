@@ -1255,10 +1255,10 @@ const DATA = {
       direction: "short",
       status: "active",
       setupTag: "PO3 · Range High → HTF .236",
-      entry: "8/24 12:15 — SHORT 175 cts @ $79,570 (limit at the rectangle retest, range high) · 8/24 13:30 — ADD 175 cts @ $78,610 (15-min confirmation) · 350 cts avg $79,090 · SL $79,285 both brackets — above the 15-min BMSB",
-      plannedEntry: "Short the range high $79,570 (half) + 15-min confirmation $78,610 (half) · SL $79,285 above the 15-min BMSB · TP1 $75,200 × 175 (lower .236) · TP2 $72,460 × 100 (the .382) · junk bid $70,680 × 75 (HTF .49) — all resting, shared SL",
-      sizeNote: "350 cts = 3.50 BTC · avg $79,090 · $276,815 notional · net risk at the shared SL $79,285 = −$682.50 (entry 1 locked +$498.75 · add −$1,181.25) — the ~$650 he can lose here, vs the −$3k the written plan would have run (see the un-written-plan section)",
-      thesisOneLiner: "PO3 back down to the .236 on the HTF — not a fractal trade, just how ranges work (2019 and 2018 printed the same unwind, kept below as CONTEXT). Entered in two tranches: half at the rectangle retest at the range high ($79,570, the fib 0 zone), half on the 15-min confirmation ($78,610). SL moved above the 15-min BMSB at $79,285 — in 2019 the 15-min BMSB loss was the dump trigger. We're DIVERGING from that script: no straight dump, price hanging at the .236 $78,911 — the read (plus the body signal) says we likely need to go HIGHER to go lower first. The tell to wait for: ETH hasn't made its new high yet while BTC did — expect ETH to print it at the midpoint of its 0→−0.15, putting in a LOWER high on BTC (possibly the .111 $79,475 retest), and the dump comes from there. If the SL takes it, it's only ~−$650 and the re-entry waits for that ETH confluence.",
+      entry: "8/24 — SHORT 350 cts avg $79,090 (175 @ $79,570 · 175 @ $78,610) · SL $79,285",
+      plannedEntry: "SL $79,285 · TP1 $75,200 × 175 · TP2 $72,460 × 100 · junk $70,680 × 75 — all resting",
+      sizeNote: "350 cts = 3.50 BTC · $276,815 notional · net risk at SL −$682.50",
+      thesisOneLiner: "PO3 back down to the .236 on the HTF — not a fractal trade, just how ranges work. Two tranches: the rectangle retest at the range high, then the 15-min confirmation; SL above the 15-min BMSB. Diverging from the 2019 script — no straight dump, so likely higher-to-go-lower first: the tell is ETH's missing new high putting in a BTC lower high (possibly the .111 $79,475). A stop costs ~−$650 and the re-entry waits for that ETH confluence.",
       bull: {
         label: "The position — ON",
         analog: "PO3 unwind of the same 1-hr range the long paid on — structure primary, the 2019/2018 comparators are context only",
@@ -1271,7 +1271,7 @@ const DATA = {
         levels: [
           { name: "Entry 1 — the rectangle retest / fib 0", value: "$79,570 (fib 0 = $79,555.9)" },
           { name: "Entry 2 — the 15-min confirmation", value: "$78,610" },
-          { name: "SL — shared, above the 15-min BMSB", value: "$79,285 · TV alert at the line [ASK BRENDAN — confirm set]" },
+          { name: "SL — shared, above the 15-min BMSB", value: "$79,285 · TV alert SET" },
           { name: "TP1 — the lower .236 $75,156 / under the 1.3 $75,238.9", value: "$75,200 × 175 — then the DECISION POINT (see the TP1 tree)" },
           { name: "TP2 — the .382 (HTF)", value: "$72,460 × 100 · resting · confirmed on by an HOURLY close under the .236" },
           { name: "Junk bid — the HTF .49, extreme-dump case", value: "$70,680 × 75 · resting · the 2019 scenario, unlikely — just in case" },
@@ -1327,7 +1327,7 @@ const DATA = {
             body: "The same range behavior, one cycle-era earlier: tag the extension zone, then unwind the full PO3 back through the range. The 2018 chart shows it too. This is why the TP sits at the lower .236 — but the trade was taken on the LIVE structure (the rectangle retest + 15-min confirmation), not on these charts. Fractals are context; ranges are the mechanism."
           }
         ],
-        notes: "Entered 8/24 same day the PO3 long closed. Mid-trade honesty logged: body says wrong-side pull; divergence from the 2019 script acknowledged; the ~−$650 stop makes being early cheap. Conventions: R terms only on cards · written invalidation lines BINDING, TV alerts at write time [ASK BRENDAN — confirm the $79,285 alert is set]."
+        notes: "Entered 8/24 same day the PO3 long closed. TV alert at $79,285 SET. Conventions: R terms only · written lines BINDING."
       },
       bear: {
         label: "What kills it",
@@ -1407,17 +1407,17 @@ const DATA = {
       pnl: "+$12,941.00 pre-fees — both TPs HIT 8/24: $79,600 × 200 (+$7,280 · $75,960 → $79,600 × 2.00 BTC) · $79,815 × 185 (+$5,661 · $76,755 → $79,815 × 1.85 BTC) · entry fees $92.36 + $86.09 · exit fees + TP timestamps at the CFM upload",
       postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the limit-then-confirmation split did its job — two limits would have been 'more correct' on price but risked a full-size stop-out; taking the first limit and adding the second only once it was playing out capped the risk on purpose. Structure primary, fractal context — the mirror image of the ETH card two days earlier.",
       setupTag: "Range Low → High · PO3 LTF",
-      entry: "Limit 1: 8/23 01:14 — 200 cts @ $75,960 · TP $79,600 · Limit 2 (confirmation): 8/24 00:52 — 185 cts @ $76,755 · TP $79,815 · stops finished profit-locked $77,395 / $77,390 · BOTH TPs HIT 8/24 — FLAT",
-      plannedEntry: "New low of the range → new high of the range: one limit into the sweep + a confirmation limit once playing out · TPs at the range high",
-      sizeNote: "385 cts = 3.85 BTC · avg $76,342 · $293,917 notional (200 @ $75,960 + 185 @ $76,755)",
-      thesisOneLiner: "BOTH TPs HIT 8/24 — closed flat at $79,600 × 200 / $79,815 × 185, +$12,941.00 pre-fees; see the postmortem. The original read: a new low of the range to make a new high of the range — a PO3 read on the LTF structure itself (the May-2019 BTC chart showed the same PO3 shape, but the setup stood on its own regardless). The $76,139.7 sweep put in the low, the $76,661.9 higher low held it, and the TPs sat at the range high around the fib 0 $79,555.9. Entry structure was the deliberate part: one phenomenal limit into the sweep zone, then the second only once it was playing out — capping stop-out risk instead of running two limits at full size.",
+      entry: "LONG 385 cts (200 @ $75,960 8/23 · 185 @ $76,755 8/24) · TPs $79,600 / $79,815 BOTH HIT 8/24 — FLAT",
+      plannedEntry: "Limit into the sweep + confirmation once playing out · TPs at the range high",
+      sizeNote: "385 cts = 3.85 BTC · avg $76,342 · $293,917 notional",
+      thesisOneLiner: "BOTH TPs HIT 8/24 — +$12,941.00 pre-fees; see the postmortem. The read: a new low of the range to make a new high of the range — a PO3 on the live LTF structure (May-2019 showed the same shape, context only). One limit into the sweep, the confirmation second — capping stop-out risk on purpose.",
       bull: {
         label: "The trade record — both TPs taken",
         analog: "PO3 on the LTF range · May-2019 BTC = the same shape, context only",
         openPosition: true,
         position: [
-          { k: "Order 1 — sweep-zone limit · FILLED 8/23 01:14 · TP HIT", v: "200 cts @ $75,960 · SL [ASK BRENDAN — original at placement] → locked $77,395 · TP $79,600 HIT", tone: "win" },
-          { k: "Order 2 — confirmation limit · FILLED 8/24 00:52 · TP HIT", v: "185 cts @ $76,755 · SL [ASK BRENDAN — original at placement] → locked $77,390 · TP $79,815 HIT", tone: "win" },
+          { k: "Order 1 — sweep-zone limit · FILLED 8/23 01:14 · TP HIT", v: "200 cts @ $75,960 · SL → locked $77,395 · TP $79,600 HIT", tone: "win" },
+          { k: "Order 2 — confirmation limit · FILLED 8/24 00:52 · TP HIT", v: "185 cts @ $76,755 · SL → locked $77,390 · TP $79,815 HIT", tone: "win" },
           { k: "Risk state at the end", v: "both stops above both entries — the trade ran risk-free into the TPs" }
         ],
         levels: [
@@ -1453,14 +1453,13 @@ const DATA = {
             body: "Two limit entries would have been 'more correct' on price — but the chosen structure was one limit into the sweep and a second entry ONLY once the trade was playing out, so a failed low would have stopped half-size, not full. That is the risk-shaping decision this card records: getting it slightly less perfect on price in exchange for capping the stop-out. Entry 1 filled at $75,960 to the tick; entry 2 at $76,755 after the higher low held. Stops were then walked above both entries before the TPs hit — the back half of the trade ran risk-free."
           }
         ],
-        notes: "ARCHIVED 8/24 (catch-up entry, same session as the ETH card). Original placement SLs not on the tickets (they show the final locked stops) — [ASK BRENDAN] to complete the record and the placement-R math."
+        notes: "ARCHIVED 8/24 (catch-up entry, same session as the ETH card)."
       },
       bear: {
         label: "What kills it",
         analog: "Nothing fired — stops were walked, TPs did the exits",
         levels: [
-          { name: "Final stops — never hit", value: "$77,395 / $77,390 (profit-locked)" },
-          { name: "Original SLs at placement", value: "[ASK BRENDAN — for the record]" }
+          { name: "Final stops — never hit", value: "$77,395 / $77,390 (profit-locked)" }
         ],
         triggersLabel: "If it fires",
         triggers: [
@@ -1477,10 +1476,10 @@ const DATA = {
       pnl: "−$1,019.74 pre-fees — SL $2,435 hit 8/21 16:17 @ $2,435.22, ALL 670 cts (67 ETH · $2,420 → $2,435.22 = −$15.22/ETH) · fees $315.34 round-trip ($153.36 entry + $161.98 exit)",
       postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: LTF fractal-matching is never the answer — and it was already known. The fractal was the PRIMARY idea and the entry was worked on the 5-min: both known red flags, and the body knew it during the hold. Wait for the range to create itself instead of forcing a preemptive trade off a big win.",
       setupTag: "Fractal · Preemptive",
-      entry: "8/21 15:30 — SELL 670 cts @ $2,420.00 (limit) · TP $2,310 / SL $2,435 attached · STOPPED OUT 8/21 16:17 @ $2,435.22, all 670 cts — a 47-minute hold",
-      plannedEntry: "Short $2,420 · SL $2,435 (15 pts) · TP $2,310 (110 pts · 7.3R) — 670 cts",
-      sizeNote: "670 cts = 67 ETH · $162,140 notional · 15 pts to the stop (~$1,005 planned risk) — the tight risk was the one thing done right",
-      thesisOneLiner: "STOPPED OUT 8/21 at $2,435 — see the postmortem. The original read: a preemptive short placed the same day the BTC PO2 win closed, built on a BTC May-2019 fractal as the PRIMARY idea, entry worked on the 5-min. The range hadn't created itself yet — the trade tried to force it, and the body knew it during the hold. What actually happened is the ironic part: ETH went way higher and built an even HIGHER range, while BTC itself printed the range the fractal was pointing at — the right shape, projected onto the wrong asset, early, on the wrong timeframe.",
+      entry: "8/21 — SHORT 670 cts @ $2,420 · SL $2,435 · STOPPED 16:17 @ $2,435.22 — a 47-minute hold",
+      plannedEntry: "Short $2,420 · SL $2,435 (15 pts) · TP $2,310 (7.3R)",
+      sizeNote: "670 cts = 67 ETH · $162,140 notional · ~$1,005 planned risk",
+      thesisOneLiner: "STOPPED OUT 8/21 at $2,435 — see the postmortem. A preemptive short off the PO2 win: a BTC May-2019 fractal as the PRIMARY idea, entry worked on the 5-min — both known red flags, and the body knew it during the hold. The irony: ETH built a higher range while BTC printed the fractal's range — right shape, wrong asset.",
       bull: {
         label: "The trade record — stopped out",
         analog: "BTC May-2019 fractal used as the primary idea — the red flag itself",
