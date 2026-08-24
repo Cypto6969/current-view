@@ -1254,60 +1254,87 @@ const DATA = {
       ticker: "BTC",
       direction: "short",
       status: "active",
-      setupTag: "Range High → Low [ASK BRENDAN — confirm tag]",
-      entry: "8/24 12:15 — SHORT 175 cts @ $79,570 (limit at the range high) · 8/24 13:30 — ADD 175 cts @ $78,610 (market, on strength) · 350 cts avg $79,090 · SL $79,285 both brackets (profit-locked vs entry 1)",
-      plannedEntry: "Short the range high $79,570 · add on strength · SL $79,285 (current, trailed) · TP $75,200 × 175 · add-TP [ASK BRENDAN]",
-      sizeNote: "350 cts = 3.50 BTC · avg $79,090 · $276,815 notional · net risk at the shared SL $79,285 = −$682.50 (entry 1 locked +$498.75 · add −$1,181.25)",
-      thesisOneLiner: "The same range traded back down: the long's TPs hit at $79,600 / $79,815 and the short went on at $79,570 — the fib 0 $79,555.9 — by resting limit at 12:15, with a second 175 added by market at $78,610 as it moved (add by strength). SL $79,285 covers both brackets, already below entry 1 — the position runs at near-zero net risk. TP $75,200 × 175 rests just under the 1.3 at $75,238.9. [ASK BRENDAN — the read in your words: new high of the range → new low, and what invalidates it beyond the SL?]",
+      setupTag: "PO3 · Range High → HTF .236",
+      entry: "8/24 12:15 — SHORT 175 cts @ $79,570 (limit at the rectangle retest, range high) · 8/24 13:30 — ADD 175 cts @ $78,610 (15-min confirmation) · 350 cts avg $79,090 · SL $79,285 both brackets — above the 15-min BMSB",
+      plannedEntry: "Short the range high $79,570 (half) + 15-min confirmation $78,610 (half) · SL $79,285 above the 15-min BMSB · TP $75,200 × 175 at the lower .236 · add-TP [ASK BRENDAN]",
+      sizeNote: "350 cts = 3.50 BTC · avg $79,090 · $276,815 notional · net risk at the shared SL $79,285 = −$682.50 (entry 1 locked +$498.75 · add −$1,181.25) — the ~$650 he can lose here, vs the −$3k the written plan would have run (see the un-written-plan section)",
+      thesisOneLiner: "PO3 back down to the .236 on the HTF — not a fractal trade, just how ranges work (2019 and 2018 printed the same unwind, kept below as CONTEXT). Entered in two tranches: half at the rectangle retest at the range high ($79,570, the fib 0 zone), half on the 15-min confirmation ($78,610). SL moved above the 15-min BMSB at $79,285 — in 2019 the 15-min BMSB loss was the dump trigger. We're DIVERGING from that script: no straight dump, price hanging at the .236 $78,911 — the read (plus the body signal) says we likely need to go HIGHER to go lower first. The tell to wait for: ETH hasn't made its new high yet while BTC did — expect ETH to print it at the midpoint of its 0→−0.15, putting in a LOWER high on BTC (possibly the .111 $79,475 retest), and the dump comes from there. If the SL takes it, it's only ~−$650 and the re-entry waits for that ETH confluence.",
       bull: {
         label: "The position — ON",
-        analog: "The same 1-hr range as the archived PO3 long, traded from the other side — entry at the fib 0 the long's TPs front-ran",
+        analog: "PO3 unwind of the same 1-hr range the long paid on — structure primary, the 2019/2018 comparators are context only",
         openPosition: true,
         position: [
-          { k: "Order 1 — range-high limit · FILLED 8/24 12:15", v: "175 cts @ $79,570 · SL $79,285 (locked, +285 pts) · TP $75,200", tone: "win" },
-          { k: "Order 2 — strength add · FILLED 8/24 13:30 (market)", v: "175 cts @ $78,610 · SL $79,285 (−675 pts) · TP [ASK BRENDAN — none attached on the ticket]", tone: "win" },
-          { k: "Net at the shared SL $79,285", v: "−$682.50 — near-zero risk on the full 350" }
+          { k: "Order 1 — rectangle-retest limit · FILLED 8/24 12:15", v: "175 cts @ $79,570 · SL $79,285 (locked, +285 pts) · TP $75,200", tone: "win" },
+          { k: "Order 2 — 15-min confirmation · FILLED 8/24 13:30 (market)", v: "175 cts @ $78,610 · SL $79,285 (−675 pts) · TP [ASK BRENDAN — none attached on the ticket; same $75,200 zone?]", tone: "win" },
+          { k: "Net at the shared SL $79,285", v: "−$682.50 — the ~$650 the trade can lose" }
         ],
         levels: [
-          { name: "Entry 1 — the range high / fib 0", value: "$79,570 (fib 0 = $79,555.9)" },
-          { name: "Entry 2 — the add", value: "$78,610" },
-          { name: "SL — shared, both brackets (current)", value: "$79,285 · [ASK BRENDAN — original SL at placement, for the record + TV alert]" },
-          { name: "TP — just under the 1.3 $75,238.9", value: "$75,200 × 175 · add exit [ASK BRENDAN]" },
-          { name: "The range below — refs", value: "1.0 $76,213.9 · sweep low $76,139.7 · 1.15 $75,724.8" },
+          { name: "Entry 1 — the rectangle retest / fib 0", value: "$79,570 (fib 0 = $79,555.9)" },
+          { name: "Entry 2 — the 15-min confirmation", value: "$78,610" },
+          { name: "SL — shared, above the 15-min BMSB", value: "$79,285 · TV alert at the line [ASK BRENDAN — confirm set]" },
+          { name: "TP — the lower .236 $75,156 / under the 1.3 $75,238.9", value: "$75,200 × 175 · add exit [ASK BRENDAN]" },
+          { name: "The grid down", value: ".236 $78,911 (price here now) · .382 $78,257 · golden pocket $77,212–$76,830 · 1.0 $76,213.9" },
+          { name: "The expected lower high — the ETH tell", value: "ETH's new high at its 0→−0.15 midpoint = BTC lower high, possibly the .111 $79,475 retest" },
           { name: "Overhead — beyond the SL", value: "swing high $79,822.7 · −0.15 $80,069.7 · −0.3 $80,586.8" },
-          { name: "R @ avg $79,090 / SL $79,285", value: "195 pts risk · 19.9R to the $75,200 TP (trailed stop — placement R [ASK BRENDAN])" }
+          { name: "R @ avg $79,090 / SL $79,285", value: "195 pts risk · 19.9R to the $75,200 TP (stop already walked past entry 1)" }
         ],
         triggersLabel: "Steps — in order",
         triggers: [
-          { label: "1. ✔ 8/24 12:10 — limit RESTING at the range high: 175 cts @ $79,570 · TP $75,200 attached", status: "met" },
+          { label: "1. ✔ 8/24 12:10 — limit RESTING at the rectangle retest, range high: 175 cts @ $79,570 · TP $75,200 attached", status: "met" },
           { label: "2. ✔ 8/24 12:15 — FILLED: 175 cts @ $79,570 — 14 pts off the fib 0 $79,555.9", status: "met" },
-          { label: "3. ✔ 8/24 13:30 — ADD on strength: 175 cts by market @ $78,610 · shares the $79,285 SL", status: "met" },
-          { label: "4. ✔ SL trailed to $79,285 — below entry 1, net position risk ~−$683", status: "met" },
-          { label: "5. TP $75,200 × 175 resting under the 1.3 — let it work", status: "pending" },
-          { label: "6. [ASK BRENDAN — the exit plan for the add 175: TP level, or trail?]", status: "pending" }
+          { label: "3. ✔ 8/24 13:30 — 15-MIN CONFIRMATION → add: 175 cts by market @ $78,610 · shares the $79,285 SL", status: "met" },
+          { label: "4. ✔ SL moved to $79,285 — ABOVE the 15-min BMSB (2019: the 15-min BMSB loss was the dump trigger) · net risk ~−$650", status: "met" },
+          { label: "5. WATCH — the divergence: no straight dump like 2019; higher-to-go-lower is the expected path. The ETH new-high / BTC lower-high confluence (possibly the .111 $79,475) is the tell that the dump window opens", status: "pending" },
+          { label: "6. TP $75,200 × 175 resting at the lower .236 — let it work · add exit [ASK BRENDAN]", status: "pending" },
+          { label: "7. If stopped: −$650, STAND DOWN and re-evaluate — the re-entry waits for the ETH confluence, no chase", status: "pending" }
         ],
         details: [
           {
-            title: "The read — LTF (1-hr): the short's grid",
+            title: "The read — MTF (1-hr): the short's grid",
             chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid off the up-leg — entry zone marked $79,538 at the fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 (price basing here at the shot) · .382 $78,257 · .49/.5237 $77,777/$77,628 · golden pocket .618–.705 $77,212–$76,830 · .786/.82 $76,477/$76,329 · target marker $75,181 at the lower .236 $75,156, next to the TP $75,200. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. Fills are CDE — the CARD governs." },
-            body: "The range that paid the long is now the map for the short: the new high of the range printed into the fib 0 zone and the short went on at it — first by the resting limit at $79,570 (no alarm-chasing), then the strength add at $78,610 once it was moving. The grid down is the ladder: .382 $78,257, the golden pocket $77,212–$76,830, then the old range lows into the TP $75,200 at the lower .236 / just under the 1.3 $75,238.9. [ASK BRENDAN — HTF/MTF reads + screenshots when you have them; this card currently carries the LTF only.]"
+            body: "The thesis: PO3 back down to the .236 on the HTF. Not a fractal trade — this is just how ranges work; the 2019 and 2018 charts printed the identical unwind, and they live below as context only. The range that paid the long is now the map for the short: the new high printed into the fib 0 zone, and the grid down is the ladder — .382 $78,257, the golden pocket $77,212–$76,830, then the old range lows into the TP $75,200 at the lower .236."
+          },
+          {
+            title: "The read — LTF (15-min): the entry + the BMSB divergence",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-34-53.png", caption: "15-min Bybit (8/24 17:34): the entry chart. The run into the fib 0 / −0.15 zone ($79,568.7 marked), the rejection to the .111 $79,030.4, and price now basing at the .236 $78,911 AROUND the 15-min BMSB — not dumping. Entry 1 at the rectangle retest $79,570; entry 2 on the 15-min confirmation $78,610. SL $79,285 sits above the BMSB. Fills are CDE — the CARD governs." },
+            body: "Entry 1 was the resting limit at the rectangle retest at the range high (half size); entry 2 came on the 15-min confirmation (half). The SL then moved above the 15-min BMSB, because in 2019 the 15-min BMSB loss was the point the dump started from. THE DIVERGENCE, called mid-trade: we did NOT dump straight down like 2019 — price is still hanging around the BMSB / .236 and hasn't been able to break. The read (and the body signal, logged honestly: the pull of being wrong is present) says we likely need to go HIGHER to go lower first. That expectation lives in the ETH-tell section — the SL is what actually governs."
+          },
+          {
+            title: "The tell — ETH's missing new high",
+            body: "BTC made its new range high; ETH has NOT made its equivalent new high yet. The expected sequence: ETH goes up and prints it at the midpoint of its 0 → −0.15, and that move puts in a LOWER HIGH on BTC — possibly the .111 $79,475 retest — and the dump comes from there. That is the confluence being waited for, in-trade and, if stopped, for the re-entry. GUARD: this is a labeled expectation, not a prediction — the written SL $79,285 governs the position, and the expectation costs nothing to be wrong about (~−$650 at the stop). If stopped: stand down, re-evaluate, wait for the ETH confluence — no chase, no re-short into the extension zone."
+          },
+          {
+            title: "The un-written plan — the $3k lesson (process record)",
+            body: "The mistake this card exists to record: the HTML sheet wasn't created BEFORE the trade. Written out first, the plan would have been a FULL short at the exact midpoint of the 1 and the −0.15 of the range, SL above the −0.3 — and that trade was almost taken live. It was passed on because the risk read −$3k at 70% utilization against a wanted −$1k (1% of the Coinbase book) — a gut number, not a sized one. That's backwards: /trade-sizing never ran, and at that R:R the −$3k was completely fine. Because the full-size plan died un-run, the entry moved DOWN a timeframe instead — half at the rectangle retest, half on the 15-min confirmation. Risk got managed well from there (net ~−$650 now), but the lesson is structural: WRITE THE SHEET FIRST, run /trade-sizing, and let the R:R — not a round-number comfort figure — size the trade. Grace noted: entered while sick as a dog, still made money on the week and managed risk throughout."
+          },
+          {
+            title: "Context — 2019, 15-min: the BMSB loss that dumped",
+            chart: { src: "charts/BTC%20Current/BTCUSD_2026-08-24_17-34-00.png", caption: "BTCUSD 15-min Bitstamp, May 2019: the comparator for the SL logic — high $8,331 into the 0 / −0.15 zone, the .111 lost at $8,268, then the 15-min BMSB loss and the straight dump. The live tape is currently DIVERGING from this: no straight dump. Context only — structure governs, the card's written levels fire the decisions." },
+            body: "This is where the SL-above-the-BMSB logic comes from: in 2019, once the 15-min lost the BMSB, the dump ran immediately. The live trade tracked that script into the rejection, then stopped tracking it — price is holding around the BMSB instead of dumping, which is exactly the divergence the higher-to-go-lower read is built on."
+          },
+          {
+            title: "Context — 2019, 1-hr: the full PO3 unwind",
+            chart: { src: "charts/BTC%20Current/BTCUSD_2026-08-24_17-33-13.png", caption: "BTCUSD 1-hr Bitstamp, May 2019: the destination the thesis points at — the −0.15 tag ($8,380 high), then the PO3 unwind through the whole grid: the 1.3 ($7,402 — marked low $7,389) and on toward the .382 $6,853 ($6,868 marked). 2018 printed the same. Context only — the CARD's grid and TP govern." },
+            body: "The same range behavior, one cycle-era earlier: tag the extension zone, then unwind the full PO3 back through the range. The 2018 chart shows it too. This is why the TP sits at the lower .236 — but the trade was taken on the LIVE structure (the rectangle retest + 15-min confirmation), not on these charts. Fractals are context; ranges are the mechanism."
           }
         ],
-        notes: "Entered 8/24 same day the PO3 long closed. Conventions: R terms only on cards · written invalidation lines BINDING, TV alerts at write time — [ASK BRENDAN — confirm the $79,285 alert is set]."
+        notes: "Entered 8/24 same day the PO3 long closed. Mid-trade honesty logged: body says wrong-side pull; divergence from the 2019 script acknowledged; the ~−$650 stop makes being early cheap. Conventions: R terms only on cards · written invalidation lines BINDING, TV alerts at write time [ASK BRENDAN — confirm the $79,285 alert is set]."
       },
       bear: {
         label: "What kills it",
-        analog: "Stop already locked past entry 1 — the trade can only give back the add's risk",
+        analog: "Stop already locked past entry 1 — the trade can only give back ~$650; the READ dies separately from the position",
         levels: [
-          { name: "SL — the hard line", value: "$79,285, both brackets (net −$682.50)" },
+          { name: "SL — the hard line, above the 15-min BMSB", value: "$79,285, both brackets (net −$682.50)" },
           { name: "Above it — the extension zone", value: "swing high $79,822.7 → −0.15 $80,069.7 → −0.3 $80,586.8" },
-          { name: "Read invalidation beyond the SL", value: "[ASK BRENDAN — what makes the short idea WRONG vs just stopped?]" }
+          { name: "If stopped — the plan", value: "stand down · re-evaluate · wait for the ETH new-high / BTC lower-high confluence for the re-entry" },
+          { name: "What kills the READ (not just the position)", value: "ETH makes its new high and BTC does NOT put in a lower high — acceptance above the −0.15 instead = the range is extending, not unwinding — stand down fully" }
         ],
         triggersLabel: "If it fires",
         triggers: [
-          { label: "$79,285 trades → flat 350, −$683 net — re-entry only on a new written setup", status: "pending" }
+          { label: "$79,285 trades → flat 350, ~−$650 net — re-entry ONLY at the ETH confluence, written out first this time", status: "pending" },
+          { label: "BTC accepts above the −0.15 $80,069.7 on the ETH new high → the unwind read is wrong — no re-short, re-map", status: "pending" }
         ],
-        notes: "A reclaim through the fib 0 and the swing high would put price back in the extension zone the long never tagged — stand down and re-map, don't re-short into it."
+        notes: "The expected path (higher to go lower) means a push toward the .111 $79,475 is NOT a kill signal — it's the setup for the lower high. The kill line is the written SL and, beyond it, acceptance in the extension zone."
       }
     }
   ],
