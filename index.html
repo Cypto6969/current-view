@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8" />
 <title>BTC Regime View — Current Cycle</title>
 <style>
@@ -1379,7 +1380,7 @@ const DATA = {
       outcome: "loss",
       pnl: "−$2,781.90 pre-fees — SL $79,600 hit 8/25, ALL 330 cts (3.30 BTC · $78,757 → $79,600 = −843 pts) · assumed clean fill — exact fill + fees at the CFM upload",
       postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the stop was anchored to where the BMSB WAS; the band migrated higher and its new top was the stop — the read was never invalidated. SLs anchored to a moving indicator must clear the indicator’s travel over the hold window, or anchor to fixed structure — applied on re-entry 2 (SL $79,880, above the $79,822.7 swing high).",
-      setupTag: "PO3 · Range High → HTF .236 · Rework RE1",
+      setupTag: "PO3 · Late Entry · Bad Stop",
       entry: "8/25 — SHORT 330 cts @ $78,757 · SL $79,600 · STOPPED same day @ ~$79,600, all 330",
       plannedEntry: "SL $79,600 · TP1 $75,200 × 165 · TP2 $72,600 × 94 · TP3 $70,670 × 71 — none reached",
       sizeNote: "330 cts = 3.30 BTC · $259,898 notional · 843 pts to the stop",
@@ -1407,7 +1408,7 @@ const DATA = {
             body: "The stop was placed just above the 15-min BMSB at $79,600. The BMSB is a moving band: it migrated higher after entry, price walked up to the band’s new top, and that top was the stop — a mechanical tag, not an invalidation. Fix applied immediately on re-entry 2: SL $79,880, above both the band’s travel and the $79,822.7 swing high. Standing rule: never anchor a hard SL to a moving indicator’s current position — clear its travel or use fixed structure. Campaign note: the two whipsaw stops total −$3,464.40; the original full-size plan (SL above the −0.3) would have been stopped as well for ≈−$3k — a wash on dollars. The write-the-sheet-first lesson stands on PROCESS. And per the written kill line: a wick through the extension zone is not ACCEPTANCE above the −0.15 — the unwind read survives on its own terms."
           }
         ],
-        notes: "ARCHIVED 8/25, same day — the campaign continues on the Active card (re-entry 2)."
+        notes: "ARCHIVED 8/25, same day — the campaign continues on the Active card (re-entry 2). Label = the two faults, named: LATE entry, bad (moving-band) stop — the PO3 read itself stands."
       },
       bear: {
         label: "What killed it",
@@ -1427,9 +1428,9 @@ const DATA = {
       direction: "short",
       closed: "2026-08-24",
       outcome: "loss",
-      pnl: "−$682.50 pre-fees at the $79,285 stop, ALL 350 cts — entry 1 +$498.75 (175 · $79,570 → $79,285) · add −$1,181.25 (175 · $78,610 → $79,285) · assumed clean fill — exact fill + fees at the CFM upload",
+      pnl: "−$682.50 pre-fees — the $79,285 stop, ALL 350 cts · entry 1 +$498.75 (175 · $79,570 → $79,285) · add −$1,181.25 (175 · $78,610 → $79,285) · assumed clean fill — exact fill + fees at the CFM upload",
       postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the full-body wrong-side feeling preceded the stop AGAIN — second documented instance in four days (ETH 8/21, this 8/24), and this time it was WRITTEN on the card mid-trade before the stop hit. Brendan at the stop: trust it for real. The protocol for acting on the signal is his to define in the postmortem.",
-      setupTag: "PO3 · Range High → HTF .236",
+      setupTag: "Fractal Early · Pre-PO3",
       entry: "8/24 — SHORT 350 cts avg $79,090 (175 @ $79,570 · 175 @ $78,610) · STOPPED same day @ $79,285, all 350",
       plannedEntry: "SL $79,285 · TP1 $75,200 × 175 · TP2 $72,460 × 100 · junk $70,680 × 75 — all cancelled at the stop",
       sizeNote: "350 cts = 3.50 BTC · $276,815 notional · net risk at SL −$682.50",
@@ -1502,7 +1503,7 @@ const DATA = {
             body: "The same range behavior, one cycle-era earlier: tag the extension zone, then unwind the full PO3 back through the range. The 2018 chart shows it too. This is why the TP sits at the lower .236 — but the trade was taken on the LIVE structure (the rectangle retest + 15-min confirmation), not on these charts. Fractals are context; ranges are the mechanism."
           }
         ],
-        notes: "ARCHIVED 8/24 — entered and stopped the same day. The body signal was logged on this card BEFORE the stop (LTF read section) — the record the postmortem should start from."
+        notes: "ARCHIVED 8/24 — entered and stopped the same day. The body signal was logged on this card BEFORE the stop (LTF read section) — the record the postmortem should start from. RELABELED 8/25: this was NOT a failed PO3 — the entry was fractal-timed (the 2019 script) and simply EARLY, before the range structure was ready. The PO3 unwind read carried on to the rework."
       },
       bear: {
         label: "What kills it",
@@ -3097,18 +3098,25 @@ const DATA = {
     const when = [];
     if (trade.opened) when.push('opened ' + trade.opened);
     if (trade.closed) when.push('closed ' + trade.closed);
+    const pnlShort = trade.pnl ? trade.pnl.split(' — ')[0] : '';
     const summary = document.createElement('summary');
     summary.innerHTML = `
       <span class="sec-title">${trade.ticker || '?'}</span>
       ${trade.direction ? `<span class="trade-direction ${dirCls}">${trade.direction.toUpperCase()}</span>` : ''}
       ${trade.setupTag ? `<span class="trade-setup">${trade.setupTag}</span>` : ''}
       <span class="sec-sub">${when.join(' · ')}</span>
-      ${trade.pnl ? `<span class="trade-pnl ${outcome}">${trade.pnl}</span>` : ''}
+      ${pnlShort ? `<span class="trade-pnl ${outcome}">${pnlShort}</span>` : ''}
       <span class="trade-status ${outcome}">${outcome.toUpperCase()}</span>
     `;
     const body = document.createElement('div');
     body.className = 'section-body';
     body.appendChild(renderTrade(trade));
+    if (trade.pnl && trade.pnl !== pnlShort) {
+      const pl = document.createElement('div');
+      pl.className = 'notes';
+      pl.innerHTML = '<b>P&L:</b> ' + trade.pnl;
+      body.appendChild(pl);
+    }
     if (trade.postmortem) {
       const pm = document.createElement('div');
       pm.className = 'notes';
