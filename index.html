@@ -1357,7 +1357,14 @@ const DATA = {
           { label: "3. ENTER: ~301 sh @ $115.50 · SL $108.27 · TPs 151/75/75", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19). Charts pending [ASK BRENDAN]. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm."
+        details: [
+          {
+            title: "The read — HTF (daily): the range and the ladder",
+            chart: { src: "charts/MSTR%20Current/MSTR_2026-08-25_16-55-13%20HTF.png", caption: "MSTR daily (8/25): the grid off the $103.82 → $197.27 range. Entry marker $115.19 at the .382 $114.45 (card entry $115.50 — the CARD governs) · SL $108.27 above the range low $103.82 · targets marked $167.71 at the .82 $168.18 (card TP1 $168.18) · $197.37 at the range high (card TP2 $197.00, front-run) · $217.91 at the −0.15 $217.21 (card TP3 $217.00, dev midpoint). Projection window shaded Sep–Dec." },
+            body: "The pullback entry sits at the .382 of the whole range with the stop tucked above the range low — the ladder walks the retracement back up: the .82, the range high, then the deviation zone above it. Fires only on the BTC trigger."
+          }
+        ],
+        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF chart added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm."
       },
       bear: {
         label: "What kills it",
@@ -1400,7 +1407,14 @@ const DATA = {
           { label: "3. ENTER: ~2,358 sh @ $10.94 · SL $10.58 · TPs 1,179/590/589", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19). Charts pending [ASK BRENDAN]. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. TP3 is a fractal-derived level — context-class target per the fractal rules; the written $18.16 governs."
+        details: [
+          {
+            title: "The read — HTF (daily): the range and the ladder",
+            chart: { src: "charts/MARA%20Current/MARA_2026-08-25_17-10-38%20HTF.png", caption: "MARA daily (8/25): the grid off the $8.67 → $16.41 range. Entry marker $11.05 at the .382 $11.08 (card entry $10.94 front-runs below it) · stop marker $10.65 (card SL $10.58 — the CARD governs) · targets $14.62 at the .82 $14.65 (card TP1 $14.69 sits a hair ABOVE the fib — noted) · $16.34 at the range high $16.41 (card TP2 $16.41) · $18.15 at the −0.15 $18.06 (card TP3 $18.16 — the trendline-fractal level). Green descending trendline runs into Nov." },
+            body: "Same structure as MSTR one grid down: entry at the .382, stop under it, ladder to the .82, the range high, and the extension where the downtrend line meets the −0.15. TP3’s trendline-fractal derivation is context-class — the written $18.16 governs."
+          }
+        ],
+        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF chart added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. TP3 is a fractal-derived level — context-class target per the fractal rules; the written $18.16 governs."
       },
       bear: {
         label: "What kills it",
@@ -1421,29 +1435,42 @@ const DATA = {
       direction: "long",
       status: "watching",
       setupTag: "Breakout Re-entry · BTC Trigger",
-      plannedEntry: "Entry $175.03 · SL $164.00 · TPs $232.00 × 57 · $239.00 × 29 · $248.00 × 28 — no orders until BTC triggers",
+      plannedEntry: "Entry $175.03 · SL $164.00 · TPs $222.00 × 57 · $239.00 × 29 · $248.00 × 28 — no orders until BTC triggers",
       sizeNote: "24.8% of Schwab (~$19,995 @ 8/25 basis) ≈ 114 sh · risk to SL 6.3%",
-      thesisOneLiner: "Breakout re-entry: COIN broke out from $147.50 (8/19, +27.7% to $188.42) with a clear re-entry zone — pullback entry $175.03, SL $164.00. Fires ONLY with the BTC flip-long from the TP1 decision tree. TP ladder 50/25/25: $232.00 (range high), $239.00 (mid deviation zone), $248.00 (the 1.25 extension) — blended +35.8%. 5.2R to TP1.",
+      thesisOneLiner: "Breakout re-entry: COIN broke out from $147.50 (8/19, +27.7% to $188.42) with a clear re-entry zone — pullback entry $175.03, SL $164.00. Fires ONLY with the BTC flip-long from the TP1 decision tree. TP ladder 50/25/25: $222.00 (range high, front-running the $223.12 fib 0 — corrected from the sheet’s $232 on 8/25), $239.00 (mid deviation zone), $248.00 (the 1.25 extension) — blended +33.0%. 4.3R to TP1.",
       bull: {
         label: "The plan — armed on the BTC trigger",
         analog: "Breakout re-entry pullback · fires WITH the BTC flip-long from the TP1 tree",
         levels: [
           { name: "Breakout price (8/19)", value: "$147.50 · +27.7% to $188.42 · clear re-entry: YES" },
           { name: "Entry — the pullback", value: "$175.03" },
+          { name: "LTF retest (8/25) — the entry zone", value: "$176.45 retested and HELD — entry front-runs it" },
           { name: "SL", value: "$164.00 (6.3%)" },
-          { name: "TP1 — range high", value: "$232.00 × 57 (+32.5%)" },
+          { name: "TP1 — range high (corrected 8/25)", value: "$222.00 × 57 (+26.8%) — front-runs the $223.12 fib 0" },
           { name: "TP2 — mid deviation zone", value: "$239.00 × 29 (+36.5%)" },
           { name: "TP3 — the 1.25 extension", value: "$248.00 × 28 (+41.7%)" },
-          { name: "R:R — $175.03 / $164.00", value: "5.2R to TP1 · blended TP +35.8%" }
+          { name: "R:R — $175.03 / $164.00", value: "4.3R to TP1 · blended TP +33.0%" }
         ],
         triggersLabel: "Steps — in order",
         triggers: [
           { label: "1. WATCH — the BTC TP1 decision tree (Active card): Branch A flip-long CONFIRMS → enter this AND the other two Schwab longs at the same time", status: "pending" },
           { label: "2. Run /trade-sizing at the trigger — share counts on this card are estimates at the $80,623.52 basis (8/25)", status: "pending" },
-          { label: "3. ENTER: ~114 sh @ $175.03 · SL $164.00 · TPs 57/29/28", status: "pending" },
+          { label: "3. ENTER: ~114 sh @ $175.03 · SL $164.00 · TPs $222 × 57 / $239 × 29 / $248 × 28", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19). Charts pending [ASK BRENDAN]. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. Lowest R:R of the basket (5.2R) — still clears the gate."
+        details: [
+          {
+            title: "The read — HTF (daily): the range and the ladder",
+            chart: { src: "charts/COIN%20Current/COIN_2026-08-25_17-01-17%20HTF.png", caption: "COIN daily (8/25): the grid off the $139.04 → $223.12 range. Entry marker $177.02 near the .49 $175.10 / .5237 $177.88 (card entry $175.03) · red zone at the .382 $166.46 with the $165.75 marker (card SL $164.00 below it — the CARD governs) · targets $222.66 at the range high $223.12 · $240.27 at the −0.15 $239.53 (card TP2 $239.00) · $250.49 at the 1.25 $249.58 (card TP3 $248.00). TP1 corrected to $222.00 on 8/25 — front-runs the range high." },
+            body: "Entry at the .49–.5237 shelf with the stop below the .382 zone. The ladder: the range high (TP1 $222, front-running the $223.12 fib 0 — corrected 8/25 from the sheet’s $232), the −0.15 deviation, then the 1.25 extension."
+          },
+          {
+            title: "The read — LTF: the retest that held (the entry zone)",
+            chart: { src: "charts/COIN%20Current/COIN_2026-08-25_17-03-03%20LTF.png", caption: "COIN zoomed (8/25): the LTF range 0 at $176.45 / 1 at $139.33. Price broke out above $176.45, tagged the −0.3 $189.41, and the pullback RETESTED the range high and HELD. Card entry $175.03 front-runs the $176.45 retest level — the CARD governs." },
+            body: "The retest of the broken range high at $176.45 held — that was likely the best entry, and the working expectation is price spends time around this shelf and offers the entry in that area. The trigger discipline is unchanged: no orders until the BTC flip-long confirms — this read says the zone should still be there when it does."
+          }
+        ],
+        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF + LTF charts added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. Lowest R:R of the basket (4.3R after the 8/25 TP1 correction) — still clears the gate. LTF chart added too — the range-high retest at $176.45 held; entry hoped for around that area."
       },
       bear: {
         label: "What kills it",
