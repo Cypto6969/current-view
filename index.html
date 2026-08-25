@@ -1255,10 +1255,10 @@ const DATA = {
       direction: "short",
       status: "active",
       setupTag: "PO3 · Range High → HTF .236 · Rework",
-      entry: "8/25 — SHORT 330 cts avg $79,400 · SL $79,880 (re-entry 2; re-entry 1 @ $79,600 stopped — see steps)",
+      entry: "8/25 — SHORT 330 cts avg $79,400 · SL $79,880 (re-entry 2; re-entry 1 stopped −$2,781.90 — archived)",
       plannedEntry: "SL $79,880 · TP1 $75,200 × 165 · TP2 $72,600 × 94 · TP3 $70,670 × 71",
       sizeNote: "330 cts = 3.30 BTC · $262,020 notional · risk at SL −$1,584 (480 pts) · 8.75R to TP1",
-      thesisOneLiner: "Same PO3 unwind read as the archived 8/24 short: range high back down to the HTF .236, TP ladder unchanged. This is re-entry 2 of the rework — re-entry 1 (330 @ $79,600) died to a stop set too close to a BMSB that then migrated higher; the new SL $79,880 sits above where the band can travel, over the swing high $79,822.7. Idea kill above the position: acceptance over the −0.15 $80,069.7 means the range is extending, not unwinding.",
+      thesisOneLiner: "Same PO3 unwind read as the archived 8/24 short: range high back down to the HTF .236, TP ladder unchanged. This is re-entry 2 of the rework — re-entry 1 (330 @ $78,757, SL $79,600, −$2,781.90) died to a stop set too close to a BMSB that then migrated higher; the new SL $79,880 sits above where the band can travel, over the swing high $79,822.7. Idea kill above the position: acceptance over the −0.15 $80,069.7 means the range is extending, not unwinding.",
       bull: {
         label: "The position — ON (re-entry 2)",
         analog: "Same PO3 unwind idea, third attempt — the lesson each time was the stop, not the read",
@@ -1282,7 +1282,7 @@ const DATA = {
         triggersLabel: "Steps — in order",
         triggers: [
           { label: "1. ✔ 8/24 — original short stopped $79,285 (−$682.50) — archived, loss on record", status: "met" },
-          { label: "2. ✘ 8/25 — RE-ENTRY 1: 330 cts @ $79,600 → STOPPED. The stop sat too close to the BMSB; the band migrated higher and its new top WAS the stop — the trade never should have been out. [ASK BRENDAN — SL level, exit fill + loss $ for the archive record]", status: "failed" },
+          { label: "2. ✘ 8/25 — RE-ENTRY 1: 330 cts @ $78,757 · SL $79,600 → STOPPED, −$2,781.90 pre-fees. The stop sat too close to the BMSB; the band migrated higher and its new top WAS the stop — the trade never should have been out · archived", status: "failed" },
           { label: "3. ✔ 8/25 — RE-ENTRY 2 (live): 330 cts avg $79,400 · SL $79,880 — placed above the band's travel AND the swing high $79,822.7, not on the band itself", status: "met" },
           { label: "4. TPs resting: $75,200 × 165 · $72,600 × 94 · $70,670 × 71 — let them work", status: "pending" },
           { label: "5. AT TP1 — the decision tree from the 8/24 card still governs: new range low + hourly close back above + tap 2/3 of a PO1/PO2 → full exit + flip long; hourly close UNDER the .236 → TP2 on", status: "pending" },
@@ -1292,11 +1292,11 @@ const DATA = {
           {
             title: "The read — MTF (1-hr): the grid (carried through the campaign)",
             chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid — fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. The CARD governs." },
-            body: "The full original record — the first entries, the TP tree, the $3k lesson, the 2019 context — lives on the archived 8/24 card. This card runs the same unwind read with the TP ladder unchanged ($75,200 / $72,600 / $70,670) and carries the campaign's running lesson: every loss so far has been the STOP, not the read."
+            body: "The full original record — the first entries, the TP tree, the $3k lesson, the 2019 context — lives on the archived 8/24 card. This card runs the same unwind read with the TP ladder unchanged ($75,200 / $72,600 / $70,670) and carries the campaign's running lesson: every loss so far has been the STOP, not the read. Campaign cost through re-entry 1: −$3,464.40 — more than the −$3k the un-written full-size plan would have risked."
           },
           {
             title: "The BMSB stop lesson (re-entry 1, 8/25)",
-            body: "Re-entry 1 went on at $79,600 with the stop parked just above the 15-min BMSB — and the BMSB is a MOVING band: it migrated higher, price walked up to the band's new top, and that top happened to be the stop. The trade was never structurally wrong; the stop was anchored to where the band WAS instead of where it could travel. Bad loss for no reason. The fix, applied on re-entry 2: anchor the stop to structure that doesn't move — above the band's realistic travel AND above the $79,822.7 swing high — so only a genuine new high takes it out. Standing rule for future cards: an SL anchored to a moving indicator must be set beyond the indicator's travel over the expected hold window, or anchored to fixed structure instead."
+            body: "Re-entry 1 went on at $78,757 with the stop $79,600 parked just above the 15-min BMSB — and the BMSB is a MOVING band: it migrated higher, price walked up to the band's new top, and that top happened to be the stop. The trade was never structurally wrong; the stop was anchored to where the band WAS instead of where it could travel. Bad loss for no reason. The fix, applied on re-entry 2: anchor the stop to structure that doesn't move — above the band's realistic travel AND above the $79,822.7 swing high — so only a genuine new high takes it out. Standing rule for future cards: an SL anchored to a moving indicator must be set beyond the indicator's travel over the expected hold window, or anchored to fixed structure instead."
           },
           {
             title: "The tell + the re-entry gate — honest status",
@@ -1373,6 +1373,56 @@ const DATA = {
   // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
   // -----------------------------------------------------------------
   closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "short",
+      closed: "2026-08-25",
+      outcome: "loss",
+      pnl: "−$2,781.90 pre-fees — SL $79,600 hit 8/25, ALL 330 cts (3.30 BTC · $78,757 → $79,600 = −843 pts) · assumed clean fill — exact fill + fees at the CFM upload",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the stop was anchored to where the BMSB WAS; the band migrated higher and its new top was the stop — the read was never invalidated. SLs anchored to a moving indicator must clear the indicator’s travel over the hold window, or anchor to fixed structure — applied on re-entry 2 (SL $79,880, above the $79,822.7 swing high).",
+      setupTag: "PO3 · Range High → HTF .236 · Rework RE1",
+      entry: "8/25 — SHORT 330 cts @ $78,757 · SL $79,600 · STOPPED same day @ ~$79,600, all 330",
+      plannedEntry: "SL $79,600 · TP1 $75,200 × 165 · TP2 $72,600 × 94 · TP3 $70,670 × 71 — none reached",
+      sizeNote: "330 cts = 3.30 BTC · $259,898 notional · 843 pts to the stop",
+      thesisOneLiner: "STOPPED OUT 8/25 at $79,600 — see the postmortem; the campaign continues as re-entry 2 (Active tab). Same PO3 unwind read as the archived 8/24 short, TP ladder unchanged. The loss was mechanical, not thesis: the stop sat just above a MOVING BMSB, the band walked higher, and its new top became the stop — the trade never should have been out.",
+      bull: {
+        label: "The trade record — stopped out",
+        analog: "Campaign leg 2 of the PO3 unwind — the stop failed, not the read",
+        openPosition: true,
+        position: [
+          { k: "Order — re-entry 1 · FILLED 8/25 · STOPPED", v: "330 cts @ $78,757 · SL $79,600 (hit) · TPs $75,200 × 165 / $72,600 × 94 / $70,670 × 71 — never in reach", tone: "loss" }
+        ],
+        levels: [
+          { name: "Entry", value: "$78,757" },
+          { name: "SL — just above the (then) BMSB", value: "$79,600 · 843 pts" },
+          { name: "TPs — unchanged ladder", value: "$75,200 × 165 · $72,600 × 94 · $70,670 × 71" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/25 — re-entered after the 8/24 stop: 330 cts @ $78,757, TP ladder attached", status: "met" },
+          { label: "2. ✘ 8/25 — STOPPED $79,600, all 330 — the BMSB migrated into the stop · re-entry 2 went on at avg $79,400, SL $79,880 (Active)", status: "failed" }
+        ],
+        details: [
+          {
+            title: "Why it died — the moving-band stop",
+            body: "The stop was placed just above the 15-min BMSB at $79,600. The BMSB is a moving band: it migrated higher after entry, price walked up to the band’s new top, and that top was the stop — a mechanical tag, not an invalidation. Fix applied immediately on re-entry 2: SL $79,880, above both the band’s travel and the $79,822.7 swing high. Standing rule: never anchor a hard SL to a moving indicator’s current position — clear its travel or use fixed structure. Campaign note: the two whipsaw stops (−$682.50 + −$2,781.90 = −$3,464.40) now exceed the −$3k risk of the original full-size written plan that went un-run — the write-the-sheet-first lesson, priced."
+          }
+        ],
+        notes: "ARCHIVED 8/25, same day — the campaign continues on the Active card (re-entry 2)."
+      },
+      bear: {
+        label: "What killed it",
+        analog: "A moving-band anchor, not the thesis",
+        levels: [
+          { name: "The mechanism", value: "BMSB migrated → band top = the stop" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "SL $79,600 — FIRED 8/25, all 330 cts → −$2,781.90 pre-fees", status: "met" }
+        ],
+        notes: "The read survives on the Active card; only the stop placement died here."
+      }
+    },
     {
       ticker: "BTC",
       direction: "short",
