@@ -729,7 +729,7 @@
 <script>
 // SIGNALS_START — auto-synced by sync.py, do not hand-edit
 const SIGNALS = {
-  "asOf": "2026-07-29",
+  "asOf": "2026-08-25",
   "overall": {
     "stateLabel": "Local Top Fully Confirmed",
     "stateShort": "BEAR RELIEF LOCAL TOP — FULLY CONFIRMED",
@@ -1146,7 +1146,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-08-07",
+  asOf: "2026-08-27",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1169,7 +1169,7 @@ const DATA = {
   probability: {
     bull: 0,
     bear: 100,
-    note: "Local Top Fully Confirmed | Confirms:10/10 (9 strict, 1 loose) Gate:1 BMSB:1 | Synced 2026-07-29"
+    note: "Local Top Fully Confirmed | Confirms:10/10 (9 strict, 1 loose) Gate:1 BMSB:1 | Synced 2026-08-25"
   },
   // Public notion.site share-to-web URLs.
   notionDashboardUrl:   "https://flannel-eyebrow-e0c.notion.site/d57d32a625b44b078858164acca2f817?v=ee625a5356f947fc9a5a98a2a322de11",
@@ -1250,80 +1250,6 @@ const DATA = {
   // (dollars live in /trade-sizing). Realized $ shows once, at close, in closedTrades.
   // -----------------------------------------------------------------
   activeTrades: [
-    {
-      ticker: "BTC",
-      direction: "short",
-      status: "active",
-      setupTag: "PO3 · Range High → HTF .236 · Rework",
-      entry: "8/25 — SHORT 330 cts avg $79,400 · SL $79,880 (re-entry 2; re-entry 1 stopped −$2,781.90 — archived)",
-      plannedEntry: "SL $79,880 · TP1 $75,200 × 165 · TP2 $72,600 × 94 · TP3 $70,670 × 71",
-      sizeNote: "330 cts = 3.30 BTC · $262,020 notional · risk at SL −$1,584 (480 pts) · 8.75R to TP1",
-      thesisOneLiner: "Same PO3 unwind read as the archived 8/24 short: range high back down to the HTF .236, TP ladder unchanged. This is re-entry 2 of the rework — re-entry 1 (330 @ $78,757, SL $79,600, −$2,781.90) died to a stop set too close to a BMSB that then migrated higher; the new SL $79,880 sits above where the band can travel, over the swing high $79,822.7. Idea kill above the position: acceptance over the −0.15 $80,069.7 means the range is extending, not unwinding.",
-      bull: {
-        label: "The position — ON (re-entry 2)",
-        analog: "Same PO3 unwind idea, third attempt — the lesson each time was the stop, not the read",
-        openPosition: true,
-        position: [
-          { k: "Position — SHORT, live", v: "330 cts avg $79,400 · SL $79,880 · TPs below", tone: "win" },
-          { k: "TP1 — the lower .236", v: "$75,200 × 165", tone: "win" },
-          { k: "TP2 — the HTF .382", v: "$72,600 × 94", tone: "win" },
-          { k: "TP3 — the HTF .49, junk bid", v: "$70,670 × 71", tone: "win" },
-          { k: "Risk at the SL", v: "−$1,584 (480 pts × 3.30 BTC)" }
-        ],
-        levels: [
-          { name: "Avg entry", value: "$79,400 (330 cts) [ASK BRENDAN — per-fill breakdown for the record]" },
-          { name: "SL — above the BMSB's travel + the swing high", value: "$79,880 · TV alert [ASK BRENDAN — confirm moved to the new line]" },
-          { name: "2nd stop — 1-hr CLOSE above the BMSB (added 8/25)", value: "manual exit, ALL 330 — fires even below $79,880 · TV alert at write time" },
-          { name: "TP1 / TP2 / TP3", value: "$75,200 × 165 · $72,600 × 94 · $70,670 × 71 — all resting [confirm]" },
-          { name: "Swing high under the SL", value: "$79,822.7" },
-          { name: "Idea kill — acceptance above", value: "−0.15 $80,069.7 (then −0.3 $80,586.8)" },
-          { name: "The grid down (unchanged)", value: ".236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156" },
-          { name: "R @ $79,400 / SL $79,880", value: "480 pts · 8.75R to TP1 · 14.2R to TP2" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. ✔ 8/24 — original short stopped $79,285 (−$682.50) — archived, loss on record", status: "met" },
-          { label: "2. ✘ 8/25 — RE-ENTRY 1: 330 cts @ $78,757 · SL $79,600 → STOPPED, −$2,781.90 pre-fees. The stop sat too close to the BMSB; the band migrated higher and its new top WAS the stop — the trade never should have been out · archived", status: "failed" },
-          { label: "3. ✔ 8/25 — RE-ENTRY 2 (live): 330 cts avg $79,400 · SL $79,880 — placed above the band's travel AND the swing high $79,822.7, not on the band itself", status: "met" },
-          { label: "4. TPs resting: $75,200 × 165 · $72,600 × 94 · $70,670 × 71 — let them work", status: "pending" },
-          { label: "5. 2ND STOP (added 8/25) — an HOURLY close above the BMSB = exit the trade, ALL 330 by manual close, even below the $79,880 hard SL · TV alert set at write time", status: "pending" },
-          { label: "6. AT TP1 — the decision tree from the 8/24 card still governs: new range low + hourly close back above + tap 2/3 of a PO1/PO2 → full exit + flip long; hourly close UNDER the .236 → TP2 on", status: "pending" },
-          { label: "7. If stopped (either stop): STAND DOWN, no third re-entry without the sheet written and /trade-sizing run", status: "pending" }
-        ],
-        details: [
-          {
-            title: "The read — MTF (1-hr): the grid (carried through the campaign)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid — fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. The CARD governs." },
-            body: "The full original record — the first entries, the TP tree, the $3k lesson, the 2019 context — lives on the archived 8/24 card. This card runs the same unwind read with the TP ladder unchanged ($75,200 / $72,600 / $70,670) and carries the campaign's running lesson: every loss so far has been the STOP, not the read. Campaign cost through re-entry 1: −$3,464.40. The counterfactual is settled: the original full-size plan would have been stopped too (≈−$3k) — a wash on dollars, so the write-the-sheet-first lesson stands on process, not on money saved."
-          },
-          {
-            title: "The BMSB stop lesson (re-entry 1, 8/25)",
-            body: "Re-entry 1 went on at $78,757 with the stop $79,600 parked just above the 15-min BMSB — and the BMSB is a MOVING band: it migrated higher, price walked up to the band's new top, and that top happened to be the stop. The trade was never structurally wrong; the stop was anchored to where the band WAS instead of where it could travel. Bad loss for no reason. The fix, applied on re-entry 2: anchor the stop to structure that doesn't move — above the band's realistic travel AND above the $79,822.7 swing high — so only a genuine new high takes it out. Standing rule for future cards: an SL anchored to a moving indicator must be set beyond the indicator's travel over the expected hold window, or anchored to fixed structure instead."
-          },
-          {
-            title: "The tell + the re-entry gate — honest status",
-            body: "The rework card gated re-entry on the ETH-confluence lower high, with the sheet written and /trade-sizing run FIRST. Both re-entries went on without those steps being confirmed on the card. [ASK BRENDAN — did the ETH tell fire (ETH new high at its 0→−0.15 midpoint)? And was $79,600 / $79,400 the lower-high structure, or a discretionary re-entry?] Logged straight because the 8/24 card's whole lesson was write-first — the record should show whether the gate held or was overridden."
-          }
-        ],
-        notes: "Re-entry 2 live 8/25. Same TP tree as the archived 8/24 card. Conventions: R terms only · written lines BINDING, TV alert moves to $79,880."
-      },
-      bear: {
-        label: "What kills it",
-        analog: "The stop now sits beyond both the band's travel and the swing high — only a real new high takes it",
-        levels: [
-          { name: "SL — the hard line", value: "$79,880 (−$1,584)" },
-          { name: "2nd stop — 1-hr close above the BMSB", value: "manual exit, all 330 — fires even below $79,880" },
-          { name: "Idea kill — acceptance above", value: "−0.15 $80,069.7 → stand down fully, re-map" }
-        ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "$79,880 trades → flat 330, −$1,584 — STAND DOWN: no third re-entry without the written sheet + /trade-sizing", status: "pending" },
-          { label: "1-hr CLOSES above the BMSB → manual exit, all 330, whatever the price — same stand-down rules", status: "pending" },
-          { label: "BTC accepts above $80,069.7 → the unwind read is dead — no re-short, re-map", status: "pending" }
-        ],
-        notes: "Three stops on one idea would be the tape saying the timing engine is off — the stand-down step is pre-written on purpose."
-      }
-    }
   ],
   // -----------------------------------------------------------------
   // TRADE PLANS — setups you're watching, not yet entered.
@@ -1494,6 +1420,100 @@ const DATA = {
   // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
   // -----------------------------------------------------------------
   closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "short",
+      closed: "2026-08-26",
+      outcome: "win",
+      pnl: "+$1,745.30 pre-fees — exited early 8/26 ahead of leg 3, ALL 355 cts (261 @ $78,835 · 94 @ $78,890) vs basis 330 @ $79,400 + 25 @ $78,565 · exact fills + fees TBD at the CFM statement upload",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the exit rule (1-hr close above the BMSB) fired at ~$78,655 but was NOT taken on the trigger — a couple more hourly closes for confirmation, then ~2 hours of internal battle, until EV math sealed the exit ~$691 worse than the rule price. The RIGHT call still got made (leg 3 came, the stop was dodged, +$2,167 vs holding), but the gap to close is rule-fire → action: the EV math that ended the battle is the math the written rule already encodes — do it BEFORE, not during.",
+      setupTag: "PO3 · Range High → HTF .236 · Rework",
+      entry: "8/25 — SHORT 330 cts avg $79,400 · 8/26 ADD 25 cts @ $78,565 · EXITED 8/26 before the close-above-BMSB leg 3: 261 cts @ $78,835 · 94 cts @ $78,890",
+      plannedEntry: "Both SLs $79,460 · TP1 $75,200 × 165 · TP2 $72,600 × 94 + 25 · TP3 $70,670 × 71",
+      sizeNote: "355 cts = 3.55 BTC · $281,661 notional · risk at SL $79,460: core −$198 · add −$224 · total −$422",
+      thesisOneLiner: "EXITED 8/26 at a profit, ahead of leg 3 — the 1-hr closed above the BMSB, ETH and SOL broke out, and the read flipped to 'this time is different'; see the postmortem. The original read: same PO3 unwind as the archived 8/24 short: range high back down to the HTF .236, TP ladder unchanged. This is re-entry 2 of the rework — re-entry 1 (330 @ $78,757, SL $79,600, −$2,781.90) died to a stop set too close to a BMSB that then migrated higher; re-entry 2 went on with SL $79,880 above the band's travel, and after the 8/26 BMSB-rejection add both SLs moved to $79,460, just over the core's entry — total risk −$422, a near-free trade. Idea kill above the position: acceptance over the −0.15 $80,069.7 means the range is extending, not unwinding.",
+      bull: {
+        label: "The position — CLOSED 8/26, exited ahead of leg 3",
+        analog: "Same PO3 unwind idea, third attempt — the lesson each time was the stop, not the read",
+        openPosition: true,
+        position: [
+          { k: "Order 1 — core SHORT, live", v: "330 cts avg $79,400 · SL $79,460 (moved 8/26) · TPs below", tone: "win" },
+          { k: "Order 2 — 8/26 ADD, BMSB touch", v: "25 cts @ $78,565 · SL $79,460 · TP $72,600", tone: "win" },
+          { k: "TP1 — the lower .236", v: "$75,200 × 165", tone: "win" },
+          { k: "TP2 — the HTF .382", v: "$72,600 × 94 (+ 25 from the add)", tone: "win" },
+          { k: "TP3 — the HTF .49, junk bid", v: "$70,670 × 71", tone: "win" },
+          { k: "Risk at the SL $79,460", v: "core −$198 (60 pts × 3.30) · add −$224 (895 pts × 0.25) · total −$422" }
+        ],
+        levels: [
+          { name: "Avg entry", value: "$79,400 (330 cts) [ASK BRENDAN — per-fill breakdown for the record]" },
+          { name: "SL — BOTH orders, moved 8/26 (just over core entry)", value: "$79,460 · TV alert [ASK BRENDAN — confirm moved to $79,460]" },
+          { name: "2nd stop — 1-hr CLOSE above the BMSB (added 8/25)", value: "manual exit, ALL 355 — fires even below $79,460 · TV alert at write time" },
+          { name: "TP1 / TP2 / TP3", value: "$75,200 × 165 · $72,600 × 94 · $70,670 × 71 — all resting [confirm]" },
+          { name: "Add — the BMSB touch (8/26)", value: "$78,565 × 25 · SL $79,460 · TP $72,600 (own bracket, filled 13:40)" },
+          { name: "Swing high under the SL", value: "$79,822.7" },
+          { name: "Idea kill — acceptance above", value: "−0.15 $80,069.7 (then −0.3 $80,586.8)" },
+          { name: "The grid down (unchanged)", value: ".236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156" },
+          { name: "R — risk basis after the move", value: "position risk −$422 at $79,460 · core near-BE (−$198)" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/24 — original short stopped $79,285 (−$682.50) — archived, loss on record", status: "met" },
+          { label: "2. ✘ 8/25 — RE-ENTRY 1: 330 cts @ $78,757 · SL $79,600 → STOPPED, −$2,781.90 pre-fees. The stop sat too close to the BMSB; the band migrated higher and its new top WAS the stop — the trade never should have been out · archived", status: "failed" },
+          { label: "3. ✔ 8/25 — RE-ENTRY 2 (live): 330 cts avg $79,400 · SL $79,880 — placed above the band's travel AND the swing high $79,822.7, not on the band itself", status: "met" },
+          { label: "4. ✔ 8/26 — ADD at the BMSB touch: 25 cts @ $78,565 · SL $79,400 · TP $72,600 (own bracket) — execution exercise: right area, minimum size, training the add-to-winners muscle", status: "met" },
+          { label: "5. ✔ 8/26 — SL MOVED, both orders to $79,400 after the BMSB rejection: core to breakeven, whole position risks −$209 max", status: "met" },
+          { label: "5b. ✔ 8/26 — SL nudged to $79,460 (both orders): 60 pts of room over the core's entry to dodge a to-the-tick BE tag · total risk −$422 · TV alert moves to $79,460", status: "met" },
+          { label: "6. TPs resting: $75,200 × 165 · $72,600 × 94 (+ 25 from the add) · $70,670 × 71 — let them work", status: "pending" },
+          { label: "7. ✔ 8/26 — 2ND STOP FIRED: the 1-hr CLOSED above the BMSB at ~$78,655 — NOT taken on the trigger: waited a couple more hourly closes for confirmation, then ~2 hrs of internal battle", status: "met" },
+          { label: "8. ✔ 8/26 — EXITED ALL 355 before bed, sealed by EV math in the head: 261 cts @ $78,835 · 94 cts @ $78,890 · +$1,745.30 pre-fees. Read: two legs up done, third coming, ETH/SOL breaking out — leg 3 came as called. vs the stop: +$2,167 better · vs the rule price $78,655: −$691 hesitation cost", status: "met" },
+          { label: "9. Never reached — AT-TP1 decision tree (the unwind never ran)", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — MTF (1-hr): the grid (carried through the campaign)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid — fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. The CARD governs." },
+            body: "The full original record — the first entries, the TP tree, the $3k lesson, the 2019 context — lives on the archived 8/24 card. This card runs the same unwind read with the TP ladder unchanged ($75,200 / $72,600 / $70,670) and carries the campaign's running lesson: every loss so far has been the STOP, not the read. Campaign cost through re-entry 1: −$3,464.40. The counterfactual is settled: the original full-size plan would have been stopped too (≈−$3k) — a wash on dollars, so the write-the-sheet-first lesson stands on process, not on money saved."
+          },
+          {
+            title: "The BMSB stop lesson (re-entry 1, 8/25)",
+            body: "Re-entry 1 went on at $78,757 with the stop $79,600 parked just above the 15-min BMSB — and the BMSB is a MOVING band: it migrated higher, price walked up to the band's new top, and that top happened to be the stop. The trade was never structurally wrong; the stop was anchored to where the band WAS instead of where it could travel. Bad loss for no reason. The fix, applied on re-entry 2: anchor the stop to structure that doesn't move — above the band's realistic travel AND above the $79,822.7 swing high — so only a genuine new high takes it out. Standing rule for future cards: an SL anchored to a moving indicator must be set beyond the indicator's travel over the expected hold window, or anchored to fixed structure instead."
+          },
+          {
+            title: "The add — training the add-to-winners muscle (8/26)",
+            body: "25 cts SHORT @ $78,565, filled 8/26 13:40 at the BMSB touch — the retest of the band from below is exactly the right area to add to a working short. The size is deliberate: the account doesn't have room to add real size, so this is a minimum-size rep to build the execution muscle of adding to winners at the right spot instead of hesitating (the add-by-strength rule, not remaining-upside). Own bracket: SL $79,400 (the core's avg entry — if price is back there, the add thesis is wrong), TP $72,600 riding with TP2. Order d29fcdc4 · attached d34541b1 · $19,641.25 notional · fee $11.83."
+          },
+          {
+            title: "The exit — 'this time is different' (8/26, before bed)",
+            body: "The 1-hr closed above the BMSB — the pre-written 2nd stop — at ~$78,655. The exit did NOT happen there: a couple more hourly closes went by for confirmation, then roughly two hours of internal battle over what to do. What sealed it was EV math run in the head: two legs up were already done, a third leg was the likely finish, and that third leg would tag the $79,460 stop — holding was negative-EV against exiting flat-to-positive now. Out at $78,835 for 261 cts and $78,890 for 94 cts, +$1,745.30 pre-fees; price shot up for leg 3 exactly as called. The honest ledger: +$2,167 better than riding into the stop, −$691 worse than taking the rule at its price. Campaign coda: the read and the final decision were both right — the remaining gap is rule-fire → action. The EV math that ended the two-hour battle is the same math the 2nd stop already encoded when it was written calm on 8/25; the rule exists so the battle doesn't have to be fought live."
+          },
+          {
+            title: "The postmortem seed — the fractal overrode a 3-tap, AGAIN (rules)",
+            body: "The real failure was upstream of the exit: a 3-tap accumulation was developing and it got ignored because of the fractal — the SAME fractal that caused the 8/10 lesson, used a second time without even noticing. RATIFIED 8/27 (Brendan): fractals have NO power over any structure developing. A fractal can never veto a live schematic — the 8/10 'structure governs' rule, hardened to law after its second paid offense. RATIFIED 8/27: 3-tap develops under a short = cut the short + flip long — that IS the normal plan, not a new rule; the only new part is the fail-safe: if price can't get above the BMSB after the flip → flip back short. ALSO RATIFIED 8/27 — the fractal role restriction: fractals get ONE job, target/magnitude projection on a trade already entered and already confirmed by structure, in the trade's direction (the 2018-fractal use — the two best trades ever). Banned from entry timing, holding, invalidation, and vetoing structure (all paid losses). Tripwire: the moment a deviation from the fractal feels like 'an issue,' the fractal has the wheel — close the fractal chart, re-read structure cold; pulling up any historical comparison mid-trade gets named on the card. NO fixed tells checklist — the tells are different every time. The general rule instead: when a live divergence from the historical pattern gets NAMED ('these closes above didn't happen before', 'the timing is different'), that naming IS the signal — a named tell demands action, not 'eeh, close enough to hold.' The progression is real: ignore → name (here, in real time) → act (next). The market is not tricking anyone — it never has; the simplest, most straightforward read is almost always right: trade what the market is showing. Also kept, deliberately: the 1-hr-close-above-BMSB exit rule. The urge to scrap it ('closes above maybe don't matter') is itself fractal-thinking — in the fractal no closes above happened; here they happened and the short failed. The result validated the rule. Full postmortem is Brendan's, in Notion."
+          },
+          {
+            title: "The tell + the re-entry gate — honest status",
+            body: "The rework card gated re-entry on the ETH-confluence lower high, with the sheet written and /trade-sizing run FIRST. Both re-entries went on without those steps being confirmed on the card. [ASK BRENDAN — did the ETH tell fire (ETH new high at its 0→−0.15 midpoint)? And was $79,600 / $79,400 the lower-high structure, or a discretionary re-entry?] Logged straight because the 8/24 card's whole lesson was write-first — the record should show whether the gate held or was overridden."
+          }
+        ],
+        notes: "CLOSED 8/26 · re-entry 2 lived one day: 8/26 add 25 cts (execution exercise), SLs walked to $79,460, then the BMSB close-above fired and the exit was taken early at a profit. Campaign net incl. the two archived stops: −$1,719.10 pre-fees."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "The stop now sits beyond both the band's travel and the swing high — only a real new high takes it",
+        levels: [
+          { name: "SL — the hard line, BOTH orders (moved 8/26)", value: "$79,460 · core −$198 · add −$224" },
+          { name: "2nd stop — 1-hr close above the BMSB", value: "manual exit, all 355 — fires even below $79,460" },
+          { name: "Idea kill — acceptance above", value: "−0.15 $80,069.7 → stand down fully, re-map" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$79,460 trades → flat ALL 355: core −$198, add −$224, total −$422 — never fired, exited first", status: "pending" },
+          { label: "✔ 8/26 — 1-hr CLOSED above the BMSB (~$78,655) → manual exit, all 355 — FIRED; taken ~2 hrs late after confirmation candles + EV math, still at a profit", status: "met" },
+          { label: "BTC accepts above $80,069.7 → the unwind read is dead — no re-short, re-map (leg 3 ran; check acceptance before any new card)", status: "pending" }
+        ],
+        notes: "Three stops on one idea would be the tape saying the timing engine is off — the stand-down step is pre-written on purpose."
+      }
+    },
     {
       ticker: "BTC",
       direction: "short",
