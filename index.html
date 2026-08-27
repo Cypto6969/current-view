@@ -1257,40 +1257,210 @@ const DATA = {
   // -----------------------------------------------------------------
   tradePlans: [
     {
-      ticker: "MSTR",
+      ticker: "BTC",
       direction: "long",
       status: "watching",
-      setupTag: "Breakout Re-entry · BTC Trigger",
-      plannedEntry: "Entry $115.50 · SL $108.27 · TPs $168.18 × 151 · $197.00 × 75 · $217.00 × 75 — no orders until BTC triggers",
-      sizeNote: "43.2% of Schwab (~$34,829 @ 8/25 basis) ≈ 301 sh · risk to SL 6.3%",
-      thesisOneLiner: "Breakout re-entry: MSTR broke out from $94.54 (8/19, +34.9% to $127.50) with a clear re-entry zone — the pullback entry is $115.50, SL $108.27. Fires ONLY with the BTC flip-long from the TP1 decision tree: when that long confirms, this enters alongside it. TP ladder 50/25/25: $168.18 (the .820), $197.00 (range high), $217.00 (dev midpoint) — blended +62.4%. 7.3R to TP1.",
+      setupTag: "3-Tap Accum · Third Tap",
+      plannedEntry: "LONG 412 cts limit $79,155 (post-only, SET 8/27) · SL $78,815 · TP $82,100 × 412",
+      sizeNote: "412 cts = 4.12 BTC · $326,119 notional · ~4.1x lev · risk at SL −$1,400.80",
+      thesisOneLiner: "Third-tap long on the 3-tap accumulation the 8/26 postmortem named — the structure the fractal overrode, now traded per the ratified rule: 3-tap under a short = cut and flip long. Limit set at $79,155 off the HTF .42/.53 shelf ($79,029–$79,115), stop 340 pts under at $78,815, full 412 taking profit at $82,100 — the front-run of the HTF .666 ($81,995.7) × −0.15 deviation midline ($82,149) confluence. 8.7R. Campaign leg 1: this long → BTC short at the confluence (next card) → cut at the BMSB → the Schwab equity longs + trade-3 BTC long.",
       bull: {
-        label: "The plan — armed on the BTC trigger",
-        analog: "Breakout re-entry pullback · fires WITH the BTC flip-long from the TP1 tree",
+        label: "The plan — limit resting",
+        analog: "The ratified 3-tap flip — the trade the last short's exit was supposed to become",
         levels: [
-          { name: "Breakout price (8/19)", value: "$94.54 · +34.9% to $127.50 · clear re-entry: YES" },
-          { name: "Entry — the pullback", value: "$115.50" },
-          { name: "SL", value: "$108.27 (6.3%)" },
-          { name: "TP1 — the .820", value: "$168.18 × 151 (+45.6%)" },
-          { name: "TP2 — range high", value: "$197.00 × 75 (+70.6%)" },
-          { name: "TP3 — dev midpoint", value: "$217.00 × 75 (+87.9%)" },
-          { name: "R:R — $115.50 / $108.27", value: "7.3R to TP1 · blended TP +62.4%" }
+          { name: "Entry — resting limit, post-only", value: "$79,155 × 412 · the HTF .42/.53 shelf $79,029–$79,115" },
+          { name: "SL", value: "$78,815 (340 pts) [ASK BRENDAN — derivation; chart tool shows $78,699 — the CARD governs]" },
+          { name: "TP — all 412", value: "$82,100 (2,945 pts) · front-run of the .666 $81,995.7 × −0.15 $82,149 confluence" },
+          { name: "R:R — $79,155 / $78,815", value: "8.7R to the TP" },
+          { name: "Risk at the SL", value: "−$1,400.80 (340 pts × 4.12)" }
         ],
         triggersLabel: "Steps — in order",
         triggers: [
-          { label: "1. WATCH — the BTC TP1 decision tree (Active card): Branch A flip-long CONFIRMS → enter this AND the other two Schwab longs at the same time", status: "pending" },
-          { label: "2. Run /trade-sizing at the trigger — share counts on this card are estimates at the $80,623.52 basis (8/25)", status: "pending" },
-          { label: "3. ENTER: ~301 sh @ $115.50 · SL $108.27 · TPs 151/75/75", status: "pending" },
+          { label: "1. ✔ 8/27 — limit SET: 412 cts @ $79,155 post-only (moved down from the $79,165 ticket) · TP $82,100 · SL $78,815 · brackets + TV alerts CONFIRMED 8/27", status: "met" },
+          { label: "2. ON FILL → graduate to Active · confirm avg fill + brackets live", status: "pending" },
+          { label: "3. FAIL-SAFE (ratified 8/27): after the fill, price can't get above the BMSB → flip back short — that IS the rule, pre-written", status: "pending" },
+          { label: "4. TP $82,100 hits → flat, then the short at the confluence arms (BTC short card + MSTZ + CONI)", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The campaign — long, short, flip (the whole map)",
+            body: "This card is leg 1 of a mapped sequence: long the third tap to $82,110 → short the top on BTC (CFM) with MSTR and COIN shorts via inverse ETFs (MSTZ −2x, CONI −2x; no MARA short — the % move is too small and no inverse ETF exists) → cut the shorts at the BMSB → enter the Schwab longs (MSTR, MARA, COIN, options overlay) near the .382, with a BTC long re-entry as well. T+1 is structural, not a problem: the inherited-IRA cash account settles T+1, and the sequence covers shorts at the BMSB (higher, first) while the longs rest near the .382 (lower, later) — the settlement day is built in unless the flush does both in one session, in which case the Schwab longs slip a day and only the CFM BTC long fires immediately."
+          },
+          {
+            title: "The weekend guard — when the equity shorts get skipped",
+            body: "The EQUITY shorts (MSTZ/CONI) are predicated on the BTC down-move playing out during market hours. If the move starts Friday and bottoms over the weekend, they get SKIPPED — no holding −2x ETFs through a weekend open you can't see — and the equity side goes longs-only, possibly entered before the full down-move completes. The BTC short is NOT conditional: perps run 24/7, that leg is a for-sure trade regardless of the calendar. Decision lives with the tape; the branch is pre-written here so it's a plan, not an improvisation."
+          },
+          {
+            title: "The read — LTF (1-hr): the shelf and the confluence overhead",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_17-57-47%20LTF%20Long%203rd%20leg.png", caption: "1-hr Bybit (8/27 17:57): the leg grid — fib 0 $81,258.4 · .111 $80,605.6 · .5 $78,359 · .236 $76,380.4 · 1 $75,563. Extension −0.15 $82,149. HTF fibs overlaid: .666 $81,995.7 · .618 $79,950.7 · the .42/.53 shelf $79,029–$79,115 (blue) — the entry zone. Position tool drawn entry $79,120.1 / SL $78,699.0 / TP $82,033.8 — chart-vs-card drift: the CARD governs ($79,155 / $78,815 / $82,100)." },
+            body: "Entry off the HTF .42/.53 shelf where price based, riding the third leg up into the confluence overhead: the HTF .666 at $81,995.7 stacked with the −0.15 deviation midline at $82,149 — the TP $82,100 front-runs the pair. That same confluence is where the short card's entry sits ($82,191): the TP here IS the handoff."
+          }
+        ],
+        notes: "Created 8/27 from the live Coinbase ticket (fee est. ~$214.51 not card data); entry moved $79,165 → $79,155 and TP $82,110 → $82,100 same day, pre-fill, limit SET. Single full-size TP — as specified, no ladder. [ASK BRENDAN — /trade-sizing run for the record, or logged as skipped?]"
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Tight stop under the tap — a break of the third tap low is the invalidation",
+        levels: [
+          { name: "SL after fill", value: "$78,815 · TV alert at write time" },
+          { name: "Fail-safe", value: "can't reclaim the BMSB after the flip → flip back short (ratified 8/27)" },
+          { name: "Pre-fill", value: "limit + brackets resting — no fill, no trade" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$78,815 trades → flat all 412, −$1,442 — re-entry only with the sheet written + /trade-sizing run", status: "pending" },
+          { label: "No fill and price runs without the tap → stand down, the short-at-the-top card becomes the next trade", status: "pending" }
+        ],
+        notes: "The 3-tap is a live schematic — no fractal can veto it (law, 8/27, second paid offense)."
+      }
+    },
+    {
+      ticker: "BTC",
+      direction: "short",
+      status: "watching",
+      setupTag: "Confluence Short · .666 × −0.15 → HTF .236",
+      plannedEntry: "SHORT [cts at arm time] @ $82,191 · SL $83,163.4 · cover $76,964.4 — no orders until leg 1 long completes",
+      sizeNote: "Counts deferred by design (8/27) — set near the trade off live account size + the actual high · 5.4R at the drawn levels",
+      thesisOneLiner: "Campaign leg 2: short the confluence the leg-1 long delivers into — entry $82,191 at the HTF .666 ($81,995.7) × −0.15 midline ($82,150.7) stack, SL $83,163.4 above the −0.3 ($83,051.3). Cover $76,964.4 front-runs the HTF .236 ($77,091.4), with the live cut trigger being entry into the BMSB — then flip to the longs. MSTZ and CONI short alongside in Schwab, MARA excluded (move too small, no inverse ETF). This BTC short is a FOR-SURE trade — perps run 24/7, unaffected by weekends; only the equity shorts are conditional (weekend guard + R:R), and they can be skipped without touching this leg.",
+      bull: {
+        label: "The plan — arms after leg 1",
+        analog: "The same unwind read the 8/24–8/26 campaign ran, re-mapped from one floor higher",
+        levels: [
+          { name: "Entry — the confluence", value: "$82,191 · .666 $81,995.7 × −0.15 $82,150.7" },
+          { name: "SL", value: "$83,163.4 · above the −0.3 $83,051.3, under the .705 $83,695.8" },
+          { name: "Cover / TP", value: "$76,964.4 · front-runs the HTF .236 $77,091.4 · live trigger = entry into the BMSB" },
+          { name: "R:R — $82,191 / $83,163.4", value: "5.4R to the cover · −6.4% move" },
+          { name: "Size", value: "deferred by design — cts + /trade-sizing at arm time (live account size, actual high)" },
+          { name: "Entry flex", value: "possibly from HIGHER than $82,191 — the actual top sets it; re-draw at arm time" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. WAIT — leg 1 long runs to $82,100 and flattens; this card arms on that exit", status: "pending" },
+          { label: "2. MARKET-HOURS CHECK (equity side only): down-move likely to start Friday / bottom over a weekend → SKIP MSTZ/CONI — this BTC short goes on regardless, perps are 24/7", status: "pending" },
+          { label: "3. Run /trade-sizing → SHORT [cts] @ $82,191 · SL $83,163.4 · TV alert at write time", status: "pending" },
+          { label: "4. Same session: MSTZ + CONI shorts on in Schwab (own cards once levels are set)", status: "pending" },
+          { label: "5. CUT on entry into the BMSB (resting cover $76,964.4 as the floor) → sell MSTZ/CONI same moment — their T+1 settlement clock starts here", status: "pending" },
+          { label: "6. Flat → trade-3 long + the Schwab longs take over (their cards)", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — LTF (1-hr): the confluence and the unwind grid",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_18-02-24%20LTF%20Short.png", caption: "1-hr Bybit (8/27 18:02): position tool drawn short $82,191.0 / SL $83,163.4 / TP $76,964.4. Overhead: −0.15 $82,150.7 · −0.3 $83,051.3 · HTF .705 $83,695.8. Below: fib 0 $81,259.9 · .5 $78,359.7 · HTF .236 $77,091.4 (yellow) with the TP just under it · 1 $75,563 · HTF .382 $74,062.5. The CARD governs." },
+            body: "Entry where the leg-1 long takes profit: the .666 × −0.15 stack. The unwind targets the HTF .236 — the drawn cover front-runs it — but the operative cut is the BMSB: price entering the band is the flip signal, the resting $76,964.4 is the floor if it flushes straight through. Same PO3-unwind family as the August campaign, one floor higher after the re-map."
+          },
+          {
+            title: "The weekend guard — equity shorts only, BTC unaffected",
+            body: "The EQUITY shorts (MSTZ/CONI) predicate on the move playing out during market hours. If BTC starts the down-move on a Friday and the bottom lands over a weekend, they are SKIPPED — no holding −2x ETFs across an open you can't see — and the equity side goes longs-only, possibly entered before the down-move fully completes. This BTC short is untouched by the branch: perps trade 24/7, the trade is FOR SURE. Pre-written so the call is a branch, not an improvisation."
+          },
+          {
+            title: "The R:R honesty note — the optional legs are the equity shorts",
+            body: "The equity shorts capture ~20% moves against longs planned for far larger ones, with T+1 friction on top — if their entries don't come to the fibs, there is NO chase: skip MSTZ/CONI and let the long cards fire on their own levels. The BTC short is NOT in that bucket — it is a committed leg of the campaign (5.4R, 24/7 market, no settlement friction). The equity side profits fine with its shorts skipped; nothing here is forced."
+          }
+        ],
+        notes: "Created 8/27 from the chart; counts + final entry set at arm time by design. MSTZ (−2x MSTR) + CONI (−2x COIN) cards pending: the short-from fib is UNRESOLVED until BTC shows its top — MSTR from one of the .666 / .705 / .786 / .82, COIN from the .786 or the .82. No MARA short (move too small, no inverse ETF)."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Acceptance over the −0.3 = the range extending again, not unwinding",
+        levels: [
+          { name: "SL after entry", value: "$83,163.4 · TV alert at write time" },
+          { name: "Idea kill", value: "acceptance above the −0.3 $83,051.3 / the .705 $83,695.8 → no re-short, re-map" },
+          { name: "Pre-arm", value: "no orders — leg 1 must complete first" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$83,163.4 trades → flat all, sell MSTZ/CONI same session — one shot, no re-entry without the sheet + /trade-sizing", status: "pending" },
+          { label: "Weekend-start branch fires → MSTZ/CONI skipped, equity side longs-only — this short runs regardless", status: "pending" }
+        ],
+        notes: "Third campaign on this unwind idea — the stand-down-after-stop rule carries over from 8/26."
+      }
+    },
+    {
+      ticker: "BTC",
+      direction: "long",
+      status: "watching",
+      setupTag: "Trade 3 · HTF .236 Reload → .786/.82",
+      plannedEntry: "LONG [cts at arm time] @ $76,860.9 · SL $76,229.2 · TPs $86,523.1 / $88,211.7 / $88,954.1 [counts at arm time]",
+      sizeNote: "Counts deferred by design (8/27) — set near the trade off live account size · 15.3R to TP1 at the drawn levels",
+      thesisOneLiner: "Campaign leg 3: the reload long after the short's unwind — entry $76,860.9 just under the HTF .236 ($77,052.4), SL $76,229.2 above the fib 1 ($75,563). Targets walk the HTF retracement: $86,523.1, $88,211.7 into the .786 ($87,340.2)/.82 ($88,916.8) zone. 15.3R to TP1, ~+15.7% to the top. Fires alongside the Schwab longs (MSTR/MARA/COIN + options) — this one on CFM, so it enters immediately while the Schwab side waits out T+1 if the flush is fast.",
+      bull: {
+        label: "The plan — arms when the short covers",
+        analog: "The completion move the equity longs were always mapped to — BTC's own leg of it",
+        levels: [
+          { name: "Entry — under the HTF .236", value: "$76,860.9 · .236 $77,052.4" },
+          { name: "SL", value: "$76,229.2 · above the fib 1 $75,563" },
+          { name: "TP1", value: "$86,523.1 [counts TBD]" },
+          { name: "TP2", value: "$88,211.7 [counts TBD]" },
+          { name: "TP3 — the .786/.82 zone", value: "$88,954.1 · .786 $87,340.2 · .82 $88,916.8 [counts TBD]" },
+          { name: "R:R — $76,860.9 / $76,229.2", value: "15.3R to TP1 · +15.7% to the top" },
+          { name: "Size", value: "deferred by design — cts + TP split + /trade-sizing at arm time" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. WAIT — arms when the leg-2 short covers at the BMSB / $76,964.4 (or on the weekend-guard longs-only branch, possibly before the down-move completes)", status: "pending" },
+          { label: "2. Run /trade-sizing → resting limit $76,860.9 · SL $76,229.2 · TV alert at write time", status: "pending" },
+          { label: "3. Same event, Schwab side: MSTZ/CONI sale settles T+1 → MSTR/MARA/COIN longs + options enter next session on their cards", status: "pending" },
+          { label: "4. On fill → graduate to Active · TP brackets per the [counts TBD] split", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — MTF (4-hr): the reload and the path",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_18-33-14%20MTF%20Long%20trade%203.png", caption: "4-hr Bybit (8/27 18:33): position tool drawn long $76,860.9 / SL $76,229.2 / targets $86,523.1 · $88,211.7 · $88,954.1. Grid: HTF .236 $77,052.4 (yellow) over the entry · fib 1 $75,563 under the SL · .705 $83,695.8 · .786 $87,340.2 · .82 $88,916.8 up top. Green hand-drawn path runs the zigzag into a 'Sep 15th assumption' marker near $84k before the push to the .82 zone. The CARD governs." },
+            body: "The entry reloads just under the HTF .236 the short unwinds into, stop tucked over the fib 1. The ladder walks the big retracement to the .786/.82. The green path with the Sep 15th marker is a PATH — a labeled expectation, not a prediction: written levels fire the entries, the tape governs, and the path invalidates; the trade doesn't."
+          }
+        ],
+        notes: "Created 8/27 from the chart. This is the BTC leg of the same trigger event that fires the three Schwab long cards — their entries/TPs are getting revised (same form) [ASK BRENDAN — revised numbers + options overlay]."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Lose the fib 1 floor and the flush is not a reload",
+        levels: [
+          { name: "SL after entry", value: "$76,229.2 · TV alert at write time" },
+          { name: "Pre-arm", value: "no orders until the short leg resolves (or the longs-only branch fires)" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$76,229.2 trades → flat — re-entry only with the sheet written + /trade-sizing run", status: "pending" }
+        ],
+        notes: "The BTC legs always run — only the equity shorts (MSTZ/CONI) can be skipped on the weekend/R:R branch, and this card fires on its own level either way."
+      }
+    },
+    {
+      ticker: "MSTR",
+      direction: "long",
+      status: "watching",
+      setupTag: "Breakout Re-entry · .382 Reload · BTC Trigger",
+      plannedEntry: "Entry $114.30 · SL $108.27 · TPs $197.37 / $211.72 / $224.92 (50/25/25, counts at arm time) — no orders until BTC triggers",
+      sizeNote: "43.2% of the Schwab basket · counts at arm time off live account size · risk to SL 5.3%",
+      thesisOneLiner: "Breakout re-entry, re-drawn 8/27 off the full $197.27 → $82.54 range: entry $114.30 at the .382 ($114.45), SL $108.27 unchanged. Fires with the BTC flip-long (trade-3 card) — Schwab cash lands T+1 after the MSTZ sale, so this enters the session after the flip. TP ladder raised 8/27 eve, 50/25/25: $197.37 (the range high), $211.72 (the deviation midline), $224.92 (the −0.15 $224.81) — blended +81.8%. 13.8R to TP1. MSTZ shorts this name first — its entry fib (.666/.705/.786/.82) resolves when BTC tops.",
+      bull: {
+        label: "The plan — armed on the BTC trigger",
+        analog: "Breakout re-entry pullback · fires WITH the BTC trade-3 flip-long",
+        levels: [
+          { name: "Breakout price (8/19)", value: "$94.54 · clear re-entry: YES" },
+          { name: "Entry — the .382 reload", value: "$114.30 · the .382 $114.45" },
+          { name: "SL", value: "$108.27 (5.3%)" },
+          { name: "TP1 — the range high", value: "$197.37 (+72.7%) · fib 0 $197.27" },
+          { name: "TP2 — the deviation midline", value: "$211.72 (+85.2%) · drawn dashed between the 0 and the −0.15" },
+          { name: "TP3 — the −0.15", value: "$224.92 (+96.8%) · −0.15 $224.81" },
+          { name: "R:R — $114.30 / $108.27", value: "13.8R to TP1 · blended TP +81.8%" },
+          { name: "MSTZ short-from candidates (pre-trade)", value: ".666 $146.89 · .705 $152.02 · .786 $163.23 · .82 $168.18 — BTC's top picks it" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. WATCH — the BTC campaign (Plans tab): leg-2 short covers at the BMSB / trade-3 long fires → this basket goes next", status: "pending" },
+          { label: "2. SELL MSTZ at the BTC cover → T+1 settlement clock starts · run /trade-sizing for the basket counts", status: "pending" },
+          { label: "3. ENTER (next session, cash settled): $114.30 · SL $108.27 · TPs $197.37/$211.72/$224.92 at 50/25/25 [counts at arm time] · options overlay per the sizing run", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
         details: [
           {
-            title: "The read — HTF (daily): the range and the ladder",
-            chart: { src: "charts/MSTR%20Current/MSTR_2026-08-25_16-55-13%20HTF.png", caption: "MSTR daily (8/25): the grid off the $103.82 → $197.27 range. Entry marker $115.19 at the .382 $114.45 (card entry $115.50 — the CARD governs) · SL $108.27 above the range low $103.82 · targets marked $167.71 at the .82 $168.18 (card TP1 $168.18) · $197.37 at the range high (card TP2 $197.00, front-run) · $217.91 at the −0.15 $217.21 (card TP3 $217.00, dev midpoint). Projection window shaded Sep–Dec." },
-            body: "The pullback entry sits at the .382 of the whole range with the stop tucked above the range low — the ladder walks the retracement back up: the .82, the range high, then the deviation zone above it. Fires only on the BTC trigger."
+            title: "The read — HTF (daily): the full range and the ladder (re-drawn 8/27)",
+            chart: { src: "charts/MSTR%20Current/MSTR_2026-08-27_19-12-08.png", caption: "MSTR daily (8/27 19:12, close $137.40): the grid off the full $197.27 → $82.54 range. Position tool: entry $114.30 at the .382 $114.45 · SL $108.27 · targets $197.37 at the fib 0 $197.27 · $211.72 at the dashed deviation midline · $224.92 at the −0.15 $224.81. Overhead fibs (the MSTZ short-from candidates): .618 $140.83 · .666 $146.89 · .705 $152.02 · .786 $163.23 · .82 $168.18. Projection window shaded Sep–Dec." },
+            body: "Re-drawn 8/27 on the full range (grid anchors the $82.54 low), targets RAISED the same evening: the .82 target came off the ladder and the whole stack moved into the deviation zone — range high, midline, −0.15. Entry at the .382 with the stop under it. The trade is the round-trip: MSTZ shorts the name from whichever overhead fib BTC's top maps to, and this long catches the .382 reload."
           }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF chart added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm."
+        notes: "Re-drawn 8/27 from the new chart (was the 8/19 sheet); counts at arm time by design. Options overlay planned — sized at the /trade-sizing run. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute — chosen deliberately, the trigger is Brendan's own BTC entry, not an alarm."
       },
       bear: {
         label: "What kills it",
@@ -1301,7 +1471,7 @@ const DATA = {
         ],
         triggersLabel: "If it fires",
         triggers: [
-          { label: "BTC never triggers (no flip-long at TP1) → this card stays dormant — NO independent entry", status: "pending" }
+          { label: "BTC never triggers (no flip-long) → this card stays dormant — NO independent entry", status: "pending" }
         ],
         notes: "Correlated basket: MSTR+MARA+COIN = 100% of the Schwab book at trigger — the /trade-sizing run at trigger owns that decision."
       }
@@ -1310,48 +1480,49 @@ const DATA = {
       ticker: "MARA",
       direction: "long",
       status: "watching",
-      setupTag: "Breakout Re-entry · BTC Trigger · Miners",
-      plannedEntry: "Entry $10.94 · SL $10.58 · TPs $14.69 × 1,179 · $16.41 × 590 · $18.16 × 589 — no orders until BTC triggers",
-      sizeNote: "32.0% of Schwab (~$25,800 @ 8/25 basis) ≈ 2,358 sh · risk to SL 3.3%",
-      thesisOneLiner: "Breakout re-entry: MARA broke out from $8.90 (8/19, +34.5% to $11.97) with a clear re-entry zone — pullback entry $10.94, SL $10.58 (tightest of the three). Fires ONLY with the BTC flip-long from the TP1 decision tree. TP ladder 50/25/25: $14.69 (the .820), $16.41 (the .705 / range high), $18.16 (trendline fractal) — blended +46.1%. 10.4R to TP1.",
+      setupTag: "Breakout Re-entry · .382 Reload · BTC Trigger · Miners",
+      plannedEntry: "Entry $11.05 · SL $10.45 · TPs $16.34 / $18.15 / $18.66 (50/25/25, counts at arm time) — no orders until BTC triggers",
+      sizeNote: "32.0% of the Schwab basket · counts at arm time off live account size · risk to SL 5.4%",
+      thesisOneLiner: "Breakout re-entry, re-drawn 8/27: entry $11.05 at the .382 ($11.08), SL $10.45. Fires with the BTC flip-long (trade-3 card), entering the session after settlement with the rest of the basket. TP ladder raised 8/27 eve, 50/25/25: $16.34 (the range high $16.41), $18.15 (the −0.15 $18.06), $18.66 (front-run of the big-grid .82 $18.70) — blended +57.2%. 8.8R to TP1. LONG ONLY — no MARA short leg: the % move is too small and no inverse ETF exists.",
       bull: {
         label: "The plan — armed on the BTC trigger",
-        analog: "Breakout re-entry pullback · fires WITH the BTC flip-long from the TP1 tree",
+        analog: "Breakout re-entry pullback · fires WITH the BTC trade-3 flip-long",
         levels: [
-          { name: "Breakout price (8/19)", value: "$8.90 · +34.5% to $11.97 · clear re-entry: YES" },
-          { name: "Entry — the pullback", value: "$10.94" },
-          { name: "SL", value: "$10.58 (3.3%)" },
-          { name: "TP1 — the .820", value: "$14.69 × 1,179 (+34.3%)" },
-          { name: "TP2 — the .705 / range high", value: "$16.41 × 590 (+50.0%)" },
-          { name: "TP3 — trendline fractal", value: "$18.16 × 589 (+66.0%)" },
-          { name: "R:R — $10.94 / $10.58", value: "10.4R to TP1 · blended TP +46.1%" }
+          { name: "Breakout price (8/19)", value: "$8.90 · clear re-entry: YES" },
+          { name: "Entry — the .382 reload", value: "$11.05 · the .382 $11.08" },
+          { name: "SL", value: "$10.45 (5.4%)" },
+          { name: "TP1 — the range high", value: "$16.34 (+47.9%) · fib 0 $16.41" },
+          { name: "TP2 — the −0.15", value: "$18.15 (+64.3%) · −0.15 $18.06" },
+          { name: "TP3 — front-run of the big-grid .82", value: "$18.66 (+68.9%) · .82 $18.70" },
+          { name: "R:R — $11.05 / $10.45", value: "8.8R to TP1 · blended TP +57.2%" },
+          { name: "Short leg", value: "NONE — move too small, no inverse ETF" }
         ],
         triggersLabel: "Steps — in order",
         triggers: [
-          { label: "1. WATCH — the BTC TP1 decision tree (Active card): Branch A flip-long CONFIRMS → enter this AND the other two Schwab longs at the same time", status: "pending" },
-          { label: "2. Run /trade-sizing at the trigger — share counts on this card are estimates at the $80,623.52 basis (8/25)", status: "pending" },
-          { label: "3. ENTER: ~2,358 sh @ $10.94 · SL $10.58 · TPs 1,179/590/589", status: "pending" },
+          { label: "1. WATCH — the BTC campaign (Plans tab): leg-2 short covers at the BMSB / trade-3 long fires → this basket goes next", status: "pending" },
+          { label: "2. Run /trade-sizing for the basket counts at the trigger", status: "pending" },
+          { label: "3. ENTER (next session, cash settled): $11.05 · SL $10.45 · TPs $16.34/$18.15/$18.66 at 50/25/25 [counts at arm time] · options overlay per the sizing run", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
         details: [
           {
-            title: "The read — HTF (daily): the range and the ladder",
-            chart: { src: "charts/MARA%20Current/MARA_2026-08-25_17-10-38%20HTF.png", caption: "MARA daily (8/25): the grid off the $8.67 → $16.41 range. Entry marker $11.05 at the .382 $11.08 (card entry $10.94 front-runs below it) · stop marker $10.65 (card SL $10.58 — the CARD governs) · targets $14.62 at the .82 $14.65 (card TP1 $14.69 sits a hair ABOVE the fib — noted) · $16.34 at the range high $16.41 (card TP2 $16.41) · $18.15 at the −0.15 $18.06 (card TP3 $18.16 — the trendline-fractal level). Green descending trendline runs into Nov." },
-            body: "Same structure as MSTR one grid down: entry at the .382, stop under it, ladder to the .82, the range high, and the extension where the downtrend line meets the −0.15. TP3’s trendline-fractal derivation is context-class — the written $18.16 governs."
+            title: "The read — HTF (daily): the range and the ladder (re-drawn 8/27)",
+            chart: { src: "charts/MARA%20Current/MARA_2026-08-27_19-12-01.png", caption: "MARA daily (8/27 19:12, close $11.87): the grid off the $16.41 → $8.67 range, plus the bigger grid overhead (.705 $16.18 · .786 $17.91 · .82 $18.70). Position tool: entry $11.05 at the .382 $11.08 · SL $10.45 · targets $16.34 at the fib 0 $16.41 · $18.15 at the −0.15 $18.06 (a hair above the fib — noted) · $18.66 under the big-grid .82 $18.70. The CARD governs." },
+            body: "Same structure as MSTR one grid down, targets RAISED the same evening: the $14.62 (.82) target came off and the ladder now runs range high → −0.15 → the big-grid .82 front-run at $18.66. Entry at the .382, stop under it. The 8/25 card front-ran the .382 from below at $10.94 — the 8/27 re-draw puts the entry on its fib cleanly."
           }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF chart added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. TP3 is a fractal-derived level — context-class target per the fractal rules; the written $18.16 governs."
+        notes: "Re-drawn 8/27 from the new chart (was the 8/19 sheet); counts at arm time by design. Options overlay planned — sized at the /trade-sizing run. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute — chosen deliberately, the trigger is Brendan's own BTC entry, not an alarm."
       },
       bear: {
         label: "What kills it",
         analog: "No position until the BTC trigger — only the setup can die here",
         levels: [
-          { name: "SL after entry", value: "$10.58" },
+          { name: "SL after entry", value: "$10.45" },
           { name: "Pre-entry", value: "no orders resting — nothing can fire" }
         ],
         triggersLabel: "If it fires",
         triggers: [
-          { label: "BTC never triggers (no flip-long at TP1) → this card stays dormant — NO independent entry", status: "pending" }
+          { label: "BTC never triggers (no flip-long) → this card stays dormant — NO independent entry", status: "pending" }
         ],
         notes: "Part of the 100%-of-book basket at trigger — /trade-sizing owns the final counts."
       }
@@ -1360,49 +1531,44 @@ const DATA = {
       ticker: "COIN",
       direction: "long",
       status: "watching",
-      setupTag: "Breakout Re-entry · BTC Trigger",
-      plannedEntry: "Entry $175.03 · SL $164.00 · TPs $222.00 × 57 · $239.00 × 29 · $248.00 × 28 — no orders until BTC triggers",
-      sizeNote: "24.8% of Schwab (~$19,995 @ 8/25 basis) ≈ 114 sh · risk to SL 6.3%",
-      thesisOneLiner: "Breakout re-entry: COIN broke out from $147.50 (8/19, +27.7% to $188.42) with a clear re-entry zone — pullback entry $175.03, SL $164.00. Fires ONLY with the BTC flip-long from the TP1 decision tree. TP ladder 50/25/25: $222.00 (range high, front-running the $223.12 fib 0 — corrected from the sheet’s $232 on 8/25), $239.00 (mid deviation zone), $248.00 (the 1.25 extension) — blended +33.0%. 4.3R to TP1.",
+      setupTag: "Breakout Re-entry · .382 Reload · BTC Trigger",
+      plannedEntry: "Entry $166.69 · SL $161.78 · TPs $222.66 / $239.08 / $249.85 (50/25/25, counts at arm time) — no orders until BTC triggers",
+      sizeNote: "24.8% of the Schwab basket · counts at arm time off live account size · risk to SL 2.9%",
+      thesisOneLiner: "Breakout re-entry, re-drawn 8/27: entry moves DOWN from the $175 shelf to $166.69 at the .382 ($166.46), SL $161.78 — the tightest stop of the basket. Fires with the BTC flip-long (trade-3 card), entering the session after the CONI sale settles. TP ladder 50/25/25: $222.66 (the range high $223.12), $239.08 (the −0.15 $239.53), $249.85 (the 1.25 $249.58) — blended +40.1%. 11.4R to TP1. CONI shorts this name first — its entry fib (.786 or .82) resolves when BTC tops.",
       bull: {
         label: "The plan — armed on the BTC trigger",
-        analog: "Breakout re-entry pullback · fires WITH the BTC flip-long from the TP1 tree",
+        analog: "Breakout re-entry pullback · fires WITH the BTC trade-3 flip-long",
         levels: [
-          { name: "Breakout price (8/19)", value: "$147.50 · +27.7% to $188.42 · clear re-entry: YES" },
-          { name: "Entry — the pullback", value: "$175.03" },
-          { name: "LTF retest (8/25) — the entry zone", value: "$176.45 retested and HELD — entry front-runs it" },
-          { name: "SL", value: "$164.00 (6.3%)" },
-          { name: "TP1 — range high (corrected 8/25)", value: "$222.00 × 57 (+26.8%) — front-runs the $223.12 fib 0" },
-          { name: "TP2 — mid deviation zone", value: "$239.00 × 29 (+36.5%)" },
-          { name: "TP3 — the 1.25 extension", value: "$248.00 × 28 (+41.7%)" },
-          { name: "R:R — $175.03 / $164.00", value: "4.3R to TP1 · blended TP +33.0%" }
+          { name: "Breakout price (8/19)", value: "$147.50 · clear re-entry: YES" },
+          { name: "Entry — the .382 reload", value: "$166.69 · the .382 $166.46" },
+          { name: "SL", value: "$161.78 (2.9%)" },
+          { name: "TP1 — the range high", value: "$222.66 (+33.6%) · fib 0 $223.12" },
+          { name: "TP2 — the −0.15", value: "$239.08 (+43.4%) · −0.15 $239.53" },
+          { name: "TP3 — the 1.25 extension", value: "$249.85 (+49.9%) · 1.25 $249.58" },
+          { name: "R:R — $166.69 / $161.78", value: "11.4R to TP1 · blended TP +40.1%" },
+          { name: "CONI short-from candidates (pre-trade)", value: ".786 $201.14 · .82 $204.37 — BTC's top picks it" }
         ],
         triggersLabel: "Steps — in order",
         triggers: [
-          { label: "1. WATCH — the BTC TP1 decision tree (Active card): Branch A flip-long CONFIRMS → enter this AND the other two Schwab longs at the same time", status: "pending" },
-          { label: "2. Run /trade-sizing at the trigger — share counts on this card are estimates at the $80,623.52 basis (8/25)", status: "pending" },
-          { label: "3. ENTER: ~114 sh @ $175.03 · SL $164.00 · TPs $222 × 57 / $239 × 29 / $248 × 28", status: "pending" },
+          { label: "1. WATCH — the BTC campaign (Plans tab): leg-2 short covers at the BMSB / trade-3 long fires → this basket goes next", status: "pending" },
+          { label: "2. SELL CONI at the BTC cover → T+1 settlement clock starts · run /trade-sizing for the basket counts", status: "pending" },
+          { label: "3. ENTER (next session, cash settled): $166.69 · SL $161.78 · TPs $222.66/$239.08/$249.85 at 50/25/25 [counts at arm time] · options overlay per the sizing run", status: "pending" },
           { label: "4. At fill: SL + all three TP brackets placed · TV alert on the SL at write time", status: "pending" }
         ],
         details: [
           {
-            title: "The read — HTF (daily): the range and the ladder",
-            chart: { src: "charts/COIN%20Current/COIN_2026-08-25_17-01-17%20HTF.png", caption: "COIN daily (8/25): the grid off the $139.04 → $223.12 range. Entry marker $177.02 near the .49 $175.10 / .5237 $177.88 (card entry $175.03) · red zone at the .382 $166.46 with the $165.75 marker (card SL $164.00 below it — the CARD governs) · targets $222.66 at the range high $223.12 · $240.27 at the −0.15 $239.53 (card TP2 $239.00) · $250.49 at the 1.25 $249.58 (card TP3 $248.00). TP1 corrected to $222.00 on 8/25 — front-runs the range high." },
-            body: "Entry at the .49–.5237 shelf with the stop below the .382 zone. The ladder: the range high (TP1 $222, front-running the $223.12 fib 0 — corrected 8/25 from the sheet’s $232), the −0.15 deviation, then the 1.25 extension."
-          },
-          {
-            title: "The read — LTF: the retest that held (the entry zone)",
-            chart: { src: "charts/COIN%20Current/COIN_2026-08-25_17-03-03%20LTF.png", caption: "COIN zoomed (8/25): the LTF range 0 at $176.45 / 1 at $139.33. Price broke out above $176.45, tagged the −0.3 $189.41, and the pullback RETESTED the range high and HELD. Card entry $175.03 front-runs the $176.45 retest level — the CARD governs." },
-            body: "The retest of the broken range high at $176.45 held — that was likely the best entry, and the working expectation is price spends time around this shelf and offers the entry in that area. The trigger discipline is unchanged: no orders until the BTC flip-long confirms — this read says the zone should still be there when it does."
+            title: "The read — HTF (daily): the range and the ladder (re-drawn 8/27)",
+            chart: { src: "charts/COIN%20Current/COIN_2026-08-27_19-12-13.png", caption: "COIN daily (8/27 19:12, close $190.72): the grid off the $223.12 → $139.04 range. Position tool: entry $166.69 at the .382 $166.46 · SL $161.78 · targets $222.66 at the fib 0 $223.12 · $239.08 at the −0.15 $239.53 · $249.85 at the 1.25 $249.58. Overhead fibs (the CONI short-from candidates): .786 $201.14 · .82 $204.37. The CARD governs." },
+            body: "Re-drawn 8/27: the entry drops from the 8/25 card's $175 shelf to the .382 itself — the same reload structure as MSTR and MARA, one basket-wide convention. Stop tucked under the fib; ladder to the range high, the −0.15, then the 1.25. Price closed $190.72, already between the two CONI short-from fibs — the round-trip is CONI short from the .786/.82, cover with BTC, reload here."
           }
         ],
-        notes: "Created 8/25 from the 8/19 sheet (prices as of 8/19); HTF + LTF charts added 8/25. Options overlay planned — to be figured out separately. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute (no resting limit) — the no-alarm-entries rule prefers resting limits; Brendan chose trigger-entry deliberately since the trigger is his own BTC entry, not an alarm. Lowest R:R of the basket (4.3R after the 8/25 TP1 correction) — still clears the gate. LTF chart added too — the range-high retest at $176.45 held; entry hoped for around that area."
+        notes: "Re-drawn 8/27 from the new chart (was the 8/19 sheet + 8/25 corrections; the 8/25 $176.45-retest LTF read is superseded — chart in old/); counts at arm time by design. Options overlay planned — sized at the /trade-sizing run. CONVENTION FLAG, logged not resolved: entry is trigger-then-execute — chosen deliberately, the trigger is Brendan's own BTC entry, not an alarm."
       },
       bear: {
         label: "What kills it",
         analog: "No position until the BTC trigger — only the setup can die here",
         levels: [
-          { name: "SL after entry", value: "$164.00" },
+          { name: "SL after entry", value: "$161.78" },
           { name: "Pre-entry", value: "no orders resting — nothing can fire" }
         ],
         triggersLabel: "If it fires",
@@ -1471,7 +1637,7 @@ const DATA = {
         details: [
           {
             title: "The read — MTF (1-hr): the grid (carried through the campaign)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid — fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. The CARD governs." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid — fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 · .382 $78,257 · golden pocket $77,212–$76,830 · lower .236 $75,156. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. The CARD governs." },
             body: "The full original record — the first entries, the TP tree, the $3k lesson, the 2019 context — lives on the archived 8/24 card. This card runs the same unwind read with the TP ladder unchanged ($75,200 / $72,600 / $70,670) and carries the campaign's running lesson: every loss so far has been the STOP, not the read. Campaign cost through re-entry 1: −$3,464.40. The counterfactual is settled: the original full-size plan would have been stopped too (≈−$3k) — a wash on dollars, so the write-the-sheet-first lesson stands on process, not on money saved."
           },
           {
@@ -1613,12 +1779,12 @@ const DATA = {
         details: [
           {
             title: "The read — MTF (1-hr): the short's grid",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid off the up-leg — entry zone marked $79,538 at the fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 (price basing here at the shot) · .382 $78,257 · .49/.5237 $77,777/$77,628 · golden pocket .618–.705 $77,212–$76,830 · .786/.82 $76,477/$76,329 · target marker $75,181 at the lower .236 $75,156, next to the TP $75,200. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. Fills are CDE — the CARD governs." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-08-24_17-31-21.png", caption: "1-hr Bybit (8/24 17:31): the retracement grid off the up-leg — entry zone marked $79,538 at the fib 0 $79,555.9 / .111 $79,475 · .236 $78,911 (price basing here at the shot) · .382 $78,257 · .49/.5237 $77,777/$77,628 · golden pocket .618–.705 $77,212–$76,830 · .786/.82 $76,477/$76,329 · target marker $75,181 at the lower .236 $75,156, next to the TP $75,200. Extensions overhead: −0.15 $80,069.7 · −0.3 $80,586.8. Fills are CDE — the CARD governs." },
             body: "The thesis: PO3 back down to the .236 on the HTF. Not a fractal trade — this is just how ranges work; the 2019 and 2018 charts printed the identical unwind, and they live below as context only. The range that paid the long is now the map for the short: the new high printed into the fib 0 zone, and the grid down is the ladder — .382 $78,257, the golden pocket $77,212–$76,830, then the old range lows into the TP $75,200 at the lower .236."
           },
           {
             title: "The read — LTF (15-min): the entry + the BMSB divergence",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-34-53.png", caption: "15-min Bybit (8/24 17:34): the entry chart. The run into the fib 0 / −0.15 zone ($79,568.7 marked), the rejection to the .111 $79,030.4, and price now basing at the .236 $78,911 AROUND the 15-min BMSB — not dumping. Entry 1 at the rectangle retest $79,570; entry 2 on the 15-min confirmation $78,610. SL $79,285 sits above the BMSB. Fills are CDE — the CARD governs." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-08-24_17-34-53.png", caption: "15-min Bybit (8/24 17:34): the entry chart. The run into the fib 0 / −0.15 zone ($79,568.7 marked), the rejection to the .111 $79,030.4, and price now basing at the .236 $78,911 AROUND the 15-min BMSB — not dumping. Entry 1 at the rectangle retest $79,570; entry 2 on the 15-min confirmation $78,610. SL $79,285 sits above the BMSB. Fills are CDE — the CARD governs." },
             body: "Entry 1 was the resting limit at the rectangle retest at the range high (half size); entry 2 came on the 15-min confirmation (half). The SL then moved above the 15-min BMSB, because in 2019 the 15-min BMSB loss was the point the dump started from. THE DIVERGENCE, called mid-trade: we did NOT dump straight down like 2019 — price is still hanging around the BMSB / .236 and hasn't been able to break. The read (and the body signal, logged honestly: the pull of being wrong is present) says we likely need to go HIGHER to go lower first. That expectation lives in the ETH-tell section — the SL is what actually governs."
           },
           {
@@ -1635,12 +1801,12 @@ const DATA = {
           },
           {
             title: "Context — 2019, 15-min: the BMSB loss that dumped",
-            chart: { src: "charts/BTC%20Current/BTCUSD_2026-08-24_17-34-00.png", caption: "BTCUSD 15-min Bitstamp, May 2019: the comparator for the SL logic — high $8,331 into the 0 / −0.15 zone, the .111 lost at $8,268, then the 15-min BMSB loss and the straight dump. The live tape is currently DIVERGING from this: no straight dump. Context only — structure governs, the card's written levels fire the decisions." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSD_2026-08-24_17-34-00.png", caption: "BTCUSD 15-min Bitstamp, May 2019: the comparator for the SL logic — high $8,331 into the 0 / −0.15 zone, the .111 lost at $8,268, then the 15-min BMSB loss and the straight dump. The live tape is currently DIVERGING from this: no straight dump. Context only — structure governs, the card's written levels fire the decisions." },
             body: "This is where the SL-above-the-BMSB logic comes from: in 2019, once the 15-min lost the BMSB, the dump ran immediately. The live trade tracked that script into the rejection, then stopped tracking it — price is holding around the BMSB instead of dumping, which is exactly the divergence the higher-to-go-lower read is built on."
           },
           {
             title: "Context — 2019, 1-hr: the full PO3 unwind",
-            chart: { src: "charts/BTC%20Current/BTCUSD_2026-08-24_17-33-13.png", caption: "BTCUSD 1-hr Bitstamp, May 2019: the destination the thesis points at — the −0.15 tag ($8,380 high), then the PO3 unwind through the whole grid: the 1.3 ($7,402 — marked low $7,389) and on toward the .382 $6,853 ($6,868 marked). 2018 printed the same. Context only — the CARD's grid and TP govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSD_2026-08-24_17-33-13.png", caption: "BTCUSD 1-hr Bitstamp, May 2019: the destination the thesis points at — the −0.15 tag ($8,380 high), then the PO3 unwind through the whole grid: the 1.3 ($7,402 — marked low $7,389) and on toward the .382 $6,853 ($6,868 marked). 2018 printed the same. Context only — the CARD's grid and TP govern." },
             body: "The same range behavior, one cycle-era earlier: tag the extension zone, then unwind the full PO3 back through the range. The 2018 chart shows it too. This is why the TP sits at the lower .236 — but the trade was taken on the LIVE structure (the rectangle retest + 15-min confirmation), not on these charts. Fractals are context; ranges are the mechanism."
           }
         ],
@@ -1704,12 +1870,12 @@ const DATA = {
         details: [
           {
             title: "The read — LTF (1-hr): the range that was traded",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-24_17-23-38.png", caption: "1-hr Bybit (8/24 17:23, shot post-trade): the full structure — sweep low $76,139.7 into the 1.0 $76,213.9 · higher low $76,661.9 · the run to the fib 0 $79,555.9, high $79,822.7. TPs $79,600 / $79,815 sat at the 0 with the −0.15 $80,069.7 above. Fills were CDE — the CARD governs." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-08-24_17-23-38.png", caption: "1-hr Bybit (8/24 17:23, shot post-trade): the full structure — sweep low $76,139.7 into the 1.0 $76,213.9 · higher low $76,661.9 · the run to the fib 0 $79,555.9, high $79,822.7. TPs $79,600 / $79,815 sat at the 0 with the −0.15 $80,069.7 above. Fills were CDE — the CARD governs." },
             body: "New low of the range to make a new high of the range. The sweep through the 1.0 into $76,139.7 was the low; Limit 1 at $75,960 sat under it and filled on the second probe. The higher low at $76,661.9 confirmed the turn and Limit 2 went on. Both TPs at the range high filled on the 8/24 push to $79,822.7."
           },
           {
             title: "Provenance — the May-2019 PO3 (context, NOT the idea)",
-            chart: { src: "charts/BTC%20Current/BTCUSD_2026-08-24_17-24-24.png", caption: "BTCUSD 1-hr Bitstamp, May 2019: the same PO3 shape one cycle-era earlier — same fib grid (.111 $7,874 · .236 $7,385), sweep low, higher low, run to the range high. Context only — the trade was read and executed on the live structure. Structure governs; fractals are context." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSD_2026-08-24_17-24-24.png", caption: "BTCUSD 1-hr Bitstamp, May 2019: the same PO3 shape one cycle-era earlier — same fib grid (.111 $7,874 · .236 $7,385), sweep low, higher low, run to the range high. Context only — the trade was read and executed on the live structure. Structure governs; fractals are context." },
             body: "The May-2019 chart showed the same PO3 — but per the 8/10 rule this stayed CONTEXT, not the primary idea: the live range was read on its own structure and the setup 'was a PO3 just regardless.' The contrast with the ETH card from 8/21 is the point of keeping both charts: there the fractal was primary and the trade died in 47 minutes; here structure was primary and the fractal just rhymed."
           },
           {
@@ -2149,7 +2315,7 @@ const DATA = {
           { k: "Post-TP2 trail on runners",   v: "4-hr close < BMSB + diagonal break = exit" }
         ],
         charts: [
-          { src: "charts/BTC%20Current/BTCUSDT.P_2026-07-09_13-27-41.png", caption: "Live execution map (7/9) — entry $60k where the local .666 and the HTF fib overlap; SL $58,748 (.85, below the .82); TP1 $66,279 (.382). Projected path: reject the .236, pull back into the entry, then the leg up." },
+          { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-07-09_13-27-41.png", caption: "Live execution map (7/9) — entry $60k where the local .666 and the HTF fib overlap; SL $58,748 (.85, below the .82); TP1 $66,279 (.382). Projected path: reject the .236, pull back into the entry, then the leg up." },
           { src: "charts/BTC%20Current/old/BTCUSD_2026-07-09_13-27-36.png", caption: "June 2018 fractal — top live MU comparator match. Same structure at 10x the price (6.7k→5.7k then, 67k→57k now), same June-bottom-into-late-July window. In 2018 the move blew past the .382 and ran to the .49, then the .66/.705 golden pocket." }
         ],
         levels: [
