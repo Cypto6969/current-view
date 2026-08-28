@@ -1271,75 +1271,26 @@ const DATA = {
   tradePlans: [
     {
       ticker: "BTC",
-      direction: "short",
-      status: "watching",
-      setupTag: "Confluence Short · .666 × −0.15 → HTF .236",
-      plannedEntry: "SHORT [cts at arm time] @ $82,191 · SL $83,163.4 · cover $76,964.4 — no orders until leg 1 long completes",
-      sizeNote: "Counts deferred by design (8/27) — set near the trade off live account size + the actual high · 5.4R at the drawn levels",
-      thesisOneLiner: "Campaign leg 2: short the confluence the leg-1 long delivers into — entry $82,191 at the HTF .666 ($81,995.7) × −0.15 midline ($82,150.7) stack, SL $83,163.4 above the −0.3 ($83,051.3). Cover $76,964.4 front-runs the HTF .236 ($77,091.4), with the live cut trigger being entry into the BMSB — then flip to the longs. MSTZ and CONI short alongside in Schwab, MARA excluded (move too small, no inverse ETF). This BTC short is a FOR-SURE trade — perps run 24/7, unaffected by weekends; only the equity shorts are conditional (weekend guard + R:R), and they can be skipped without touching this leg.",
-      bull: {
-        label: "The plan — arms after leg 1",
-        analog: "The same unwind read the 8/24–8/26 campaign ran, re-mapped from one floor higher",
-        levels: [
-          { name: "Entry — the confluence", value: "$82,191 · .666 $81,995.7 × −0.15 $82,150.7" },
-          { name: "SL", value: "$83,163.4 · above the −0.3 $83,051.3, under the .705 $83,695.8" },
-          { name: "Cover / TP", value: "$76,964.4 · front-runs the HTF .236 $77,091.4 · live trigger = entry into the BMSB" },
-          { name: "R:R — $82,191 / $83,163.4", value: "5.4R to the cover · −6.4% move" },
-          { name: "Size", value: "deferred by design — cts + /trade-sizing at arm time (live account size, actual high)" },
-          { name: "Entry flex", value: "possibly from HIGHER than $82,191 — the actual top sets it; re-draw at arm time" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. WAIT — leg 1 long runs to $82,100 and flattens; this card arms on that exit", status: "pending" },
-          { label: "2. MARKET-HOURS CHECK (equity side only): down-move likely to start Friday / bottom over a weekend → SKIP MSTZ/CONI — this BTC short goes on regardless, perps are 24/7", status: "pending" },
-          { label: "3. Run /trade-sizing → SHORT [cts] @ $82,191 · SL $83,163.4 · TV alert at write time", status: "pending" },
-          { label: "4. Same session: MSTZ + CONI shorts on in Schwab (own cards once levels are set)", status: "pending" },
-          { label: "5. CUT on entry into the BMSB (resting cover $76,964.4 as the floor) → sell MSTZ/CONI same moment — their T+1 settlement clock starts here", status: "pending" },
-          { label: "6. Flat → trade-3 long + the Schwab longs take over (their cards)", status: "pending" }
-        ],
-        details: [
-          {
-            title: "The read — LTF (1-hr): the confluence and the unwind grid",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_18-02-24%20LTF%20Short.png", caption: "1-hr Bybit (8/27 18:02): position tool drawn short $82,191.0 / SL $83,163.4 / TP $76,964.4. Overhead: −0.15 $82,150.7 · −0.3 $83,051.3 · HTF .705 $83,695.8. Below: fib 0 $81,259.9 · .5 $78,359.7 · HTF .236 $77,091.4 (yellow) with the TP just under it · 1 $75,563 · HTF .382 $74,062.5. The CARD governs." },
-            body: "Entry where the leg-1 long takes profit: the .666 × −0.15 stack. The unwind targets the HTF .236 — the drawn cover front-runs it — but the operative cut is the BMSB: price entering the band is the flip signal, the resting $76,964.4 is the floor if it flushes straight through. Same PO3-unwind family as the August campaign, one floor higher after the re-map."
-          },
-          {
-            title: "The weekend guard — equity shorts only, BTC unaffected",
-            body: "The EQUITY shorts (MSTZ/CONI) predicate on the move playing out during market hours. If BTC starts the down-move on a Friday and the bottom lands over a weekend, they are SKIPPED — no holding −2x ETFs across an open you can't see — and the equity side goes longs-only, possibly entered before the down-move fully completes. This BTC short is untouched by the branch: perps trade 24/7, the trade is FOR SURE. Pre-written so the call is a branch, not an improvisation."
-          },
-          {
-            title: "The R:R honesty note — the optional legs are the equity shorts",
-            body: "The equity shorts capture ~20% moves against longs planned for far larger ones, with T+1 friction on top — if their entries don't come to the fibs, there is NO chase: skip MSTZ/CONI and let the long cards fire on their own levels. The BTC short is NOT in that bucket — it is a committed leg of the campaign (5.4R, 24/7 market, no settlement friction). The equity side profits fine with its shorts skipped; nothing here is forced."
-          }
-        ],
-        notes: "8/28 STATUS: leg 1 stopped and the down-move ran WITHOUT the $82k top — this card's campaign map is now CONTEXT ONLY (veto extension, ratified 8/28: maps can't veto live structure); re-arming requires the tap gate like any new entry. Created 8/27 from the chart; counts + final entry set at arm time by design. MSTZ (−2x MSTR) + CONI (−2x COIN) cards pending: the short-from fib is UNRESOLVED until BTC shows its top — MSTR from one of the .666 / .705 / .786 / .82, COIN from the .786 or the .82. No MARA short (move too small, no inverse ETF)."
-      },
-      bear: {
-        label: "What kills it",
-        analog: "Acceptance over the −0.3 = the range extending again, not unwinding",
-        levels: [
-          { name: "SL after entry", value: "$83,163.4 · TV alert at write time" },
-          { name: "Idea kill", value: "acceptance above the −0.3 $83,051.3 / the .705 $83,695.8 → no re-short, re-map" },
-          { name: "Pre-arm", value: "no orders — leg 1 must complete first" }
-        ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "$83,163.4 trades → flat all, sell MSTZ/CONI same session — one shot, no re-entry without the sheet + /trade-sizing", status: "pending" },
-          { label: "Weekend-start branch fires → MSTZ/CONI skipped, equity side longs-only — this short runs regardless", status: "pending" }
-        ],
-        notes: "Third campaign on this unwind idea — the stand-down-after-stop rule carries over from 8/26."
-      }
-    },
-    {
-      ticker: "BTC",
       direction: "long",
       status: "watching",
       setupTag: "Trade 3 · HTF .236 Reload → .786/.82",
+      structure: {
+        schematic: "[ASK BRENDAN — 3-tap range or 3-drive? counts only when the down-move PRINTS its structure at the zone]",
+        taps4h: "[ASK BRENDAN — number them at the zone: date + level each, no count = no entry]",
+        taps1h: "[ASK BRENDAN — 1hr nest, or — if entering off the 4hr]",
+        entryType: "[ASK BRENDAN — tap 2 / tap 3 / BMSB confirm]"
+      },
+      strip: [
+        { if: "BTC delivers into the HTF .236 zone ($77,052 → $76,860)", then: "run the gate: number the 4hr taps — no count, no entry" },
+        { if: "Gate passes (tap 2 / tap 3 / BMSB confirm)", then: "LONG [cts at /trade-sizing] limit $76,860.9 · SL $76,229.2" },
+        { if: "4hr acceptance below fib 1 $75,563", then: "reload read dead — no entry, re-map" },
+        { if: "$76,229.2 trades after fill", then: "flat — stand down, re-map" }
+      ],
       plannedEntry: "LONG [cts at arm time] @ $76,860.9 · SL $76,229.2 · TPs $86,523.1 / $88,211.7 / $88,954.1 [counts at arm time]",
       sizeNote: "Counts deferred by design (8/27) — set near the trade off live account size · 15.3R to TP1 at the drawn levels",
-      thesisOneLiner: "Campaign leg 3: the reload long after the short's unwind — entry $76,860.9 just under the HTF .236 ($77,052.4), SL $76,229.2 above the fib 1 ($75,563). Targets walk the HTF retracement: $86,523.1, $88,211.7 into the .786 ($87,340.2)/.82 ($88,916.8) zone. 15.3R to TP1, ~+15.7% to the top. Fires alongside the Schwab longs (MSTR/MARA/COIN + options) — this one on CFM, so it enters immediately while the Schwab side waits out T+1 if the flush is fast.",
+      thesisOneLiner: "Campaign leg 3: the reload long after the short's unwind — entry $76,860.9 just under the HTF .236 ($77,052.4), SL $76,229.2 above the fib 1 ($75,563). Targets walk the HTF retracement: $86,523.1, $88,211.7 into the .786 ($87,340.2)/.82 ($88,916.8) zone. 15.3R to TP1, ~+15.7% to the top. Fires alongside the Schwab longs (MSTR/MARA/COIN + options) — this one on CFM, so it enters immediately while the Schwab side waits out T+1 if the flush is fast. 8/28: the leg-2 short archived as MISSED — this card arms on its OWN LEVEL through the structure gate, not on the campaign sequence (maps are context only).",
       bull: {
-        label: "The plan — arms when the short covers",
+        label: "The plan — arms at the zone, through the gate",
         analog: "The completion move the equity longs were always mapped to — BTC's own leg of it",
         levels: [
           { name: "Entry — under the HTF .236", value: "$76,860.9 · .236 $77,052.4" },
@@ -1352,8 +1303,8 @@ const DATA = {
         ],
         triggersLabel: "Steps — in order",
         triggers: [
-          { label: "1. WAIT — arms when the leg-2 short covers at the BMSB / $76,964.4 (or on the weekend-guard longs-only branch, possibly before the down-move completes)", status: "pending" },
-          { label: "2. Run /trade-sizing → resting limit $76,860.9 · SL $76,229.2 · TV alert at write time", status: "pending" },
+          { label: "1. WAIT — arms when price delivers into the HTF .236 zone (8/28: the leg-2 short archived as MISSED — the map no longer sequences this card; the LEVEL does)", status: "pending" },
+          { label: "2. THE GATE at the zone: number the 4hr taps (date + level), name the schematic (3-tap range vs 3-drive), declare the entry type off the menu — no count, no entry; then resting limit $76,860.9 · SL $76,229.2 · TV alerts arm the strip", status: "pending" },
           { label: "3. Same event, Schwab side: MSTZ/CONI sale settles T+1 → MSTR/MARA/COIN longs + options enter next session on their cards", status: "pending" },
           { label: "4. On fill → graduate to Active · TP brackets per the [counts TBD] split", status: "pending" }
         ],
@@ -1543,6 +1494,71 @@ const DATA = {
   closedTrades: [
     {
       ticker: "BTC",
+      direction: "short",
+      closed: "2026-08-28",
+      outcome: "scratch",
+      pnl: "no position — MISSED: leg-1 long stopped 8/28 and the down-move ran WITHOUT the $82k top ever printing; the short that actually set up fired from ~$79.8k and went untaken (its record lives on the 8/28 archived long card)",
+      postmortem: "Never armed — archived 8/28 as the VETO-EXTENSION specimen: the campaign map said long-first-then-short-from-$82,191, live structure offered the short from ~$79.8k, and the map helped veto it. Maps, cycles, and fractals are context + targets only (ratified 8/28). Any re-short is a NEW card through the structure gate — this one is a record, not a resting idea.",
+      setupTag: "Confluence Short · Map Overtaken",
+      plannedEntry: "SHORT [cts at arm time] @ $82,191 · SL $83,163.4 · cover $76,964.4 — no orders until leg 1 long completes",
+      sizeNote: "Counts deferred by design (8/27) — set near the trade off live account size + the actual high · 5.4R at the drawn levels",
+      thesisOneLiner: "MISSED / STOOD DOWN 8/28 — never armed: leg 1 died and the tape ran the unwind from ~$79.8k without the $82k top. The original plan — Campaign leg 2: short the confluence the leg-1 long delivers into — entry $82,191 at the HTF .666 ($81,995.7) × −0.15 midline ($82,150.7) stack, SL $83,163.4 above the −0.3 ($83,051.3). Cover $76,964.4 front-runs the HTF .236 ($77,091.4), with the live cut trigger being entry into the BMSB — then flip to the longs. MSTZ and CONI short alongside in Schwab, MARA excluded (move too small, no inverse ETF). This BTC short is a FOR-SURE trade — perps run 24/7, unaffected by weekends; only the equity shorts are conditional (weekend guard + R:R), and they can be skipped without touching this leg.",
+      bull: {
+        label: "The plan — arms after leg 1",
+        analog: "The same unwind read the 8/24–8/26 campaign ran, re-mapped from one floor higher",
+        levels: [
+          { name: "Entry — the confluence", value: "$82,191 · .666 $81,995.7 × −0.15 $82,150.7" },
+          { name: "SL", value: "$83,163.4 · above the −0.3 $83,051.3, under the .705 $83,695.8" },
+          { name: "Cover / TP", value: "$76,964.4 · front-runs the HTF .236 $77,091.4 · live trigger = entry into the BMSB" },
+          { name: "R:R — $82,191 / $83,163.4", value: "5.4R to the cover · −6.4% move" },
+          { name: "Size", value: "deferred by design — cts + /trade-sizing at arm time (live account size, actual high)" },
+          { name: "Entry flex", value: "possibly from HIGHER than $82,191 — the actual top sets it; re-draw at arm time" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. WAIT — leg 1 long runs to $82,100 and flattens; this card arms on that exit", status: "pending" },
+          { label: "2. MARKET-HOURS CHECK (equity side only): down-move likely to start Friday / bottom over a weekend → SKIP MSTZ/CONI — this BTC short goes on regardless, perps are 24/7", status: "pending" },
+          { label: "3. Run /trade-sizing → SHORT [cts] @ $82,191 · SL $83,163.4 · TV alert at write time", status: "pending" },
+          { label: "4. Same session: MSTZ + CONI shorts on in Schwab (own cards once levels are set)", status: "pending" },
+          { label: "5. CUT on entry into the BMSB (resting cover $76,964.4 as the floor) → sell MSTZ/CONI same moment — their T+1 settlement clock starts here", status: "pending" },
+          { label: "6. Flat → trade-3 long + the Schwab longs take over (their cards)", status: "pending" },
+          { label: "7. ✘ 8/28 — NEVER ARMED: leg 1 stopped, the down-move ran without the $82k top; the live short (~$79.8k) was vetoed by this very map — card archived as missed, veto extension ratified the same day", status: "failed" }
+        ],
+        details: [
+          {
+            title: "The read — LTF (1-hr): the confluence and the unwind grid",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_18-02-24%20LTF%20Short.png", caption: "1-hr Bybit (8/27 18:02): position tool drawn short $82,191.0 / SL $83,163.4 / TP $76,964.4. Overhead: −0.15 $82,150.7 · −0.3 $83,051.3 · HTF .705 $83,695.8. Below: fib 0 $81,259.9 · .5 $78,359.7 · HTF .236 $77,091.4 (yellow) with the TP just under it · 1 $75,563 · HTF .382 $74,062.5. The CARD governs." },
+            body: "Entry where the leg-1 long takes profit: the .666 × −0.15 stack. The unwind targets the HTF .236 — the drawn cover front-runs it — but the operative cut is the BMSB: price entering the band is the flip signal, the resting $76,964.4 is the floor if it flushes straight through. Same PO3-unwind family as the August campaign, one floor higher after the re-map."
+          },
+          {
+            title: "The weekend guard — equity shorts only, BTC unaffected",
+            body: "The EQUITY shorts (MSTZ/CONI) predicate on the move playing out during market hours. If BTC starts the down-move on a Friday and the bottom lands over a weekend, they are SKIPPED — no holding −2x ETFs across an open you can't see — and the equity side goes longs-only, possibly entered before the down-move fully completes. This BTC short is untouched by the branch: perps trade 24/7, the trade is FOR SURE. Pre-written so the call is a branch, not an improvisation."
+          },
+          {
+            title: "The R:R honesty note — the optional legs are the equity shorts",
+            body: "The equity shorts capture ~20% moves against longs planned for far larger ones, with T+1 friction on top — if their entries don't come to the fibs, there is NO chase: skip MSTZ/CONI and let the long cards fire on their own levels. The BTC short is NOT in that bucket — it is a committed leg of the campaign (5.4R, 24/7 market, no settlement friction). The equity side profits fine with its shorts skipped; nothing here is forced."
+          }
+        ],
+        notes: "8/28 STATUS: leg 1 stopped and the down-move ran WITHOUT the $82k top — this card's campaign map is now CONTEXT ONLY (veto extension, ratified 8/28: maps can't veto live structure); re-arming requires the tap gate like any new entry. Created 8/27 from the chart; counts + final entry set at arm time by design. MSTZ (−2x MSTR) + CONI (−2x COIN) cards pending: the short-from fib is UNRESOLVED until BTC shows its top — MSTR from one of the .666 / .705 / .786 / .82, COIN from the .786 or the .82. No MARA short (move too small, no inverse ETF)."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Acceptance over the −0.3 = the range extending again, not unwinding",
+        levels: [
+          { name: "SL after entry", value: "$83,163.4 · TV alert at write time" },
+          { name: "Idea kill", value: "acceptance above the −0.3 $83,051.3 / the .705 $83,695.8 → no re-short, re-map" },
+          { name: "Pre-arm", value: "no orders — leg 1 must complete first" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$83,163.4 trades → flat all, sell MSTZ/CONI same session — one shot, no re-entry without the sheet + /trade-sizing", status: "pending" },
+          { label: "Weekend-start branch fires → MSTZ/CONI skipped, equity side longs-only — this short runs regardless", status: "pending" }
+        ],
+        notes: "Third campaign on this unwind idea — the stand-down-after-stop rule carries over from 8/26."
+      }
+    },
+    {
+      ticker: "BTC",
       direction: "long",
       closed: "2026-08-28",
       outcome: "loss",
@@ -1593,7 +1609,7 @@ const DATA = {
             body: "Named 8/28: when this trade went off, the card wasn't consulted — decisions ran on memory and charts, because the card is too wordy to use live. Cards have been RECORDS (good ones) pretending to be TOOLS (never used as one). The redesign, live in /trade-card from the next card forward: an IF/THEN strip at the top, hard cap ~5 lines, trigger → action only; everything else collapses below as the record. Strip rule: a line that can't become a resting order or a TV alert (with the action in the alert message) is commentary, not a rule. The BMSB fail-safe was the proof case — 'can't lay out levels for that' was wrong: TV alerts fire on MA crosses, so '1-hr close below/above BMSB' is settable, and the alert text carries the instruction. Sizing note for the record: /trade-sizing deliberately not run on these — standing futures convention is 70% util, ≥5R only, $1–2k risk per trade; the skill runs on deviations."
           }
         ],
-        notes: "ARCHIVED 8/28, same day as the stop. Campaign leg 1 dead as drawn; the leg-2 confluence short card stays in Trade Plans but its map is now CONTEXT ONLY — the veto extension applies to it explicitly. Fee est. on entry ~$214.51 + exit $211.76 · exact totals at the CFM statement upload."
+        notes: "ARCHIVED 8/28, same day as the stop. Campaign leg 1 dead as drawn; the leg-2 confluence short was archived 8/28 as MISSED (map overtaken — the veto-extension specimen). Fee est. on entry ~$214.51 + exit $211.76 · exact totals at the CFM statement upload."
       },
       bear: {
         label: "What killed it",
