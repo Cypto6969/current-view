@@ -465,6 +465,20 @@
     border-left: 3px solid var(--border); border-radius: 0 4px 4px 0;
     margin-bottom: 14px;
   }
+  /* IF/THEN strip — the in-the-moment layer (ratified 8/28): ≤5 trigger → action lines, each armed as a resting order or a TV alert whose message carries the action */
+  .ifthen-strip { margin-bottom: 14px; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .ifthen-strip .strip-head { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 5px 12px; background: var(--panel-2); color: var(--muted); border-bottom: 1px solid var(--border); }
+  .ifthen-row { display: flex; gap: 10px; align-items: baseline; padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 13.5px; flex-wrap: wrap; }
+  .ifthen-row:last-child { border-bottom: 0; }
+  .ifthen-row .if { color: var(--muted); flex: 1 1 40%; min-width: 180px; }
+  .ifthen-row .then { font-weight: 700; flex: 1 1 35%; }
+  .ifthen-row .arm { margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; white-space: nowrap; align-self: center; }
+  .ifthen-row .arm.order { background: var(--bull-soft); color: var(--bull); }
+  .ifthen-row .arm.alert { background: rgba(201,195,74,0.15); color: var(--pending); }
+  .ifthen-row .arm.unarmed { background: var(--bear-soft); color: var(--bear); }
+  /* Structure gate line — schematic + counted taps + entry type (ratified 8/28: no countable taps, no card) */
+  .structure-gate { font-size: 12.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 6px 12px; margin-bottom: 10px; background: var(--panel-2); border-radius: 4px; color: var(--text); overflow-wrap: anywhere; }
+  .structure-gate b { color: var(--pending); }
   .trade-toggle {
     display: inline-flex; background: var(--panel-2); border: 1px solid var(--border);
     border-radius: 8px; padding: 3px; margin-bottom: 14px;
@@ -3346,6 +3360,8 @@ const DATA = {
         ${trade.status ? `<span class="trade-status ${statCls}">${statLabel}</span>` : ''}
         ${expBadge}
       </div>
+      ${trade.structure ? `<div class="structure-gate"><b>${trade.structure.schematic || '[ASK BRENDAN — schematic]'}</b> · 4hr taps: ${trade.structure.taps4h || '[ASK BRENDAN]'} · 1hr nest: ${trade.structure.taps1h || '—'} · entry: <b>${trade.structure.entryType || '[ASK BRENDAN]'}</b></div>` : ''}
+      ${Array.isArray(trade.strip) && trade.strip.length ? `<div class="ifthen-strip"><div class="strip-head">IF / THEN — the strip governs live</div>${trade.strip.map(r => `<div class="ifthen-row"><span class="if">${r.if}</span><span class="then">→ ${r.then}</span><span class="arm ${r.armed || 'unarmed'}">${r.armed === 'order' ? 'RESTING ORDER' : r.armed === 'alert' ? 'TV ALERT' : 'NOT ARMED'}</span></div>`).join('')}</div>` : ''}
       ${trade.thesisOneLiner ? `<div class="trade-thesis">${trade.thesisOneLiner}</div>` : ''}
       <div class="trade-toggle" role="tablist">
         <button class="bull active" data-side="bull">${bullLabel}</button>
