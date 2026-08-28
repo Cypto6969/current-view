@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta name="robots" content="noindex, nofollow">
+<head><meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8" />
 <title>BTC Regime View — Current Cycle</title>
 <style>
@@ -1146,7 +1145,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-08-27",
+  asOf: "2026-08-28",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1258,64 +1257,6 @@ const DATA = {
   tradePlans: [
     {
       ticker: "BTC",
-      direction: "long",
-      status: "watching",
-      setupTag: "3-Tap Accum · Third Tap",
-      plannedEntry: "LONG 412 cts limit $79,155 (post-only, SET 8/27) · SL $78,815 · TP $82,100 × 412",
-      sizeNote: "412 cts = 4.12 BTC · $326,119 notional · ~4.1x lev · risk at SL −$1,400.80",
-      thesisOneLiner: "Third-tap long on the 3-tap accumulation the 8/26 postmortem named — the structure the fractal overrode, now traded per the ratified rule: 3-tap under a short = cut and flip long. Limit set at $79,155 off the HTF .42/.53 shelf ($79,029–$79,115), stop 340 pts under at $78,815, full 412 taking profit at $82,100 — the front-run of the HTF .666 ($81,995.7) × −0.15 deviation midline ($82,149) confluence. 8.7R. Campaign leg 1: this long → BTC short at the confluence (next card) → cut at the BMSB → the Schwab equity longs + trade-3 BTC long.",
-      bull: {
-        label: "The plan — limit resting",
-        analog: "The ratified 3-tap flip — the trade the last short's exit was supposed to become",
-        levels: [
-          { name: "Entry — resting limit, post-only", value: "$79,155 × 412 · the HTF .42/.53 shelf $79,029–$79,115" },
-          { name: "SL", value: "$78,815 (340 pts) [ASK BRENDAN — derivation; chart tool shows $78,699 — the CARD governs]" },
-          { name: "TP — all 412", value: "$82,100 (2,945 pts) · front-run of the .666 $81,995.7 × −0.15 $82,149 confluence" },
-          { name: "R:R — $79,155 / $78,815", value: "8.7R to the TP" },
-          { name: "Risk at the SL", value: "−$1,400.80 (340 pts × 4.12)" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. ✔ 8/27 — limit SET: 412 cts @ $79,155 post-only (moved down from the $79,165 ticket) · TP $82,100 · SL $78,815 · brackets + TV alerts CONFIRMED 8/27", status: "met" },
-          { label: "2. ON FILL → graduate to Active · confirm avg fill + brackets live", status: "pending" },
-          { label: "3. FAIL-SAFE (ratified 8/27): after the fill, price can't get above the BMSB → flip back short — that IS the rule, pre-written", status: "pending" },
-          { label: "4. TP $82,100 hits → flat, then the short at the confluence arms (BTC short card + MSTZ + CONI)", status: "pending" }
-        ],
-        details: [
-          {
-            title: "The campaign — long, short, flip (the whole map)",
-            body: "This card is leg 1 of a mapped sequence: long the third tap to $82,110 → short the top on BTC (CFM) with MSTR and COIN shorts via inverse ETFs (MSTZ −2x, CONI −2x; no MARA short — the % move is too small and no inverse ETF exists) → cut the shorts at the BMSB → enter the Schwab longs (MSTR, MARA, COIN, options overlay) near the .382, with a BTC long re-entry as well. T+1 is structural, not a problem: the inherited-IRA cash account settles T+1, and the sequence covers shorts at the BMSB (higher, first) while the longs rest near the .382 (lower, later) — the settlement day is built in unless the flush does both in one session, in which case the Schwab longs slip a day and only the CFM BTC long fires immediately."
-          },
-          {
-            title: "The weekend guard — when the equity shorts get skipped",
-            body: "The EQUITY shorts (MSTZ/CONI) are predicated on the BTC down-move playing out during market hours. If the move starts Friday and bottoms over the weekend, they get SKIPPED — no holding −2x ETFs through a weekend open you can't see — and the equity side goes longs-only, possibly entered before the full down-move completes. The BTC short is NOT conditional: perps run 24/7, that leg is a for-sure trade regardless of the calendar. Decision lives with the tape; the branch is pre-written here so it's a plan, not an improvisation."
-          },
-          {
-            title: "The read — LTF (1-hr): the shelf and the confluence overhead",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_17-57-47%20LTF%20Long%203rd%20leg.png", caption: "1-hr Bybit (8/27 17:57): the leg grid — fib 0 $81,258.4 · .111 $80,605.6 · .5 $78,359 · .236 $76,380.4 · 1 $75,563. Extension −0.15 $82,149. HTF fibs overlaid: .666 $81,995.7 · .618 $79,950.7 · the .42/.53 shelf $79,029–$79,115 (blue) — the entry zone. Position tool drawn entry $79,120.1 / SL $78,699.0 / TP $82,033.8 — chart-vs-card drift: the CARD governs ($79,155 / $78,815 / $82,100)." },
-            body: "Entry off the HTF .42/.53 shelf where price based, riding the third leg up into the confluence overhead: the HTF .666 at $81,995.7 stacked with the −0.15 deviation midline at $82,149 — the TP $82,100 front-runs the pair. That same confluence is where the short card's entry sits ($82,191): the TP here IS the handoff."
-          }
-        ],
-        notes: "Created 8/27 from the live Coinbase ticket (fee est. ~$214.51 not card data); entry moved $79,165 → $79,155 and TP $82,110 → $82,100 same day, pre-fill, limit SET. Single full-size TP — as specified, no ladder. [ASK BRENDAN — /trade-sizing run for the record, or logged as skipped?]"
-      },
-      bear: {
-        label: "What kills it",
-        analog: "Tight stop under the tap — a break of the third tap low is the invalidation",
-        levels: [
-          { name: "SL after fill", value: "$78,815 · TV alert at write time" },
-          { name: "Fail-safe", value: "can't reclaim the BMSB after the flip → flip back short (ratified 8/27)" },
-          { name: "Pre-fill", value: "limit + brackets resting — no fill, no trade" }
-        ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "$78,815 trades → flat all 412, −$1,442 — re-entry only with the sheet written + /trade-sizing run", status: "pending" },
-          { label: "No fill and price runs without the tap → stand down, the short-at-the-top card becomes the next trade", status: "pending" }
-        ],
-        notes: "The 3-tap is a live schematic — no fractal can veto it (law, 8/27, second paid offense)."
-      }
-    },
-    {
-      ticker: "BTC",
       direction: "short",
       status: "watching",
       setupTag: "Confluence Short · .666 × −0.15 → HTF .236",
@@ -1357,7 +1298,7 @@ const DATA = {
             body: "The equity shorts capture ~20% moves against longs planned for far larger ones, with T+1 friction on top — if their entries don't come to the fibs, there is NO chase: skip MSTZ/CONI and let the long cards fire on their own levels. The BTC short is NOT in that bucket — it is a committed leg of the campaign (5.4R, 24/7 market, no settlement friction). The equity side profits fine with its shorts skipped; nothing here is forced."
           }
         ],
-        notes: "Created 8/27 from the chart; counts + final entry set at arm time by design. MSTZ (−2x MSTR) + CONI (−2x COIN) cards pending: the short-from fib is UNRESOLVED until BTC shows its top — MSTR from one of the .666 / .705 / .786 / .82, COIN from the .786 or the .82. No MARA short (move too small, no inverse ETF)."
+        notes: "8/28 STATUS: leg 1 stopped and the down-move ran WITHOUT the $82k top — this card's campaign map is now CONTEXT ONLY (veto extension, ratified 8/28: maps can't veto live structure); re-arming requires the tap gate like any new entry. Created 8/27 from the chart; counts + final entry set at arm time by design. MSTZ (−2x MSTR) + CONI (−2x COIN) cards pending: the short-from fib is UNRESOLVED until BTC shows its top — MSTR from one of the .666 / .705 / .786 / .82, COIN from the .786 or the .82. No MARA short (move too small, no inverse ETF)."
       },
       bear: {
         label: "What kills it",
@@ -1588,11 +1529,79 @@ const DATA = {
   closedTrades: [
     {
       ticker: "BTC",
+      direction: "long",
+      closed: "2026-08-28",
+      outcome: "loss",
+      pnl: "−$1,463.63 pre-fees — SL $78,815 stopped 8/28 10:02:27 at avg $78,799.75, ALL 412 cts (4.12 BTC · $79,155 → $78,799.75 = −355.25 pts) · exit fee $211.76 · ~$63 slippage past the stop (order 6b5c31bf)",
+      postmortem: "Postmortem: the 8/28 daily reflection (MU section + Ratified Takeaways) — /monthly-close pulls it. The honest re-read: the card sold this as 'the ratified third-tap flip,' but the taps were never actually countable — it was a TAP-1 fractal entry wearing a resting limit, at a valid area of interest where an accumulation could BEGIN, not one that existed. Writing the sheet first isn't protection when the structural claim is asserted in prose instead of proven. Born from this trade: the ENTRY MENU (tap 2 · tap 3 · BMSB confirmation w/ HTF 3-tap identified — can't number the taps, no entry, resting limits included) and the tap-listing build gate now in /trade-card.",
+      setupTag: "Tap-1 Fractal · Entry Menu Born",
+      entry: "8/27 — limit SET $79,155 × 412 post-only · FILLED overnight 8/28 · STOPPED 8/28 10:02 @ avg $78,799.75, all 412",
+      plannedEntry: "SL $78,815 · TP $82,100 × 412 — never in reach",
+      sizeNote: "412 cts = 4.12 BTC · $326,119 notional · ~4.1x lev · planned risk −$1,400.80, actual −$1,463.63 pre-fees",
+      thesisOneLiner: "STOPPED OUT 8/28 — and the day's larger loss was the SHORT that went untaken while this long was dying. The card claimed 'third-tap long per the ratified 3-tap flip' — the 8/28 re-read says the taps were never countable: a tap-1, fractal-timed entry at an area where accumulation could BEGIN, placed hours after writing a full review about only taking structured trades. Then the pre-written fail-safe (can't reclaim the BMSB → flip back short) FIRED and wasn't executed — the 1-hr never closed back above, the order was even built and placed at the BMSB add mark, then talked off via fractals. Price dumped exactly as the short read called it (~+$9k untaken).",
+      bull: {
+        label: "The trade record — stopped, and the short missed",
+        analog: "The 8/28 review's founding specimen: every rule it ratified was violated here first",
+        openPosition: true,
+        position: [
+          { k: "Order — resting limit · FILLED overnight 8/28 · STOPPED 10:02", v: "412 cts @ $79,155 · SL $78,815 → stopped avg $78,799.75 · TP $82,100 never in reach", tone: "loss" },
+          { k: "The untaken short — fail-safe fired, order built, pulled", v: "BMSB-retest add mark seen, order PLACED, then talked off by fractals · ~+$9k if the .236 completes", tone: "loss" }
+        ],
+        levels: [
+          { name: "Entry — the HTF .42/.53 shelf", value: "$79,155 × 412 (limit, post-only, set 8/27)" },
+          { name: "SL", value: "$78,815 · stopped avg $78,799.75 (~$63 slippage)" },
+          { name: "TP — never in reach", value: "$82,100 × 412" },
+          { name: "The short's SL that was never used", value: "a 1-hr CLOSE above the BMSB — it never came; the wick close didn't count and the next candle whipped down" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 8/27 — limit SET: 412 cts @ $79,155 post-only · TP $82,100 · SL $78,815 · brackets + TV alerts confirmed", status: "met" },
+          { label: "2. ✔ 8/28 overnight — FILLED (great fill; fill quality on a trade that shouldn't exist is not a credit)", status: "met" },
+          { label: "3. ✘ 8/28 10:02:27 — STOPPED: all 412 @ avg $78,799.75, −$1,463.63 pre-fees · fee $211.76", status: "failed" },
+          { label: "4. ✘ 8/28 — FAIL-SAFE FIRED, NOT EXECUTED: LTF 3-tap + HTF 3-tap + break of the high screamed short; no 1-hr close above the BMSB ever printed; the BMSB-retest add order was BUILT AND PLACED, then pulled on fractal excuses ('the hourly shouldn't have closed like that') — price dumped exactly as the short read called", status: "failed" },
+          { label: "5. ✔ 8/28 — full range retrospective written (daily reflection) → entry menu + 3-drive/3-tap distinction + BMSB add protocol + veto extension RATIFIED · tap gate + IF/THEN strip added to /trade-card", status: "met" }
+        ],
+        details: [
+          {
+            title: "The honest re-read — a tap-1 entry laundered as structure",
+            body: "The card's own words: 'Third-tap long on the 3-tap accumulation the 8/26 postmortem named — traded per the ratified rule.' Its own notes: 'The 3-tap is a live schematic — no fractal can veto it (law, 8/27).' The 8/28 re-read, 24 hours later: zero countable structure — the entry was fractal-timed, at best tap 1 of an accumulation that had not yet formed, placed the same day the fractal law was ratified. The area-of-interest read was valid; the ENTRY was not, because an area where accumulation could begin is a place to WATCH for taps, not to buy tap 1. The fix is structural, not motivational: the /trade-card build gate now requires the taps listed individually (timeframe, date, level), the schematic named (3-tap range vs 3-drive), and the entry type declared from the menu — tap 2, tap 3, or BMSB confirmation. Can't fill the taps in → no card → no order. Resting limits are NOT exempt: this trade proves a limit order placed without numbered taps is the same sin at better prices."
+          },
+          {
+            title: "The missed short — rule-fire → action gap, third documented instance",
+            body: "The flip-back-short fail-safe was PRE-WRITTEN on this very card (step 3: 'can't get above the BMSB → flip back short — that IS the rule'). It fired: the 1-hr never closed back above the BMSB (the one hard close was a giant wick and the next candle whipped down). The structure was named in real time — 'LTF 3-tap and HTF 3-tap with a break of the high, that screams go short' — the BMSB-retest add mark was seen, the order was CREATED AND PLACED... and then fractals got the wheel ('the .111 should have held', 'the 4-hr should have dumped already') and the order came off in favor of hunting a third-tap long that was not due. The dump came exactly as the short read called it. Instance 1: 8/24 body signal logged, not acted on. Instance 2: 8/26 exit rule fired, taken ~2 hrs late. Instance 3: this, a pre-written fail-safe with the order already placed. The pattern is now precise: naming a tell does not produce action, because action still requires an in-the-moment decision. The fix ships with the new card format: the IF/THEN strip (≤5 lines, trigger → action), where every line must compile to a resting order or a TV alert whose MESSAGE carries the pre-written action — the buzz IS the card. Protocol line ratified 8/28: miss the initial short → add at the BMSB retest, SL = a 1-hr close above the BMSB."
+          },
+          {
+            title: "The range retrospective — what the full audit found (8/28)",
+            body: "All 8 trades of the range audited in the daily reflection. The verdict: every trade with follow-through had clear 4-HR structure; every loss was LTF checking or fractal usage without HTF backing — and even one win (the 8/24 long's second entry) was a fractal add that happened to work, which RESULTED into this loss. The valid structural trades of the range were exactly: longs on the 3-taps of 8/22–8/24, longs 8/25–8/26, short on 8/27 (1-hr taps aligned with HTF). Nothing else. Ratified from it: the 4-hr governs (the 1-hr is entry-only, inside a clear 4-hr setup — the A+ entry is the 1-hr tap 3 OF the 4-hr tap 3) · 3-drive ≠ 3-tap range (3-tap = range = targets exist; 3-drive = fade until structure presents, then cut — no target entitlement) · veto extension: fractals, time cycles, AND campaign maps are context/targets only, none can veto live structure (this card's own campaign map — 'long first, short from $82k' — helped talk the $79.8k short away) · scalps off the menu until more reps."
+          },
+          {
+            title: "The card-usability finding — records vs tools",
+            body: "Named 8/28: when this trade went off, the card wasn't consulted — decisions ran on memory and charts, because the card is too wordy to use live. Cards have been RECORDS (good ones) pretending to be TOOLS (never used as one). The redesign, live in /trade-card from the next card forward: an IF/THEN strip at the top, hard cap ~5 lines, trigger → action only; everything else collapses below as the record. Strip rule: a line that can't become a resting order or a TV alert (with the action in the alert message) is commentary, not a rule. The BMSB fail-safe was the proof case — 'can't lay out levels for that' was wrong: TV alerts fire on MA crosses, so '1-hr close below/above BMSB' is settable, and the alert text carries the instruction. Sizing note for the record: /trade-sizing deliberately not run on these — standing futures convention is 70% util, ≥5R only, $1–2k risk per trade; the skill runs on deviations."
+          }
+        ],
+        notes: "ARCHIVED 8/28, same day as the stop. Campaign leg 1 dead as drawn; the leg-2 confluence short card stays in Trade Plans but its map is now CONTEXT ONLY — the veto extension applies to it explicitly. Fee est. on entry ~$214.51 + exit $211.76 · exact totals at the CFM statement upload."
+      },
+      bear: {
+        label: "What killed it",
+        analog: "Not the stop — the entry: tap 1 of structure that didn't exist yet",
+        levels: [
+          { name: "The mechanism", value: "fractal-timed tap-1 entry · no countable taps · limit placed hours after ratifying the law it broke" },
+          { name: "The bigger loss", value: "the untaken short — fail-safe fired, order placed, pulled on fractals (~+$9k)" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "SL $78,815 — FIRED 8/28 10:02:27 @ avg $78,799.75 → flat 412, −$1,463.63 pre-fees", status: "met" }
+        ],
+        notes: "The entry menu, the tap gate, and the IF/THEN strip all exist because of this card. Expensive tuition, good syllabus."
+      }
+    },
+    {
+      ticker: "BTC",
       direction: "short",
       closed: "2026-08-26",
       outcome: "win",
       pnl: "+$1,745.30 pre-fees — exited early 8/26 ahead of leg 3, ALL 355 cts (261 @ $78,835 · 94 @ $78,890) vs basis 330 @ $79,400 + 25 @ $78,565 · exact fills + fees TBD at the CFM statement upload",
-      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the exit rule (1-hr close above the BMSB) fired at ~$78,655 but was NOT taken on the trigger — a couple more hourly closes for confirmation, then ~2 hours of internal battle, until EV math sealed the exit ~$691 worse than the rule price. The RIGHT call still got made (leg 3 came, the stop was dodged, +$2,167 vs holding), but the gap to close is rule-fire → action: the EV math that ended the battle is the math the written rule already encodes — do it BEFORE, not during.",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the exit rule (1-hr close above the BMSB) fired at ~$78,655 but was NOT taken on the trigger — a couple more hourly closes for confirmation, then ~2 hours of internal battle, until EV math sealed the exit ~$691 worse than the rule price. The RIGHT call still got made (leg 3 came, the stop was dodged, +$2,167 vs holding), but the gap to close is rule-fire → action: the EV math that ended the battle is the math the written rule already encodes — do it BEFORE, not during. 8/28 REVIEW COLOR: the campaign's shorts kept fighting a 3-DRIVE, not a 3-tap range — the distinction ratified 8/28: a 3-drive has no range structure, so no target entitlement (the .236 was never 'owed'); it gets faded until structure presents, then cut. The late confirmation add here (the process loss inside the monetary win) was exactly that error — the fractal said the .236 had to print, the tape said accumulation on the 1-hr AND 4-hr. Rule-fire → action gap instance 2 of 3 (8/24 body signal · this · the 8/28 untaken flip-back short).",
       setupTag: "PO3 · Range High → HTF .236 · Rework",
       entry: "8/25 — SHORT 330 cts avg $79,400 · 8/26 ADD 25 cts @ $78,565 · EXITED 8/26 before the close-above-BMSB leg 3: 261 cts @ $78,835 · 94 cts @ $78,890",
       plannedEntry: "Both SLs $79,460 · TP1 $75,200 × 165 · TP2 $72,600 × 94 + 25 · TP3 $70,670 × 71",
@@ -1736,7 +1745,7 @@ const DATA = {
       closed: "2026-08-24",
       outcome: "loss",
       pnl: "−$682.50 pre-fees — the $79,285 stop, ALL 350 cts · entry 1 +$498.75 (175 · $79,570 → $79,285) · add −$1,181.25 (175 · $78,610 → $79,285) · assumed clean fill — exact fill + fees at the CFM upload",
-      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the full-body wrong-side feeling preceded the stop AGAIN — second documented instance in four days (ETH 8/21, this 8/24), and this time it was WRITTEN on the card mid-trade before the stop hit. Brendan at the stop: trust it for real. The protocol for acting on the signal is his to define in the postmortem.",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the full-body wrong-side feeling preceded the stop AGAIN — second documented instance in four days (ETH 8/21, this 8/24), and this time it was WRITTEN on the card mid-trade before the stop hit. Brendan at the stop: trust it for real. The protocol for acting on the signal is his to define in the postmortem. 8/28 REVIEW COLOR: this was a shaky 3-DRIVE on the 1-hr, not a 3-tap range — no HTF range structure existed to promise the .236, so the short had an SFP-style reversal POINT but no follow-through entitlement (distinction ratified 8/28); the entry rode a 15-min fractal. And the 'SL below the entry on a short??' confusion from the review: NOT a data error — the $79,285 SL was profit-WALKED below tranche 1's $79,570 entry (+285 pts locked); the net loss came from tranche 2 at $78,610.",
       setupTag: "Fractal Early · Pre-PO3",
       entry: "8/24 — SHORT 350 cts avg $79,090 (175 @ $79,570 · 175 @ $78,610) · STOPPED same day @ $79,285, all 350",
       plannedEntry: "SL $79,285 · TP1 $75,200 × 175 · TP2 $72,460 × 100 · junk $70,680 × 75 — all cancelled at the stop",
@@ -1835,7 +1844,7 @@ const DATA = {
       closed: "2026-08-24",
       outcome: "win",
       pnl: "+$12,941.00 pre-fees — both TPs HIT 8/24: $79,600 × 200 (+$7,280 · $75,960 → $79,600 × 2.00 BTC) · $79,815 × 185 (+$5,661 · $76,755 → $79,815 × 1.85 BTC) · entry fees $92.36 + $86.09 · exit fees + TP timestamps at the CFM upload",
-      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the limit-then-confirmation split did its job — two limits would have been 'more correct' on price but risked a full-size stop-out; taking the first limit and adding the second only once it was playing out capped the risk on purpose. Structure primary, fractal context — the mirror image of the ETH card two days earlier.",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: the limit-then-confirmation split did its job — two limits would have been 'more correct' on price but risked a full-size stop-out; taking the first limit and adding the second only once it was playing out capped the risk on purpose. Structure primary, fractal context — the mirror image of the ETH card two days earlier. 8/28 REVIEW COLOR — the recognition lag: in the moment this was traded as 'a PO3,' but entry 1 was actually TAP 2 of a 4-HR 3-tap accumulation — the taps were never consciously counted, the structure was traded without knowing why it was correct. Entry 2 was the 1-hr tap 2 = the 4-hr tap 3 (the A+ nesting), but it was FRACTAL-timed, not tap-counted — and that win resulting'd straight into the 8/28 tap-1 loss: same fractal, this time with no structure underneath. A fractal entry that WINS still damages. This card is why the tap-listing gate requires BOTH timeframes and how they nest.",
       setupTag: "Range Low → High · PO3 LTF",
       entry: "LONG 385 cts (200 @ $75,960 8/23 · 185 @ $76,755 8/24) · TPs $79,600 / $79,815 BOTH HIT 8/24 — FLAT",
       plannedEntry: "Limit into the sweep + confirmation once playing out · TPs at the range high",
@@ -1904,7 +1913,7 @@ const DATA = {
       closed: "2026-08-21",
       outcome: "loss",
       pnl: "−$1,019.74 pre-fees — SL $2,435 hit 8/21 16:17 @ $2,435.22, ALL 670 cts (67 ETH · $2,420 → $2,435.22 = −$15.22/ETH) · fees $315.34 round-trip ($153.36 entry + $161.98 exit)",
-      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: LTF fractal-matching is never the answer — and it was already known. The fractal was the PRIMARY idea and the entry was worked on the 5-min: both known red flags, and the body knew it during the hold. Wait for the range to create itself instead of forcing a preemptive trade off a big win.",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: LTF fractal-matching is never the answer — and it was already known. The fractal was the PRIMARY idea and the entry was worked on the 5-min: both known red flags, and the body knew it during the hold. Wait for the range to create itself instead of forcing a preemptive trade off a big win. 8/28 REVIEW COLOR: three more faults named in the range audit — the short followed a 3rd tap (almost a 4th) so the entry was LATE; the structure was a 3-DRIVE, not a 3-tap range (distinction ratified 8/28: drives get faded into structure then cut, no target entitlement); and the entry sat on a 1-hr TAP-1 potential area — the exact shape of the 8/28 overnight long. Same sin, two costumes, a week apart.",
       setupTag: "Fractal · Preemptive",
       entry: "8/21 — SHORT 670 cts @ $2,420 · SL $2,435 · STOPPED 16:17 @ $2,435.22 — a 47-minute hold",
       plannedEntry: "Short $2,420 · SL $2,435 (15 pts) · TP $2,310 (7.3R)",
@@ -1958,7 +1967,7 @@ const DATA = {
       closed: "2026-08-21",
       outcome: "win",
       pnl: "+$28,573.00 pre-fees — 192 @ $62,600 → $68,500 (+$11,328) · PO2 adds 96+86 @ $64,250 → $73,300 ×96 (+$8,688) / $74,200 ×86 (+$8,557) · fees + dates at the CFM upload",
-      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. Lesson carried forward: [ASK BRENDAN].",
+      postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. 8/28 REVIEW COLOR (Win 1 of the range audit): entry 1 was read as a possible 1-hr third tap, stopped, and the stop-out itself was the tell that it was really TAP 2 — the re-entry was then a very clear PO2, one of the cleanest entries of the range. Entry 2's flaw: hunting tap 3 with a RIGID time cycle (the pattern named 8/28 — abundance teaches cycles as variable, they were used as fixed) plus travel meant the tap wasn't recognized live, and the second tranche went on late, wherever it could. The win stands; the time-cycle rigidity it exposed cost real money later in the range (the 8/28 untaken short died to the same rigidity).",
       setupTag: "3-Tap Accum · PO2",
       entry: "8/14 — 192 cts @ $62,600 to the tick · PO2 adds 96+86 @ $64,250 · SL $62,150 → BE → trailed up · ALL 3 TPs HIT — FLAT (TP dates at monthly close)",
       plannedEntry: "Adds 96 + 96 cts at the 3rd tap (~Mon 8/17): PO1 limit $62,030 (rests once the .382 tags) OR PO2 by confirmation ONLY · add SL under the 3rd tap (set at placement) · add TPs $73,300 / $74,200",
