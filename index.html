@@ -545,6 +545,17 @@
   .live-record .done-row .dmark.met { color: var(--bull); }
   .live-record .done-row .dmark.failed { color: var(--bear); }
   .live-record .kills { margin-top: 10px; }
+  /* Multiple active trades (9/9): each console collapses behind a one-line summary; single active trade renders open */
+  .active-collapse { margin-bottom: 12px; }
+  .active-collapse > summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .active-collapse > summary .ac-pos { font-size: 15px; font-weight: 800; letter-spacing: -0.2px; }
+  .active-collapse > summary .ac-pos.long { color: var(--bull); } .active-collapse > summary .ac-pos.short { color: var(--bear); }
+  .active-collapse > summary .ac-meta { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--muted); }
+  .active-collapse > summary .ac-meta b { color: var(--text); font-weight: 700; }
+  .active-collapse > summary .ac-meta .zero { color: var(--bull); font-weight: 700; }
+  .active-collapse > summary .trade-status { margin-left: auto; }
+  .active-collapse .live-console { margin: 8px 0 0; border: 0; padding-top: 10px; }
+  @media (max-width: 640px) { .active-collapse > summary .ac-meta { flex-basis: 100%; } .active-collapse > summary .trade-status { margin-left: 0; } }
   /* COMPACT RECORD STANDARD (9/9): details bodies are 3–6 snippet lines, not paragraphs */
   .notes ul.snips { margin: 2px 0 0 18px; padding: 0; font-style: normal; color: var(--text); }
   .notes ul.snips li { margin: 3px 0; font-size: 13px; line-height: 1.45; }
@@ -3844,7 +3855,26 @@ const DATA = {
       return;
     }
     trades.forEach((t, idx) => {
-      if (collapsible === 'active') { root.appendChild(renderActiveTrade(t)); return; }
+      if (collapsible === 'active') {
+        if (trades.length === 1) { root.appendChild(renderActiveTrade(t)); return; }
+        const L = t.live || {};
+        const det = document.createElement('details');
+        det.className = 'section active-collapse';
+        if (idx === 0) det.open = true;
+        const dirCls = (t.direction || '').toLowerCase();
+        const posLine = L.position ? L.position.replace(/\s*@.*$/, '') : `${t.ticker || '?'} ${(t.direction || '').toUpperCase()}`;
+        const riskZero = L.risk !== undefined && /^\$?0(\.0+)?$/.test(String(L.risk).trim());
+        const meta = [];
+        if (L.stop && L.stop.price) meta.push(`Stop <b>${L.stop.price}</b>${L.stop.note ? ' ' + L.stop.note : ''}`);
+        if (L.risk !== undefined) meta.push(`Risk <span class="${riskZero ? 'zero' : ''}"><b>${L.risk}</b></span>`);
+        (L.targets || []).forEach(x => meta.push(`${x.label || 'TP'} <b>${x.price || '?'}</b>`));
+        const sum = document.createElement('summary');
+        sum.innerHTML = `<span class="ac-pos ${dirCls}">${posLine}</span><span class="ac-meta">${meta.join(' · ')}</span>${t.status ? `<span class="trade-status ${(t.status || '').toLowerCase()}">${t.status.toUpperCase()}</span>` : ''}`;
+        det.appendChild(sum);
+        det.appendChild(renderActiveTrade(t));
+        root.appendChild(det);
+        return;
+      }
       if (!collapsible) { root.appendChild(renderTrade(t)); return; }
       const details = document.createElement('details');
       details.className = 'section plan-collapse';
