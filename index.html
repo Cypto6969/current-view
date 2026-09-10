@@ -559,6 +559,7 @@
   /* COMPACT RECORD STANDARD (9/9): details bodies are 3–6 snippet lines, not paragraphs */
   .notes ul.snips { margin: 2px 0 0 18px; padding: 0; font-style: normal; color: var(--text); }
   .notes ul.snips li { margin: 3px 0; font-size: 13px; line-height: 1.45; }
+  .notes ul.snips.gate li b { color: var(--pending); font-weight: 700; }
   @media (max-width: 640px) {
     .live-console { padding: 14px 14px 6px; }
     .tk-hero { padding-left: 18px; }
@@ -1382,9 +1383,10 @@ const DATA = {
         ]
       },
       structure: {
-        schematic: "1hr 3-Tap DISTRIBUTION at the range .382 ($79,200) — three interactions, hard rejection, then a 1hr CLOSE below the BMSB. Context (labeled, no veto power): a fractal short at a POI — the fractal is why the .382 was watched, the structure is why the trade exists. No 4hr count on this leg.",
-        taps4h: "NONE — 1hr structure only",
-        taps1h: "1) 9/9 01:00 — test of the .382 from below, rejected · 2) 9/9 04:00 — second test from below, rejected · 3) 9/9 08:00 — test from underneath, hard rejection (the same three taps that exited the 9/8 long) · then the 1hr closed below the BMSB",
+        schematic: "1H 3-tap distribution at .382 resistance ($79,200) · fractal/POI = context only",
+        taps4h: "none — no independent 4H count",
+        taps1h: "9/9 01:00 · 04:00 · 08:00 at the .382 — tap 3 from underneath, hard rejection (same taps that exited the 9/8 long)",
+        confirmation: "1H close below the BMSB · invalidation = reclaim",
         entryType: "BMSB confirmation"
       },
       strip: [
@@ -1639,9 +1641,9 @@ const DATA = {
       postmortem: "Postmortem in Notion (daily reflection) — /monthly-close pulls it. RULE DISCOVERY carried forward: when a known problem level sits inside the trade (here the fractal's 'no target, the .382 rejects'), pre-write the exit as a 3-tap rule at that level — two failed tests from the trade's side + one from the other side = out, armed as a TV alert. Written 9/8, that exit was ~+$3,500 at the third tap; the hand exit banked +$2,072 and still beat the mechanical BE scratch.",
       setupTag: "PO3 Setup · PO2 Entry · 1hr 3-Tap · Tap-3 · Early Exit",
       structure: {
-        schematic: "PO3 SETUP (the deviation-zone sweep under the range, reclaim back into it) with a PO2 ENTRY inside it (the structural entry model: 1hr 3-tap accumulation in the deviation, tap 3 = textbook S/R flip-and-confirm retest) — targets = the range fibs · NO clear 4hr structure (a strictly-1hr setup — a deviation from the 8/28 '4hr governs' rule, recorded as such)",
-        taps4h: "NONE — no clear 4hr count; this was a 1hr-only setup",
-        taps1h: "1) 9/8 03:00 · 2) 9/8 09:00 — the bottom of the deviation zone (~$77,961 Bybit) · 3) 9/8 14:00 — the retest of the flipped S/R (~$78,236–$78,281 Bybit) → entry $78,305 (CDE)",
+        schematic: "PO3 setup (deviation-zone sweep under the range) · PO2 entry model inside it: 1H 3-tap accumulation, tap 3 = S/R flip retest · targets = range fibs · 1H-only (8/28 '4H governs' deviation, recorded)",
+        taps4h: "none — no clear 4H count",
+        taps1h: "9/8 03:00 · 09:00 (deviation bottom ~$77,961) · 14:00 (S/R flip retest ~$78,240–78,280) → entry $78,305",
         entryType: "tap 3"
       },
       strip: [
@@ -3803,7 +3805,13 @@ const DATA = {
     const doneSteps = steps.filter(t => t.status === 'met' || t.status === 'failed');
     const pendingSteps = steps.filter(t => !(t.status === 'met' || t.status === 'failed'));
     const st = trade.structure || {};
-    const gateHtml = trade.structure ? `<div class="structure-gate"><b>${st.schematic || '[ASK BRENDAN — schematic]'}</b> · 4hr taps: ${st.taps4h || '[ASK BRENDAN]'} · 1hr nest: ${st.taps1h || '—'} · entry: <b>${st.entryType || '[ASK BRENDAN]'}</b></div>` : '';
+    const gateHtml = trade.structure ? `<div class="notes" style="margin-top:10px"><ul class="snips gate">${[
+        ['Structure', st.schematic || '[ASK BRENDAN — schematic]'],
+        ['4H count', st.taps4h || '[ASK BRENDAN]'],
+        ['1H taps', st.taps1h || '—'],
+        ['Entry', st.entryType || '[ASK BRENDAN]'],
+        st.confirmation ? ['Confirmation', st.confirmation] : null
+      ].filter(Boolean).map(([k, v]) => `<li><b>${k}:</b> ${v}</li>`).join('')}</ul></div>` : '';
     const ticketsHtml = (trade.entry || trade.plannedEntry || trade.sizeNote) ? `<div class="record-tickets">${trade.entry ? `<div><b>Entry</b> — ${trade.entry}</div>` : ''}${trade.plannedEntry ? `<div><b>Plan</b> — ${trade.plannedEntry}</div>` : ''}${trade.sizeNote ? `<div><b>Size</b> — ${trade.sizeNote}</div>` : ''}</div>` : '';
     // Read (snippets) ABOVE the image — compact record standard 9/9
     const detailHtml = (bull.details || []).map(d => `<details class="subsection"><summary><span class="sec-title">${d.title}</span></summary><div class="section-body"><div class="notes" style="margin-top:10px">${d.body}</div>${d.chart ? `<div class="chart-card" style="margin-top:10px"><img src="${d.chart.src}" alt="${(d.chart.caption || '').replace(/"/g, '&quot;')}" data-zoom="1" />${d.chart.caption ? `<div class="chart-caption">${d.chart.caption}</div>` : ''}</div>` : ''}</div></details>`).join('');
