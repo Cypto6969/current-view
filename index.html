@@ -1294,7 +1294,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-09-11",
+  asOf: "2026-09-18",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1404,6 +1404,110 @@ const DATA = {
   // Same structure as activeTrades. Status: "watching".
   // -----------------------------------------------------------------
   tradePlans: [
+    {
+      ticker: "BTC",
+      direction: "short",
+      status: "watching",
+      setupTag: "4H 3-TAP DISTRO · LTF −0.15 · TAP 2/3",
+      live: {
+        state: "WAITING · DISTRIBUTION TAPS AT THE −0.15 ZONE · NOTHING RESTING",
+        position: "PLAN SHORT 1.85 BTC @ $83,660",
+        stop: { price: "$84,985", note: "above the −0.3" },
+        risk: "$0",
+        targets: [
+          { label: "TP1", cts: 93, price: "$76,692" },
+          { label: "TP2", cts: 92, price: "$69,915" }
+        ]
+      },
+      structure: {
+        schematic: "Expected 4hr 3-tap distribution at the LTF −0.15 zone · NOT PRINTED YET · a range exists ($82,272 → $74,930), so targets are owed levels",
+        taps4h: "None yet — [ASK BRENDAN — number them as they print, date + level] · no order rests until tap 1 has printed",
+        taps1h: "— until the 4hr count exists",
+        entryType: "tap 2 or tap 3 — resolved when the count exists · tap 1 is not on the menu"
+      },
+      strip: [
+        { if: "$83,430", then: "Tap 1 printing · number it · rest the limit for the next tap", armed: "" },
+        { ref: "stop", then: "FLAT ALL 185", armed: "" },
+        { ref: "tp1", then: "TAKE 93", armed: "" },
+        { if: "TP1 candle closes above the .236", then: "Close other 92 · flip long", armed: "" },
+        { ref: "tp2", then: "TAKE 92 · FLAT", armed: "" }
+      ],
+      plannedEntry: "Short limit 185 @ $83,660 at the LTF −0.15 zone, on distribution tap 2 or 3 · SL $84,985 (above the −0.3) · TP1 93 @ $76,692 · TP2 92 @ $69,915 · add 185 after tap 2 · Coinbase levels",
+      sizeNote: "Standing convention ($1–2k risk · ≥5R) · full book 370 cts = 3.70 BTC (70% utilization), split in half: first order 185 · add 185 once the SL moves down · first-order risk $2,451 (1,325 pts × 1.85 BTC), above the $1–2k band · 1,325-pt stop → 5.3R to TP1 · 10.4R to TP2 · 7.8R blended",
+      thesisOneLiner: "BTC broke out of the 9/11–9/16 accumulation and is running at the LTF range extensions, where the mid-range .705 sits between the −0.15 and the −0.3. The plan is to short a distribution tap there into the 120-day cycle date (~9/28), take half at the LTF .236 and half at the HTF .236, then flip long at that low for the HTF extensions.",
+      bull: {
+        label: "The plan — short a distribution tap at the −0.15 zone, nothing resting",
+        analog: "Three paths: deep drop · shallow drop (more likely) · chop into the date (no short)",
+        levels: [
+          { name: "Entry zone — LTF −0.15 → the mid-range .705 (Bybit)", value: "$83,434 → $83,824 Bybit · limit $83,660 × 185 Coinbase" },
+          { name: "SL — 100 pts above the LTF −0.3 (Coinbase)", value: "$84,985 · 1,325 pts · risk $2,451 on 185" },
+          { name: "TP1 — the .236 of the LTF structure ($76,594)", value: "$76,692 × 93 · 5.3R" },
+          { name: "TP2 — the .236 of the HTF structure ($69,410)", value: "$69,915 × 92 · 10.4R" },
+          { name: "The add — after tap 2 is in and the SL moves down", value: "to 370 cts total (70% utilization) · add 185 · [ASK BRENDAN — level · new SL] · TPs unchanged" },
+          { name: "Risk check at 370 cts — $3.70 per point", value: "book SL within 540 pts of the blended entry = $2k · within 405 pts = $1.5k" },
+          { name: "LTF range (Bybit 4hr)", value: "0 $82,272 · 1 $74,930" },
+          { name: "HTF range (Bybit daily)", value: "0 $82,890 · 1 $57,565 · .382 $77,770" },
+          { name: "120-day cycle date — context only", value: "~9/28 · low window 9/28–9/30" },
+          { name: "Macro inside the window — context only", value: "Deribit expiry Fri 9/25 04:00 · PCE Wed 9/30 08:30 · NFP Fri 10/2 08:30" },
+          { name: "The long after — HTF targets", value: "TP1 $87,550 (HTF −0.15) · TP2 $92,471 (HTF −0.3, the deviation limit)" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/18 — breakout from the 9/11–9/16 accumulation · CDE high $81,435 (15:00 hour) · flat, nothing resting", status: "met" },
+          { label: "2. ✔ 9/18 — Coinbase levels on the card: entry $83,660 · SL $84,985 · TP1 $76,692 · TP2 $69,915 · 185 now + 185 add (370 = 70% utilization)", status: "met" },
+          { label: "3. Tap 1 prints at the −0.15 zone → number the taps (date + level) on the card", status: "pending" },
+          { label: "4. REST the short limit for the next tap: 185 @ $83,660 · SL $84,985 · TP1 93 @ $76,692 · TP2 92 @ $69,915 — one order, split inside the position after the fill", status: "pending" },
+          { label: "5. Tap 2 is in → SL moves down (new level [ASK BRENDAN]) → ADD to 370 cts total (70% utilization) at the next tap: 185 @ [level] · SL [new] · TP1 93 @ $76,692 · TP2 92 @ $69,915", status: "pending" },
+          { label: "6. $76,692 tags → take ½ · if that candle closes without cutting through the .236 → close the other ½ at the close and flip long", status: "pending" },
+          { label: "7. $69,915 tags → flat · the long plan at the cycle low goes live (own gate + card)", status: "pending" }
+        ],
+        details: [
+          {
+            title: "The read — HTF (daily): the range and where the extensions sit",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-18_18-38-01%20SHORT%20HTF%20daily.png", caption: "1D BTCUSDT.P Bybit · captured 9/18 18:38 · HTF range 0 $82,890 → 1 $57,565 · green −0.15 $87,549 · red −0.3 $92,471 · card levels govern." },
+            body: "<ul class=\"snips\"><li>Frame: price is back at the HTF range high after the .382 ($77,770) held</li><li>Read: the HTF extensions ($87,550 · $92,471) are the targets for the long AFTER the late-September low, not for this leg</li><li>This leg: a rejection at the LTF extensions first, into the cycle date</li><li>Timing: the 120-day cycle date ~9/28 is why a deep drop is possible; the shallow drop is the more likely path</li></ul>"
+          },
+          {
+            title: "The path — deep drop to the HTF .236 (visual reminder)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-18_18-48-34%20SHORT%204hr%20deep.png", caption: "4H BTCUSDT.P Bybit · captured 9/18 18:48 · LTF range 0 $82,272 → 1 $74,930 · blue line = path drawing (expectation only) · callouts = entry $83,872 · SL $84,565 · target $69,861 · arches = time cycles · card levels govern." },
+            body: "<ul class=\"snips\"><li>Path: distribution at the −0.15 zone → dump into the 9/28–9/30 low at the HTF .236 / .382 band ($69,410–$70,673)</li><li>Role: TP2 — the second half rides for it only if TP1 is cut through in one candle</li><li>Guard: a labeled expectation, not a prediction — written levels fire the orders, the tape governs · the path invalidates; the trade doesn't</li></ul>"
+          },
+          {
+            title: "The path — shallow drop to the LTF .236 (more likely)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-18_18-49-09%20SHORT%204hr%20shallow.png", caption: "4H BTCUSDT.P Bybit · captured 9/18 18:49 · same grid · green line = path drawing (expectation only) · callouts = entry $83,870 · SL $84,628 · target $76,524 · card levels govern." },
+            body: "<ul class=\"snips\"><li>Path: same entry and stop → drop to the .236 of the LTF structure ($76,594) into the date, then up</li><li>Role: TP1 — half comes off here in every scenario</li><li>Rule: if the candle that tags TP1 does not cut through the .236, the other half closes at that candle's close and the book flips long · candle timeframe [ASK BRENDAN]</li></ul>"
+          },
+          {
+            title: "Third path — chop into the date (no short)",
+            body: "<ul class=\"snips\"><li>Price chops under the −0.15 zone until 9/28–9/30, then dumps into the date</li><li>Rule: no short unless clear structure develops · the only short on this card is the −0.15 zone tap</li><li>All three paths end the same way: a long at the 9/28–9/30 low</li></ul>"
+          },
+          {
+            title: "The long after — the cycle low (needs its own gate + card)",
+            body: "<ul class=\"snips\"><li>Zone: the LTF .236 ($76,594) on the shallow path · the HTF .236 / .382 band ($69,410–$70,673) on the deep path</li><li>Targets: TP1 $87,550 (HTF −0.15) · TP2 $92,471 (HTF −0.3, the deviation limit)</li><li>Entry: an accumulation structure at the low, counted and carded — tap 2 limit, or tap 3 by the .666 Math & Matrix / PO1 channel</li><li>Schwab: no inverse-ETF short (T+1 settlement) — the Schwab book waits for this long</li></ul>"
+          },
+          {
+            title: "Provenance — the July 2018 fractal (context, NOT the idea)",
+            chart: { src: "charts/BTC%20Current/BTCUSD_2026-09-18_18-14-22%20Fractal%20HTF.png", caption: "4H BTCUSD Bitstamp · May–Jul 2018 · range 0 $7,764 → 1 $5,773 · topped at the −0.3 $8,485 on the HTF .705 $8,493 · Structure governs; fractals are context." },
+            body: "<ul class=\"snips\"><li>Analog: a 1hr 3-tap accumulation (7/18 · 7/20 · 7/22) broke out and topped where a range extension met an HTF fib</li><li>Use: it points at extension + fib confluence as the rejection area — today the LTF −0.15 / −0.3 around the mid-range .705</li><li>Held loosely (Abundance 9/18): no entry comes from the fractal; the distribution taps do that</li></ul>"
+          }
+        ],
+        notes: "Written 9/18 after the Abundance call. Ticket levels are Coinbase (given 9/18 eve); fib and range levels in the reads are the Bybit drawing. The add takes the strip row that frees up when the first order rests. Owed: the add level + new SL, the TP1-candle timeframe, clean 4hr + 1hr charts once taps print."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "The stop is the invalidation — and the read expires with the date",
+        levels: [
+          { name: "SL — above the LTF −0.3", value: "$84,985" },
+          { name: "Pre-entry", value: "no orders resting — nothing can fire" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "Price closes above the −0.3 → stopped / no short · the read is wrong, BTC is continuing to the HTF extensions", status: "pending" },
+          { label: "No close below the BMSB + a 3-tap accumulation prints + the 9/28–9/30 date passes → the short read is dead · long side only", status: "pending" }
+        ],
+        notes: "Time cycles are context — the short rests at a counted tap, not on a date."
+      }
+    },
     {
       ticker: "MSTR",
       direction: "long",
@@ -1587,6 +1691,109 @@ const DATA = {
   // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
   // -----------------------------------------------------------------
   closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-09-18",
+      outcome: "win",
+      exit: "TP",
+      capture: { realizedR: 5.9, plannedR: 5.9 },
+      pnl: "+$4,622.50 pre-fees — 215 cts · $75,865 → $78,015 (+2,150 pts) · resting bracket TP, 5 maker fills 9/18 04:24–04:54 · +5.9R on the $785 entry risk · fees $200.48 (in $99.20 · out $101.28) · net +$4,422.02",
+      postmortem: "In Notion (daily reflection). Brendan's diagnosis 9/18: the thesis was right all along and played out; fear shrank the trade. The tap-2 limit was never rested and tap 3 had no concrete entry plan, so the fill came late at half size. Then the Abundance time-cycle videos convinced him there was not enough time left for the 9/15 plan's range targets ($82,430 / $83,415), so all 215 went on one near target and the second entry was dropped. CDE traded $80,985 five hours after the exit. Open question, his: with full tap-2/tap-3 entries, would the plan's targets have stayed on? Unsure — the video's read was strong on its own. Lesson carried: time cycles moved TARGETS here, which the 8/28 rule allows, but they did it against a live 3-tap that was holding.",
+      setupTag: "4hr 3-Tap Accum · BMSB Confirmation · Half Size · Add Never Rested",
+      live: {
+        state: "CLOSED 9/18 04:24 · TP $78,015 HIT · +5.9R · HALF SIZE, ADD NEVER RESTED",
+        position: "LONG 2.15 BTC @ $75,865",
+        stop: { price: "$76,140", note: "never hit" },
+        risk: "+$4,622.50 pre-fees",
+        targets: [
+          { label: "TP ✔", cts: 215, price: "$78,015" }
+        ]
+      },
+      structure: {
+        schematic: "4hr 3-tap accumulation (range) at the range low · range exists, so targets are owed levels · entered late, off the BMSB confirmation after tap 3, not at a tap",
+        taps4h: "1) 9/11 08:00 — $75,945 · 2) 9/13 20:00 — $76,340 (held above tap 1) · 3) 9/15 10:00 — $75,525 sweep, deepened to $74,880 on 9/15 14:00 (Clarity vote) and $74,970 on 9/16 14:00 (FOMC) — CDE 1hr lows via the Coinbase API",
+        taps1h: "1) 9/15 10:00 — $75,525 · 2) and 3) [ASK BRENDAN — number them; CDE 1hr lows on the tape: 9/15 14:00 $74,880 · 9/15 17:00–18:00 $75,070 · 9/16 04:00 $75,275 · 9/16 14:00 FOMC $74,970]",
+        confirmation: "BMSB confirmation after tap 3 (Brendan 9/16) · resting limit $75,865 placed 9/16 17:26, filled 17:43–18:00 on the pullback after FOMC · [ASK BRENDAN — which 1hr close armed it]",
+        entryType: "BMSB confirmation"
+      },
+      entry: "9/16 17:43–18:00 — LONG 215 @ $75,865 (one limit, 21 fills) · SL $75,500 → $75,555 → $75,865 BE → $76,140 · 9/18 04:24–04:54 TP HIT $78,015 × 215 (tag 445c48be), +2,150 pts · the add never rested",
+      plannedEntry: "9/15 plan: 1hr tap 3 in two halves of 215 (PO2 then PO1) · TPs $82,430 / $83,415 · taken instead: BMSB confirmation, one half, TP $78,035",
+      sizeNote: "215 cts = 2.15 BTC · $163.1k ntl · half of the 430 plan · risk at entry $785 (365 pts) · TP 5.9R · realized +5.9R · fees $200.48 round trip",
+      thesisOneLiner: "TP HIT 9/18 04:24 at $78,015, all 215 off, +2,150 pts, 5.9R on the entry risk. Original read: BTC printed the third tap of a 4hr 3-tap accumulation at the range low (9/11 · 9/13 · 9/15) and held it through the Clarity vote and FOMC. The long went on after FOMC as the late entry off the menu, a BMSB confirmation at half size, with one bracket and a take-profit just above the HTF range .382.",
+      bull: {
+        label: "The trade — 9/16 → 9/18, BMSB confirmation long after FOMC, half size, TP hit",
+        analog: "The late entry of the 9/15 plan — the tap-2 limit never rested, FOMC acted as a veto, structure held through the print",
+        openPosition: true,
+        position: [
+          { k: "Order 1 — BMSB confirmation · FILLED 9/16 17:43–18:00 · tag d0e0a6d1 · TP HIT 9/18", v: "LONG 215 @ $75,865 · SL $75,500 → $76,140 · TP $78,015 × 215 — HIT, +2,150 pts", tone: "win" },
+          { k: "Order 2 — the add · 9/19–9/20 cycle · NEVER RESTED", v: "no ticket was written · the trade closed before the cycle window" },
+          { k: "Risk at entry", v: "$785 (365 pts × 2.15 BTC) · under the $1–2k band — half size", tone: "loss" },
+          { k: "The exit that was available", v: "TP $78,015 took all 215 · CDE high after the exit: $80,985 (9/18 10:00 hour) · range targets $82,430 / $83,415 had no order" }
+        ],
+        levels: [
+          { name: "Entry — resting limit, BMSB confirmation", value: "$75,865 × 215" },
+          { name: "SL at entry", value: "$75,500" },
+          { name: "SL — trailed 9/16 21:39", value: "$75,555" },
+          { name: "SL — breakeven, moved 9/17 09:45", value: "$75,865" },
+          { name: "SL — final, raised 9/17 23:21 (never hit)", value: "$76,140" },
+          { name: "TP — bracket limit, above the HTF range .382 ($78,000) · written $78,035, pulled in 9/17 23:22", value: "$78,015 × 215 · 5.9R · HIT 9/18 04:24" },
+          { name: "9/17 09:00 hour low — after the BE move", value: "$75,915 · 50 pts above the stop" },
+          { name: "Range targets from the 9/15 plan — no order on them", value: "$82,430 range high · $83,415 the −0.15" },
+          { name: "S/R flip from the 9/15 plan", value: "$76,660" },
+          { name: "Post-entry high before the exit (CDE)", value: "$77,110 · 9/17 08:00" },
+          { name: "CDE high after the exit", value: "$80,985 · 9/18 10:00 hour" },
+          { name: "Timing — context only", value: "FOMC 9/16 14:00 (behind) · second entry cycle 9/19–9/20" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/11 08:00 $75,945 · 9/13 20:00 $76,340 · 9/15 10:00 $75,525 — three 4hr taps at the range low", status: "met" },
+          { label: "2. ✔ 9/15 14:00 Clarity vote wick $74,880 · 9/16 14:00 FOMC wick $74,970 — tap 3 deepened twice, both hours closed back above $75,500", status: "met" },
+          { label: "3. ✔ 9/16 17:26 — limit LONG 215 @ $75,865 placed (BMSB confirmation, half size) · the 9/15 tap-2 limit never rested", status: "met" },
+          { label: "4. ✔ 9/16 17:43–18:00 — FILLED 215 @ $75,865 in 21 prints · bracket on: SL $75,500 · TP $78,035 × 215", status: "met" },
+          { label: "5. ✔ 9/16 21:39 — SL trailed $75,500 → $75,555", status: "met" },
+          { label: "6. ✔ 9/17 09:45 — SL → $75,865 (BE) after the 08:00 push to $77,110 · risk $0", status: "met" },
+          { label: "7. ✔ 9/17 23:21–23:22 — SL raised $75,865 → $76,140 · TP pulled in $78,035 → $78,015 (bracket edits, Coinbase API)", status: "met" },
+          { label: "8. ✘ The add never rested — no ticket written for the 9/19–9/20 cycle · cost = size, not the trade", status: "failed" },
+          { label: "9. ✔ 9/18 04:24–04:54 — TP $78,015 HIT: all 215 off in 5 maker fills, +2,150 pts · book flat, nothing resting", status: "met" }
+        ],
+        details: [
+          {
+            title: "The read — HTF (4hr): the range, the zone, the path",
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-15_12-17-10%20LONG%204hr.png", caption: "4H BTCUSDT.P Bybit · captured 9/15 12:17 (pre-entry) · range grid fib 0 $82,272 → 1 $75,543 · pink band = the zone · blue circles = the taps · green line = path drawing (expectation only) · card levels govern." },
+            body: "<ul class=\"snips\"><li>Frame: the $82,272 → $75,543 range · price at the range low, third 4hr tap</li><li>Structure: 3-tap accumulation, not a 3-drive — a range exists, so targets are owed levels</li><li>Zone: the band under the range low did its job — both macro wicks ($74,880 · $74,970) landed at the 1.15 deviation and closed back up</li><li>Targets: this bracket exited at $78,015 (written $78,035), above the HTF range .382 · the range high $82,430 and the −0.15 $83,415 stay on the map with no order on them</li></ul>"
+          },
+          {
+            title: "The read — LTF (1hr): the deviation range",
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-15_13-05-14%20LONG%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/15 13:05 (pre-entry) · LTF deviation grid 0 $79,905 → 1 $75,522 · green 1.15 · purple 1.3 · blue circles = 4hr taps · blue/green lines = the PO2/PO1 paths (expectations only) · card levels govern." },
+            body: "<ul class=\"snips\"><li>Frame: the LTF deviation range off the 9/14 high · the 1.15 (≈ $74,900) was the PO1 estimate</li><li>What printed: two wicks to the 1.15 area, no 1hr close below $75,400 · the 1.3 / $74,040 count-kill never traded</li><li>Owed: a fresh 1hr screenshot showing the entry and the BMSB</li></ul>"
+          },
+          {
+            title: "The entry — what was taken vs the 9/15 plan",
+            body: "<ul class=\"snips\"><li>Plan: wait for 1hr tap 2, then tap-3 entries in two halves (PO2, then PO1)</li><li>Taken: nothing rested into FOMC — the print acted as a veto · structure held · the BMSB confirmation entry went on after it, the late entry on the menu</li><li>Size: 215 = one half · the second half is the 9/19–9/20 add, as a resting limit with its own SL</li><li>TP: one exit for all 215 (written $78,035, 5.9R at entry; filled $78,015) instead of the plan's $82,430 / $83,415 split</li><li>Card: written 9/17 from the Coinbase API, about 16 hours after the fill — the 9/15 plan did not script this entry</li></ul>"
+          },
+          {
+            title: "If the BE stop fires — the re-entry (never fired)",
+            body: "<ul class=\"snips\"><li>$75,865 trades → flat 215 at breakeven, fees only · no chase back in</li><li>Re-entry = the 9/19–9/20 add, a resting limit with its own SL · [ASK BRENDAN — level · cts · SL]</li><li>Count kill from the 9/15 plan still stands: a 1hr close below $74,040 breaks the 4hr count → no long</li><li>Any short needs its own gate + card — this section is the read, not a ticket</li></ul>"
+          }
+        ],
+        notes: "Archived 9/18 from the Coinbase API (fills, bracket edit times, final stop $76,140). The $75,500 and $75,555 stop levels are from Brendan's 9/16 report. Retired unfilled: the add ticket, 1hr tap numbering, the arming 1hr close, a post-entry 1hr chart."
+      },
+      bear: {
+        label: "What kills it",
+        analog: "Never fired — the 9/17 09:00 hour came within 50 pts of the BE stop, then the stop was raised to $76,140",
+        levels: [
+          { name: "SL — final, never hit", value: "$76,140 × 215" },
+          { name: "Count kill — 1hr close below the LTF 1.3 + HTF .382 (9/15 plan)", value: "$74,040" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "Stop never traded — closed at the TP 9/18", status: "pending" },
+          { label: "1hr close below $74,040 never printed", status: "pending" }
+        ],
+        notes: "Time cycles are context — the add rests at a level, not on a date."
+      }
+    },
     {
       ticker: "COIN",
       direction: "long",
@@ -1805,12 +2012,12 @@ const DATA = {
         details: [
           {
             title: "MTF — 4H",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-09_14-51-58%20SHORT%204hr%20path.png", caption: "4H BTCUSDT.P Bybit · captured 9/9 14:51 · blue circles = .382 taps · green line = path drawing (expectation only) · orange marker = the analog's projected low, context · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-09_14-51-58%20SHORT%204hr%20path.png", caption: "4H BTCUSDT.P Bybit · captured 9/9 14:51 · blue circles = .382 taps · green line = path drawing (expectation only) · orange marker = the analog's projected low, context · card levels govern." },
             body: "<ul class=\"snips\"><li>Frame: the 9/3 range (top → the 1 at ~$78.6k); the .382 failed</li><li>Read: distribution resolving lower — no 4hr count of its own, the 1hr carries the structure</li><li>Path: the 1 (~$78.6k) → the 1.3 (~$77.6k) → prior range-low zone</li><li>Targets: prior range-low liquidity = the .42/.53 of the larger swing</li><li>Path drawing = expectation only; the levels fire the exits</li></ul>"
           },
           {
             title: "LTF — 1H",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-09_14-30-03%20SHORT%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/9 14:30 · circles = the .382 taps + the BMSB close · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-09_14-30-03%20SHORT%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/9 14:30 · circles = the .382 taps + the BMSB close · card levels govern." },
             body: "<ul class=\"snips\"><li>Structure: 3-tap distribution at .382 resistance (9/9 01:00 / 04:00 / 08:00)</li><li>Confirmation: hard tap-3 rejection → 1H close below the BMSB</li><li>Entry type: BMSB confirmation — the late entry; needs the 3-tap identified, no tap of its own</li><li>Invalidation: reclaim of the BMSB (stop sits above it)</li><li>Context: the same three taps that took the 9/8 long off</li></ul>"
           },
           {
@@ -1819,7 +2026,7 @@ const DATA = {
           },
           {
             title: "Provenance — the June-2021 distribution (context, NOT the idea)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-09_14-52-01%20FRACTAL%20Jun2021%204hr.png", caption: "4H BTCUSDT.P Binance, May–Jun 2021 · same shape: .382 3-tap → break of the 1 → 1.3 → .42/.53 low (Jun 8) · 1H analog in charts/BTC Current/old · Structure governs; fractals are context." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-09_14-52-01%20FRACTAL%20Jun2021%204hr.png", caption: "4H BTCUSDT.P Binance, May–Jun 2021 · same shape: .382 3-tap → break of the 1 → 1.3 → .42/.53 low (Jun 8) · 1H analog in charts/BTC Current/old · Structure governs; fractals are context." },
             body: "<ul class=\"snips\"><li>Purpose: named the .382 as the point of interest before the 9/8 long — it was right</li><li>Match: 3-tap rejection at the .382 → BMSB rollover → break of the 1 → range-low move</li><li>Role: context + target map ONLY (8/10 + 8/28 law)</li><li>Trade authority: live taps + the BMSB confirmation</li><li>Failure: BMSB reclaim / stop fires — the analog gets no vote</li></ul>"
           },
           {
@@ -1913,7 +2120,7 @@ const DATA = {
           },
           {
             title: "LTF — 1H",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-09_12-44-23%20PO2%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/9 12:44 after the exit · circles = the 9/8 taps at the deviation bottom + the S/R-flip retest · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-09_12-44-23%20PO2%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/9 12:44 after the exit · circles = the 9/8 taps at the deviation bottom + the S/R-flip retest · card levels govern." },
             body: "<ul class=\"snips\"><li>Structure: 1hr 3-tap accumulation inside the deviation (9/8 03:00 / 09:00 / 14:00)</li><li>Entry: tap 3 = textbook S/R flip retest (the PO2 entry model)</li><li>Then: .382 traded → BE · two failed tests from below + one from under = rejection</li><li>Exit: by hand, fast — the three TP orders walked down to the tape</li><li>After: price traded through BE — the early exit beat the scratch</li></ul>"
           },
           {
@@ -2003,12 +2210,12 @@ const DATA = {
         details: [
           {
             title: "MTF — 4H: PO2, the trade on",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-02_14-43-50%20PO2.png", caption: "4H BTCUSDT.P Bybit · captured 9/2 14:43 · position tool = the trade · fib 1 $76,197.9 at the tap-2 level · −0.15 $82,470 overhead · green path + Sep 7–10 window = expectation only, time-cycle arches = context · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-02_14-43-50%20PO2.png", caption: "4H BTCUSDT.P Bybit · captured 9/2 14:43 · position tool = the trade · fib 1 $76,197.9 at the tap-2 level · −0.15 $82,470 overhead · green path + Sep 7–10 window = expectation only, time-cycle arches = context · card levels govern." },
             body: "<ul class=\"snips\"><li>Setup: 4hr 3-tap range, tap 2 on the fib 1 — the 1hr printed a full 3-tap of its own to build it (A-grade nesting)</li><li>Entry: tap 2 off the menu · SL under the tap-2 level, not the bodies</li><li>Target: front-run of the −0.15, not the extreme</li><li>Path: the green line and the Sep 7–10 window are an expectation — levels fire the exits, the tape governs</li></ul>"
           },
           {
             title: "The alternate — PO1 (live ONLY if the SL fired; it never did)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-02_14-43-17%20PO1.png", caption: "4H BTCUSDT.P Bybit · captured 9/2 14:43 · the deeper-flush read: entry zone ~$75.5–75.8k, stop under the 1.3, target the −0.15 · book firmed 9/2 eve to E1 $75,800 · E2 $75,600 · SL $75,170 · never armed · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-02_14-43-17%20PO1.png", caption: "4H BTCUSDT.P Bybit · captured 9/2 14:43 · the deeper-flush read: entry zone ~$75.5–75.8k, stop under the 1.3, target the −0.15 · book firmed 9/2 eve to E1 $75,800 · E2 $75,600 · SL $75,170 · never armed · card levels govern." },
             body: "<ul class=\"snips\"><li>Role: the same trade one floor lower — live only if $76,195 stopped PO2 out</li><li>E1: limit $75,800 at the .5 wick · E2: SFP of the range-low wick $75,600 (fib 1 $75,563 under it) · fallback: 1hr reclaims the .111</li><li>SL $75,170 for all three (risk $1,297.80 at 206 cts) · TP $82,400 = 10.5R from E1</li><li>Gate: a stop-out breaks the tap count → re-run the gate before any order rests</li><li>Kill: acceptance below the 1.3 $75,278</li></ul>"
           },
           {
@@ -2073,7 +2280,7 @@ const DATA = {
         details: [
           {
             title: "The read — LTF (1-hr): the confluence and the unwind grid",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-08-27_18-02-24%20LTF%20Short.png", caption: "1-hr Bybit (8/27 18:02): position tool drawn short $82,191.0 / SL $83,163.4 / TP $76,964.4. Overhead: −0.15 $82,150.7 · −0.3 $83,051.3 · HTF .705 $83,695.8. Below: fib 0 $81,259.9 · .5 $78,359.7 · HTF .236 $77,091.4 (yellow) with the TP just under it · 1 $75,563 · HTF .382 $74,062.5. The CARD governs." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-08-27_18-02-24%20LTF%20Short.png", caption: "1-hr Bybit (8/27 18:02): position tool drawn short $82,191.0 / SL $83,163.4 / TP $76,964.4. Overhead: −0.15 $82,150.7 · −0.3 $83,051.3 · HTF .705 $83,695.8. Below: fib 0 $81,259.9 · .5 $78,359.7 · HTF .236 $77,091.4 (yellow) with the TP just under it · 1 $75,563 · HTF .382 $74,062.5. The CARD governs." },
             body: "Entry where the leg-1 long takes profit: the .666 × −0.15 stack. The unwind targets the HTF .236 — the drawn cover front-runs it — but the operative cut is the BMSB: price entering the band is the flip signal, the resting $76,964.4 is the floor if it flushes straight through. Same PO3-unwind family as the August campaign, one floor higher after the re-map."
           },
           {
@@ -4111,16 +4318,24 @@ const DATA = {
         root.appendChild(det);
         return;
       }
-      if (!collapsible) { root.appendChild(renderTrade(t)); return; }
+      if (!collapsible) { root.appendChild(t.live ? renderActiveTrade(t) : renderTrade(t)); return; }
       const details = document.createElement('details');
       details.className = 'section plan-collapse';
       if (idx === 0) details.open = true;
       const dirCls = (t.direction || '').toLowerCase();
       const statCls = (t.status || '').toLowerCase();
       const meta = [];
-      if (t.plannedEntry) meta.push('plan: ' + t.plannedEntry);
-      else if (t.entry) meta.push('entered ' + t.entry);
-      if (t.sizeNote) meta.push(t.sizeNote);
+      if (t.live) {
+        // 9/15: console plan cards — the summary is the live line, never the concatenated blurbs
+        const L = t.live;
+        if (L.state) meta.push(L.state);
+        if (L.stop && L.stop.price) meta.push(`Stop <b>${L.stop.price}</b>`);
+        (L.targets || []).forEach(x => meta.push(`${x.label || 'TP'} <b>${x.price || '?'}</b>`));
+      } else {
+        if (t.plannedEntry) meta.push('plan: ' + t.plannedEntry);
+        else if (t.entry) meta.push('entered ' + t.entry);
+        if (t.sizeNote) meta.push(t.sizeNote);
+      }
       const summary = document.createElement('summary');
       summary.innerHTML = `
         <span class="sec-title">${t.ticker || '?'}</span>
@@ -4131,7 +4346,7 @@ const DATA = {
       `;
       const body = document.createElement('div');
       body.className = 'section-body';
-      body.appendChild(renderTrade(t));
+      body.appendChild(t.live ? renderActiveTrade(t) : renderTrade(t));
       details.appendChild(summary);
       details.appendChild(body);
       root.appendChild(details);
