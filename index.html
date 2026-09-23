@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8" />
 <title>BTC Regime View — Current Cycle</title>
 <style>
@@ -1416,6 +1415,77 @@ const DATA = {
   // Same structure as activeTrades. Status: "watching".
   // -----------------------------------------------------------------
   tradePlans: [
+    {
+      ticker: "BTC", direction: "long", status: "watching",
+      setupTag: "1H 3-TAP ACCUM · 4H TAP 2 · MODEL 2 · HALF SIZE",
+      live: {
+        state: "WAITING · 1H TAP 3/4 · ONE LIMIT RESTING",
+        position: "PLAN LONG 185 BTC @ $83,905",
+        stop: { price: "$83,420", note: "deviation-limit stop · tap 3" },
+        risk: "$0",
+        targets: [ { label: "TP1", cts: 185, price: "$85,880" }, { label: "TP2", cts: "[ASK — add]", price: "$87,905" } ]
+      },
+      structure: {
+        schematic: "Model 2 accumulation · 1hr 3-tap on the low nested in a 4hr 3-tap at tap 2 · range exists, targets are owed · half size now, full size (390) on the PO1 if the deviation limit is run",
+        taps4h: "1) [ASK BRENDAN — date · level] · 2) 9/23 — this low, at the 1.15 of the deviation limit · 3) pending",
+        taps1h: "9/23: 1) 10:00 · 2) 12:00 · 3) 13:00 · HLC shows only 2, so this entry is the 3rd or 4th — the next entry either way",
+        entryType: "tap 3",
+        confirmation: "1hr closed above the .236 then rejected back under it → looking for the .236 → .111 pullback; LTF fib .666 + midpoint inefficiency = $83,905"
+      },
+      strip: [
+        { if: "$83,905 · .111 / LTF .666", then: "LONG 185 · SL $83,420 · TP1 $85,880", armed: "order" },
+        { if: ".382 tags before the fill", then: "MOVE the limit up to $84,060 (S/R retest)", armed: "[ASK — alert?]" },
+        { if: "$83,420 trades · SL", then: "FLAT · PO1 long at [ASK] × 390 · SL $82,715", armed: "[ASK — alert?]" },
+        { if: "3-tap forms before TP2", then: "EXIT the TP2 runners there", armed: "alert" }
+      ],
+      ticket: {
+        planned: "185 @ $83,905 · SL $83,420 · TP1 $85,880 ×185 · TP2 $87,905 ×[ASK]",
+        risk: "$897 · 4.1R / 8.2R (TP1 under the 5R floor — Brendan's call)",
+        exception: "PO1 leg: 390 @ [ASK] · SL $82,715 · same TPs · full size"
+      },
+      thesisOneLiner: "Third (or fourth) 1hr tap into the low of 4hr tap 2, the entry refined to the LTF .666 and the midpoint inefficiency; half size at the deviation-limit stop, full size on the PO1 if the limit is run.",
+      bull: {
+        label: "The trade", openPosition: true,
+        position: [
+          { k: "Order 1 — .111 retest · RESTING (API 17:42)", v: "LONG 185 @ $83,905 · SL $83,420 · TP1 $85,880 ×185 · TP2 $87,905 ×[ASK — needs the add]", tone: "win" },
+          { k: "Order 1 alt — if the .382 tags first", v: "limit moves up to $84,060 (S/R retest) · same SL / TPs", tone: "win" },
+          { k: "Order 2 — PO1 · NOT PLACED", v: "LONG 390 @ [ASK BRENDAN — level] · SL $82,715 (deviation of the deviation) · TP1 $85,880 · TP2 $87,905", tone: "win" },
+          { k: "Risk at entry", v: "$897 (485 pts × 1.85 BTC) · PO1 risk = [ASK] once the level is set", tone: "loss" }
+        ],
+        levels: [
+          { name: "Entry — .236 → .111 · LTF .666 + midpoint inefficiency", value: "$83,905" },
+          { name: "Entry alt — S/R retest if the .382 tags first", value: "$84,060" },
+          { name: "SL — deviation limit (tap 3)", value: "$83,420" },
+          { name: "PO1 SL — deviation of the deviation", value: "$82,715" },
+          { name: "TP1 — .618 MTF = .111 macro HTF + midpoint inefficiency", value: "$85,880" },
+          { name: "TP2 — −0.15 of the range · exit early on a 3-tap", value: "$87,905" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/23 10:00–13:00 — 1hr taps 1–3 printed on the low of 4hr tap 2 (tap 2 sat at the 1.15 of the deviation limit — pattern to track)", status: "met" },
+          { label: "2. ✔ 9/23 14:44 — limit 185 @ $83,905 resting (API-verified 17:42)", status: "met" },
+          { label: "3. Scenario table — Brendan's rows owed before the order sleeps", status: "pending" },
+          { label: "4. .382 tags first → limit up to $84,060", status: "pending" },
+          { label: "5. Fill → verify the bracket attached · SL $83,420 · TP1 $85,880", status: "pending" },
+          { label: "6. $83,420 trades → flat · PO1 long 390 at [ASK] · SL $82,715", status: "pending" },
+          { label: "7. TP1 $85,880 · then the add for TP2 $87,905, exit early on a 3-tap", status: "pending" }
+        ],
+        details: [
+          { title: "The read — LTF (1hr) · Brendan 9/23",
+            body: "<ul class=\"snips\"><li>Setup: Model 2 accumulation — three 1hr taps (10:00 · 12:00 · 13:00) on the low of 4hr tap 2; on the HLC only two are in, so this is the 3rd or 4th tap and the next entry either way</li><li>Read: price closed above the .236 and rejected back under it — the pullback target is the .236 back to the .111</li><li>Trigger: the .111, refined by an LTF fib pull — the .666 and the midpoint inefficiency both sit at $83,905</li><li>Alternate: straight up to the .382 first → the retest is the S/R between the .111 and .236 at $84,060, the limit moves up</li><li>Invalidation: the deviation limit at $83,420 (tap 3) — a stop-out means the PO1 entry at full size, SL at the deviation of the deviation $82,715</li><li>Targets: TP1 $85,880 = .618 MTF, .111 macro HTF and the midpoint inefficiency stacked · TP2 $87,905 = −0.15 of the range, exit on any 3-tap that forms first</li><li>Why half size: tap 2 sat at the 1.15 of the deviation limit and keeps doing so — the full 390 waits for the PO1</li></ul>" }
+        ],
+        notes: "Written 9/23 17:45 from Brendan's read. Owed: 4hr tap 1 date/level · PO1 entry level · TP2 cts and the add · scenario rows · alert texts for the .382 move and the stop-out · charts (daily · 4hr · 1hr · LTF fib)."
+      },
+      bear: {
+        label: "What kills it",
+        levels: [ { name: "SL — Order 1", value: "$83,420 × 185" }, { name: "SL — PO1", value: "$82,715 × 390" } ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$83,420 trades → flat · the deviation-limit entry is done · PO1 card at [ASK] × 390, SL $82,715", status: "pending" },
+          { label: "$82,715 trades on the PO1 → flat · no re-entry without a new count", status: "pending" }
+        ]
+      }
+    },
     {
       ticker: "BTC",
       direction: "short",
