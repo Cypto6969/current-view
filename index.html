@@ -585,6 +585,18 @@
   .notes ul.snips { margin: 2px 0 0 18px; padding: 0; font-style: normal; color: var(--text); }
   .notes ul.snips li { margin: 3px 0; font-size: 13px; line-height: 1.45; }
   .notes ul.snips.gate li b { color: var(--pending); font-weight: 700; }
+  /* SCENARIO TABLE (9/23): record-only · scenario · action · when · executable — a NO = the order does not rest */
+  .notes table.scen { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 6px 0 4px; font-style: normal; color: var(--text); }
+  .notes table.scen th { text-align: left; color: var(--muted); font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .notes table.scen td { padding: 6px 8px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
+  .notes table.scen td.ok { color: var(--bull); font-weight: 700; font-family: ui-monospace, monospace; }
+  .notes table.scen td.no { color: var(--bear); font-weight: 700; font-family: ui-monospace, monospace; }
+  .notes table.scen tr.last td { color: var(--muted); font-style: italic; }
+  .notes .scen-verdict { margin: 8px 0 0; font-size: 13px; font-weight: 700; color: var(--bear); }
+  .notes table.scen.audit td { font-size: 12px; white-space: nowrap; }
+  .notes table.scen.audit td.mono { font-family: ui-monospace, monospace; }
+  .record-tickets .tk-exc b { color: var(--bear); }
+  @media (max-width: 640px) { .notes table.scen { font-size: 11.5px; } .notes table.scen th, .notes table.scen td { padding: 5px 5px; } }
   @media (max-width: 640px) {
     .live-console { padding: 14px 14px 6px; }
     .tk-hero { padding-left: 18px; }
@@ -1294,7 +1306,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-09-22",
+  asOf: "2026-09-23",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1406,101 +1418,11 @@ const DATA = {
   tradePlans: [
     {
       ticker: "BTC",
-      direction: "long",
-      status: "watching",
-      setupTag: "1H 3-TAP ACCUM · TAP-3 LONG · HANDS OFF TO THE SHORT LADDER",
-      live: {
-        state: "ARMED · TWO LIMITS RESTING · SCALP · NO FILL IS FINE",
-        position: "PLAN LONG 3.00 BTC @ $85,755",
-        stop: { price: "$85,255", note: "under the .86" },
-        risk: "$0",
-        targets: [
-          { label: "TP1", cts: 150, price: "$87,330" },
-          { label: "TP2", cts: 150, price: "$87,885" }
-        ]
-      },
-      structure: {
-        schematic: "1hr 3-tap ACCUMULATION forming on 9/22 on the other side of a 1hr 2-tap distribution · a range exists ($85,105 → $86,765), so targets are owed levels · tap-3 long at the .666 abundance pocket, exits hand off to the resting short ladder 20 pts above TP2",
-        taps4h: "None — the 4hr count lives on the short card (tap 1 = the 9/21 $87,430 high, tap 2 = the sweep) · this long is the LTF route INTO that sweep",
-        taps1h: "Distribution highs (CDE 9/22): 1) 04:00 $86,385 · 2) 11:00 $86,765 · Accumulation lows: 1) 05:00 $85,675 · 2) 10:00 $85,495 (swept tap 1) · 3) PENDING — the entry, at the .666 pocket +100 = $85,755 · LTF fib grid: 01:00 low $85,105 → 11:00 high $86,765 (.666 $85,659 · .86 $85,337)",
-        entryType: "tap 3",
-        confirmation: "None — resting limit at the level · SL is the invalidation · automated end to end so the two-sided plan is executable without a screen"
-      },
-      strip: [
-        { if: "$85,755 · tap 3", then: "LONG 300 · SL $85,255", armed: "order" },
-        { if: "1hr close above BMSB · long", then: "SL → BE $85,755", armed: "alert" },
-        { ref: "tp1", then: "TAKE 150 · SL → the .382", armed: "order" },
-        { ref: "tp2", then: "TAKE 150 · FLAT", armed: "order" },
-        { if: "Rung A ($87,905) fills first", then: "CANCEL BOTH LONGS", armed: "alert" }
-      ],
-      entry: "Nothing filled · RESTING 9/22 18:25–18:26 ET: BUY 150 @ $85,755 (tag 567999b3) · BUY 150 @ $85,755 (tag 0b68a7ab) · brackets attach at fill",
-      plannedEntry: "BUY 150 @ $85,755 (bracket SL $85,255 · TP $87,330) + BUY 150 @ $85,755 (bracket SL $85,255 · TP $87,885) · two entries because a bracket carries one TP · 300 confirmed 9/22 (not sized up: R under the floor)",
-      sizeNote: "500 pts of risk = $5.00/ct → 300 cts = $1,500 (150/150) · TP1 3.2R · TP2 4.3R · both under the 5R floor — Brendan's call, same as short rung A · Coinbase nets resting longs against the resting shorts: up to 500 cts long was allowed with 400 short resting",
-      thesisOneLiner: "While the short ladder waits for the sweep of the $87,430 high, the 9/22 tape is building a 1hr 3-tap accumulation under a 2-tap distribution — the LTF route into that sweep. Tap 3 is bought at the .666 pocket with the stop under the .86, and the exits are laid 100 pts under the high and 20 pts under short rung A, so the book is flat for 20 points and then short on the sweep, with no hand on the ticket.",
-      bull: {
-        label: "The trade — tap-3 long into the sweep, hands off to the short",
-        analog: "The 'long into the short' parked 9/22 pm, un-parked once it could be fully automated",
-        openPosition: true,
-        position: [
-          { k: "Long A — tap 3 · RESTING 9/22 18:25 · tag 567999b3", v: "BUY 150 @ $85,755 · SL $85,255 · TP $87,330", tone: "win" },
-          { k: "Long B — tap 3 · RESTING 9/22 18:26 · tag 0b68a7ab", v: "BUY 150 @ $85,755 · SL $85,255 · TP $87,885", tone: "win" },
-          { k: "Risk at entry", v: "$1,500 (500 pts × 3.00 BTC) · 3.2R / 4.3R", tone: "loss" },
-          { k: "The handoff — positions are NET", v: "TP2 $87,885 flats the long · short rung A fills 20 pts later at $87,905 · exits must sit below $87,905, always" },
-          { k: "The hazard — sweep BEFORE tap 3", v: "shorts fill first while the longs rest → CANCEL the longs immediately · a filled BUY 300 at $85,755 would cover the short early and its brackets would re-short 300 with no plan" }
-        ],
-        levels: [
-          { name: "Entry — tap 3 · the .666 pocket ($85,659) +100", value: "$85,755" },
-          { name: "SL — 100 under the .86 ($85,337) / the .111 of the LTF grid", value: "$85,255 · 500 pts" },
-          { name: "TP1 — 100 under the 9/21 high ($87,430)", value: "$87,330 × 150 · 3.2R" },
-          { name: "TP2 — 20 under short rung A ($87,905)", value: "$87,885 × 150 · 4.3R" },
-          { name: "BE trigger — 1hr close reclaiming the BMSB", value: "SL → $85,755 · TV alert set 9/22" },
-          { name: "Trail after TP1 — the .382 of the fib re-pulled to the new high", value: "~$86,550 on the old high · recompute once the high prints" },
-          { name: "LTF fib grid (CDE)", value: "0 $85,105 (9/22 01:00 low) → 1 $86,765 (11:00 high)" },
-          { name: "Distribution taps (highs)", value: "04:00 $86,385 · 11:00 $86,765" },
-          { name: "Accumulation taps (lows)", value: "05:00 $85,675 · 10:00 $85,495 · tap 3 pending" },
-          { name: "Short ladder above (its own card)", value: "rung A $87,905 × 150 · rung C $88,650 × 250" },
-          { name: "Macro inside the window — context only", value: "Deribit expiry Fri 9/25 04:00 · PCE Wed 9/30 08:30 · NFP Fri 10/2 08:30" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. ✔ 9/22 04:00–11:00 — 2-tap distribution highs $86,385 / $86,765 · accumulation lows $85,675 / $85,495 (tap 2 swept tap 1)", status: "met" },
-          { label: "2. ✔ 9/22 18:25–18:26 — both longs RESTING (API-verified): 150 @ $85,755 (567999b3) · 150 @ $85,755 (0b68a7ab) · brackets attach at fill", status: "met" },
-          { label: "3. Tap 3 prints → both fill · book LONG 300 · nothing to do by hand", status: "pending" },
-          { label: "3a. Filled → 1hr close reclaims the BMSB → SL $85,255 → BE $85,755 on both brackets (TV alert set 9/22, tighten)", status: "pending" },
-          { label: "4. $87,330 → TAKE 150 · then trail the remaining 150's SL to the .382 of the fib re-pulled to the NEW high (not known until the high is in; on the old high it is ~$86,550) · $87,885 → TAKE 150, flat · 20 pts later short rung A fills at $87,905 — the short card takes over", status: "pending" },
-          { label: "5. $85,255 → stopped, flat · the short ladder stays resting untouched · no re-entry without a new count", status: "pending" },
-          { label: "6. Retire the BMSB flip-long alert row on the short card — this long IS the flip, written as a resting order", status: "pending" },
-          { label: "7. HAZARD RULE — if the sweep comes before tap 3 and short rung A fills while these longs still rest: CANCEL BOTH LONGS at once (Coinbase fill notifications on, standard) · otherwise the BUY 300 covers the short 925 pts early at $85,755 and its brackets re-short 300 above (TPs) and at $85,255 (stop) with no plan behind them · GUARD: expected timing is by ~20:00 ET 9/22 — check the book before bed; if the longs are unfilled and the shorts are on, cancel the longs; if neither filled, both can rest overnight (a shallow tap 3 may never reach $85,755, that is fine)", status: "pending" }
-        ],
-        details: [
-          {
-            title: "The read — the 1hr range under the sweep (Brendan 9/22 eve)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-22_18-52-08%20LONG%201hr%20tap3.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 18:52 · grey circles = the taps · fib grid low→high with the .666 pocket, .86 and .382 · blue box = the long ticket (entry / SL / TP1 / TP2) · red = the −0.3, cyan = the −0.15 · green line = path drawing (expectation only) · card levels govern." },
-            body: "<ul class=\"snips\"><li>Setup: a 2-tap distribution at the top of the 9/22 range and a 3-tap accumulation forming under it · both counted on the 1hr, CDE</li><li>Trigger: tap 3 at the .666 abundance pocket, resting limit 100 pts above the pocket so a shallow tap 3 still fills</li><li>Invalidation: the stop under the .86 and the .111 of the LTF grid · below that the accumulation count is broken</li><li>Targets: 100 under the 9/21 high, then 20 under the short's first rung · the long does not try to catch the sweep, it hands the sweep to the short</li><li>Why now and not this afternoon: the idea was parked as too complex to execute by hand · fully resting orders on both sides make it executable with no screen, and Coinbase's netting lets both sides rest</li></ul>"
-          }
-        ],
-        notes: "Written 9/22 eve from Brendan's count + the CDE tape; both limits resting, API-verified. FRAME (Brendan 9/22): this is a SCALP on an LTF move, on both ends — the orders sit where the risk makes the most sense; a shallow tap that never fills is fine, cancel and wait for the long from the .236 to the higher MTF targets. Owed: chart of the 1hr range."
-      },
-      bear: {
-        label: "What kills it",
-        analog: "The count breaks under the .86",
-        levels: [
-          { name: "SL — both brackets", value: "$85,255 × 300 → BE $85,755 on a 1hr BMSB reclaim → the .382 after TP1" }
-        ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "$85,255 trades → flat 300 · −$1,500 · the short ladder above is untouched and stays resting · no long re-entry without a new count + card", status: "pending" }
-        ],
-        notes: "If the long is on and the sweep comes early, the exits at $87,330 / $87,885 fire first by construction — never move them above $87,905. If the shorts fill while the longs still rest, cancel the longs — that is the only order of events that breaks the netting."
-      }
-    },
-    {
-      ticker: "BTC",
       direction: "short",
       status: "watching",
       setupTag: "SFP TAP-2 SHORT · −0.15 + OVERSHOOT DOUBLE · FLIP AT BMSB / −0.3",
       live: {
-        state: "ARMED · TWO LIMITS RESTING · SL A $88,650 · SL C $88,950",
+        state: "PARKED 9/23 · BOTH LIMITS CANCELLED · NOTHING RESTING · RE-ARM = BRENDAN'S CALL",
         position: "PLAN SHORT 4.00 BTC @ $87,905 / $88,650",
         stop: { price: "$88,650", note: "A · C $88,950" },
         risk: "$0",
@@ -1516,13 +1438,13 @@ const DATA = {
         confirmation: "Short = the ladder fills on the sweep, no confirmation · Invalidation = two layers: hard stop above the overshoot band (sized against) + hand exit on a 1hr CLOSE above the −0.3 $88,425 (TV alert) · Exit/flip on the way down = the first level price interacts with and 1hr-closes above (BMSB or the −0.3 retest) → stop to that candle's high, long at the retest"
       },
       strip: [
-        { if: "$87,905 · rung A", then: "SHORT 150 · SL $88,650", armed: "order" },
-        { if: "$88,650 · rung C", then: "SHORT 250 · SL $88,950", armed: "order" },
+        { if: "$87,905 · rung A", then: "SHORT 150 · SL $88,650", armed: "" },
+        { if: "$88,650 · rung C", then: "SHORT 250 · SL $88,950", armed: "" },
         { if: "$88,650 · top-up after A stops", then: "LIMIT 50 · SL $88,950 · only if ≤ $88,700", armed: "" },
         { if: "1hr close above $88,425", then: "EXIT ALL", armed: "alert" },
         { if: "1hr close above BMSB · short", then: "STOP → candle high", armed: "alert" }
       ],
-      entry: "Nothing filled · RESTING 9/22 21:14 ET: SELL 150 @ $87,905 (tag 2a2de380) · SELL 250 @ $88,650 (tag 95478830) · brackets attach at fill (Coinbase API shows plain limits pre-fill)",
+      entry: "Nothing filled · RESTED 9/22 21:14 ET: SELL 150 @ $87,905 (tag 2a2de380) · SELL 250 @ $88,650 (tag 95478830) · CANCELLED 9/23 10:18 by hand (API: user requested cancel) to free the margin for the long's close · nothing resting",
       plannedEntry: "Two rungs: A 150 @ $87,905 (the −0.15, placed AT the level, no front-run), SL $88,650 · C 250 @ $88,650 resting (the double, fills as A stops) + 50 top-up by hand as a LIMIT at $88,650 once A's margin frees, only if price ≤ $88,700 · SL $88,950 (the deviation of the deviation $88,850 + 100) · hand exit 1hr close above $88,425 · one bracket TP $84,830 on both · BMSB = alert → stop to the candle high on a 1hr close above · cts proposed 9/22, Brendan to confirm",
       sizeNote: "A: 150 cts, 745 pts, risk $1,118, 4.1R to $84,830 (under the 5R floor — Brendan's call, the base case) · C: 250 resting (Coinbase margin hold caps A+C resting at 400) + 50 top-up by hand = 300, 300 pts, risk $750 → $900, 12.7R · worst case both stop = $1,868 resting / $2,018 with the top-up · C sized on its own budget, never on A's loss · C stop = the deviation of the deviation ($88,850) + 100 buffer, the new standard",
       thesisOneLiner: "The 9/21 leg tagged the HTF −0.15 and a range is building there; the pullback could not hold the .111 and turned in no-man's land, so the bias is a .236 retest next (then the .382 if that fails). Tap 2 is an SFP sweep of the highs; the base case is that it stops at the −0.15, so the size goes there with the stop just above the deviation limit, and a second rung doubles at that stop price with a wide stop above the overshoot band, because once the −0.15 is tagged the only way to be wrong on rung A is the overshoot. A 1hr close above the −0.3 is the hand exit on either rung. The sweep raises the .236 to about the −0.3 retest from above at $84,830, which is the target; the exit-and-flip is wherever price interacts with the BMSB or that retest and cannot close below.",
@@ -1565,10 +1487,11 @@ const DATA = {
           { label: "1. ✔ 9/21 04:00–16:00 — the leg: $81,750 → $87,430, the HTF −0.15 tagged, strong reversal candle · 1hr 3-tap distribution at the level", status: "met" },
           { label: "2. ✔ 9/21 21:00 → 9/22 — pullback closed below the .111, turned at $85,105 (no .111 or .236 tag), back into the BMSB and holding · no-man's land = range not complete", status: "met" },
           { label: "2b. ✔ 9/22 21:14–21:16 — both limits RESTING: A 150 @ $87,905 (2a2de380) · C 250 @ $88,650 (95478830) · buying power left ~$1k, margin fully committed · brackets attach at fill", status: "met" },
+          { label: "2c. ✘ 9/23 10:18 — both limits CANCELLED by hand: the long card's naked 150 could not be closed with 400 short limits resting (margin) · the sweep never came (9/23 00:00 high $87,283 spot, 620 pts short of rung A) · NOT RE-ARMED — Brendan's call · if re-armed: rest ONE side only, brackets need margin headroom (see the 9/23 long archive)", status: "failed" },
           { label: "3. The SFP sweep → A 150 @ $87,905 (SL $88,650) · if the overshoot runs to $88,650: A stops AND C 250 fills at the same price (SL $88,950) · at the screen: top-up SELL LIMIT 50 @ $88,650 once margin frees, only if price ≤ $88,700 · this is tap 2 · no fill if the sweep never comes", status: "pending" },
           { label: "3a. 1hr closes above $88,425 while short → EXIT ALL at market (hand invalidation, alert) · the hard stop is only for the wick that runs past the band", status: "pending" },
           { label: "3d. TWO MODES AT THE −0.15 (Brendan 9/22 eve): (i) fast tag-and-go — rung A fills and price rejects → the limit is the whole entry, NOTHING added · (ii) price closes up into the −0.15 and builds a countable 3-tap distribution there → ADD a double, 150 more, as a RESTING LIMIT at the counted tap (same SL $88,650) · the add collides with the 400-ct margin cap and the risk band (300 @ ~$87,905 vs $88,650 = $2,235 before C), so when the double goes on, CANCEL RUNG C (decided 9/22) · the structure case is not the fast-overshoot sweep C was built for · book after: 300 short at ~$87,905, SL $88,650, $2,235 risk", status: "pending" },
-          { label: "3c. NETTING RULE with the 9/22 tap-3 long card — if rung A fills while the two longs (BUY 300 @ $85,755) still rest: CANCEL THE LONGS at once, or the buy covers this short 925 pts early on the way to $84,830 and its brackets re-short with no plan · fill notification on rung A", status: "pending" },
+          { label: "3c. ✔ NETTING RULE — moot 9/23: the long filled, stopped and was closed first; the rungs were cancelled · the real hazard was the long's bracket being REJECTED for margin while these rungs rested (9/23 long archive) · never rest a two-sided book at the margin cap again", status: "met" },
           { label: "3b. Once the sweep high prints → re-pull the fib low→high, write the recomputed .236 on the card, move the bracket TP to it if it differs from $84,830 (tighten-only applies to the stop, not the TP)", status: "pending" },
           { label: "4. On the way down: wait for the TP unless a 3-tap prints first · a 1hr close above the BMSB (alert) or above the −0.3 retest after interacting → stop to that candle's high, no market exit · a countable 3-tap accumulation above the target = the same treatment, exit at the tap-3 close, never hold through it for the fib · any long after this short = its own card with its own count (the 9/22 tap-3 long card is the current one)", status: "pending" },
           { label: "5. The level that could not be closed below = the flip: LONG [cts] at its retest · SL below the red wick · TPs $87,500 / $89,850 / $91,285 · [ASK — one 1hr close above or two]", status: "pending" },
@@ -1787,6 +1710,105 @@ const DATA = {
   // outcome: "win" | "loss" | "scratch". pnl: free text ("+$6,520", "flat", "-1.0% AUM").
   // -----------------------------------------------------------------
   closedTrades: [
+    {
+      ticker: "BTC",
+      direction: "long",
+      closed: "2026-09-23",
+      outcome: "loss",
+      exit: "SL",
+      capture: { realizedR: -1.80, plannedR: 3.2 },
+      pnl: "−$2,702.70 pre-fees — 150 SL @ $85,246 = −$763 · 150 hand @ $84,462 = −$1,940 · fees $264 · net −$2,966 · −1.80R on $1,500",
+      postmortem: "In Notion (daily reflection). Brendan 9/23: at 00:00, asleep, the 3rd distribution tap printed — a lower high, effectively equal highs — which should have cancelled the longs; they filled at 04:52 instead, longs that should never have gone on. In the morning I should have closed them at once when I was wrong; I kept them on out of hope, switched to the 4hr and said we still need the high sweep, and decided the stop would take me out when I was wrong — and the stop didn't work. Double lesson.",
+      rulesChanged: [
+        "Scenario gate: any order that rests while away from the screen gets a scenario table first; a required action that is not executable = the order does not rest",
+        "Every fill = verify the bracket attached (API attached_order_id → OPEN); FAILED = stop by hand now",
+        "Never rest a two-sided book that consumes the buying power — brackets are margined as new exposure"
+      ],
+      setupTag: "Tap-3 Long · Filled After the LH · Held on Hope · Bracket Rejected",
+      live: {
+        state: "CLOSED 9/23 10:19 · HALF STOPPED, HALF HAND · −1.80R · LOWER HIGH IGNORED",
+        position: "LONG 3.00 BTC @ $85,755",
+        stop: { price: "$85,255", note: "HIT ×150 · NONE ×150" },
+        risk: "−$2,702.70 pre-fees",
+        targets: [
+          { label: "TP1 ✘", cts: 150, price: "$87,330" },
+          { label: "TP2 ✘", cts: 150, price: "$87,885" }
+        ]
+      },
+      structure: {
+        schematic: "1hr 3-tap accumulation forming under a 1hr 2-tap distribution · range $85,105 → $86,765, targets owed · the LTF route into the short ladder's sweep",
+        taps4h: "None — the 4hr count lives on the short card (tap 1 = the 9/21 $87,430 high, tap 2 = the sweep)",
+        taps1h: "Distribution highs: 04:00 $86,385 · 11:00 $86,765 · Accumulation lows: 05:00 $85,675 · 10:00 $85,495 · tap 3 = the entry at the .666 pocket +100",
+        entryType: "tap 3",
+        confirmation: "None — resting limit, SL is the invalidation"
+      },
+      ticket: {
+        planned: "300 @ $85,755 · SL $85,255 · TP1 $87,330 ×150 · TP2 $87,885 ×150",
+        actual: "300 filled @ $85,755 · 150 SL @ $85,246 · 150 HAND @ $84,462",
+        risk: "$1,500 planned · −1.80R realized",
+        exception: "bracket rejected on 150 cts (margin) → half the position unprotected 5h26m"
+      },
+      audit: [
+        { tag: "567999b3", time: "9/23 04:52", side: "BUY", cts: 150, price: "$85,755", fee: "$50.16", note: "bracket edb4e975 REJECTED · insufficient funds" },
+        { tag: "0b68a7ab", time: "9/23 04:52", side: "BUY", cts: 150, price: "$85,755", fee: "$50.16", note: "bracket e6d65cee OPEN" },
+        { tag: "e6d65cee", time: "9/23 10:10", side: "SELL", cts: 150, price: "$85,246.20", fee: "$81.93", note: "stop · trigger $85,255" },
+        { tag: "2a2de380 · 95478830", time: "9/23 10:18", side: "—", cts: 400, price: "—", fee: "—", note: "short rungs cancelled to free margin" },
+        { tag: "518b84a5", time: "9/23 10:18", side: "SELL", cts: 150, price: "$84,462", fee: "$81.35", note: "hand close · market" }
+      ],
+      thesisOneLiner: "CLOSED 9/23, −1.80R — filled after the lower high, held on hope, half the position had no stop. The original read: a 1hr 3-tap accumulation under a 2-tap distribution, tap 3 bought at the .666 pocket with the stop under the .86, exits handed to the short ladder above.",
+      bull: {
+        label: "The trade — tap-3 long into the sweep",
+        analog: "The 'long into the short', un-parked 9/22 because it could rest end to end — it could not",
+        openPosition: true,
+        position: [
+          { k: "Long A — tap 3 · FILLED 9/23 04:52 · no bracket · HAND CLOSE 10:18", v: "LONG 150 @ $85,755 · SL none (planned $85,255) · out $84,462 = −$1,939.50 · TP $87,885 ✘", tone: "loss" },
+          { k: "Long B — tap 3 · FILLED 9/23 04:52 · STOPPED 10:10", v: "LONG 150 @ $85,755 · SL $85,255 → out $85,246.20 = −$763.20 · TP $87,330 ✘", tone: "loss" },
+          { k: "Risk at entry", v: "$1,500 · realized −$2,702.70 · −1.80R · fees $263.60", tone: "loss" },
+          { k: "The exits that were available", v: "8am, at the screen, lower high on the chart: close 300 by hand ≈ −$345 · or the planned stop on Long A: −$763 instead of −$1,940" }
+        ],
+        levels: [
+          { name: "Entry — tap 3 · the .666 pocket +100", value: "$85,755" },
+          { name: "SL — under the .86", value: "$85,255 · attached on 150 only" },
+          { name: "TP1 — 100 under the 9/21 high", value: "$87,330 ×150 · 3.2R ✘" },
+          { name: "TP2 — 20 under short rung A", value: "$87,885 ×150 · 4.3R ✘" },
+          { name: "The lower high — 9/23 00:00, the cancel signal", value: "~$87,330 (≈$100 under $87,430)" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/22 — 2-tap distribution + accumulation taps 1 and 2 counted", status: "met" },
+          { label: "2. ✔ 9/22 18:25 — both longs resting · BMSB alert set", status: "met" },
+          { label: "3. ✘ 9/23 00:00 — 3rd distribution tap, a lower high · the cancel signal · asleep", status: "failed" },
+          { label: "4. ✘ 9/23 04:52 — both longs filled after the lower high · Long A bracket REJECTED (margin), Long B attached", status: "failed" },
+          { label: "5. ✘ 9/23 ~08:00 — at the screen, wrong on the chart · held: switched to the 4hr, 'still need the sweep', 'the stop will take me out'", status: "failed" },
+          { label: "6. ✘ 9/23 10:10 — Long B stopped · Long A kept riding, no stop", status: "failed" },
+          { label: "7. ✘ 9/23 10:18 — API pull found the naked 150 · hand close blocked by margin until the short rungs were cancelled · closed at market", status: "failed" },
+          { label: "8. ✔ 9/23 — flat, nothing resting · no re-entry without a new count", status: "met" }
+        ],
+        details: [
+          {
+            title: "The read — the 1hr range under the sweep (9/22 eve)",
+            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-22_18-52-08%20LONG%201hr%20tap3.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 18:52 · grey circles = the taps · fib grid low→high · blue box = the long ticket · green = path drawing (expectation only) · card levels govern." },
+            body: "<ul class=\"snips\"><li>Setup: a 2-tap distribution at the top of the 9/22 range and a 3-tap accumulation forming under it</li><li>Trigger: tap 3 at the .666 pocket, resting limit 100 pts above it so a shallow tap still fills</li><li>Invalidation: the stop under the .86 — below it the count is broken</li><li>Targets: 100 under the 9/21 high, then 20 under the short's first rung — the long hands the sweep to the short</li><li>Result: the high was swept at 00:00 before tap 3; the fill came on the way down; the count broke at 10:10</li></ul>"
+          },
+          {
+            title: "Scenario table — what the 9/22 walk would have produced (written 9/23)",
+            body: "<ul class=\"snips\"><li>Pre-mortem: the distribution finishes before tap 3 fills · shorts fill first and the buy covers them · a bracket does not attach</li><li>When = overnight for nearly every row (fill estimate 6–8pm or 12–2am) · Exec? = is the body there</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>Fill, both targets hit</td><td>none</td><td>overnight</td><td class=\"ok\">YES</td></tr><tr><td>Fill, TP1 only</td><td>BE on BMSB reclaim · trail to the .382</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>Lower high before fill</td><td>cancel longs</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>Shorts fill, longs resting</td><td>cancel longs</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>3rd tap in, then longs fill</td><td>close longs</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>Fill, bracket rejected</td><td>stop by hand</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>One leg fills, one rests</td><td>cancel the second leg</td><td>overnight</td><td class=\"no\">NO</td></tr><tr><td>Fill, sideways 12h</td><td>time stop · close</td><td>next morning</td><td class=\"ok\">YES</td></tr><tr><td>Nothing fills</td><td>none</td><td>—</td><td class=\"ok\">YES</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">6 × NO → the longs do not rest. Verdict at 18:00 on 9/22: shorts only.</div><ul class=\"snips\"><li>The gate: a NO means that scenario is made impossible, or the order does not rest — decided at write time, not at 8am</li><li>The last row is the principle: an unlisted state is a position without a read → flat; it also stops a listed row being reframed</li></ul>"
+          }
+        ],
+        notes: "Archived 9/23 from the Coinbase API. Relabeled at archive: the tag carries the decisions, not the setup."
+      },
+      bear: {
+        label: "What killed it",
+        analog: "The count broke — and half the stop never reached the book",
+        levels: [
+          { name: "SL — planned on both", value: "$85,255 × 300 · attached ×150" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "✔ $85,255 traded 9/23 10:10 → 150 by bracket · 150 by hand at $84,462 → −$2,702.70", status: "met" }
+        ]
+      }
+    },
     {
       ticker: "BTC",
       direction: "long",
@@ -4650,7 +4672,13 @@ const DATA = {
         ['Entry', st.entryType || '[ASK BRENDAN]'],
         st.confirmation ? ['Confirmation', st.confirmation] : null
       ].filter(Boolean).map(([k, v]) => `<li><b>${k}:</b> ${v}</li>`).join('')}</ul></div>` : '';
-    const ticketsHtml = (trade.entry || trade.plannedEntry || trade.sizeNote) ? `<div class="record-tickets">${trade.entry ? `<div><b>Entry</b> — ${trade.entry}</div>` : ''}${trade.plannedEntry ? `<div><b>Plan</b> — ${trade.plannedEntry}</div>` : ''}${trade.sizeNote ? `<div><b>Size</b> — ${trade.sizeNote}</div>` : ''}</div>` : '';
+    // Ticket block (9/23): planned / actual / risk / exception — one line each. Legacy cards fall back to entry/plannedEntry/sizeNote.
+    const T = trade.ticket;
+    const ticketsHtml = T ? `<div class="record-tickets">${T.planned ? `<div><b>Planned</b> — ${T.planned}</div>` : ''}${T.actual ? `<div><b>Actual</b> — ${T.actual}</div>` : ''}${T.risk ? `<div><b>Risk</b> — ${T.risk}</div>` : ''}${T.exception ? `<div class="tk-exc"><b>Exception</b> — ${T.exception}</div>` : ''}</div>`
+      : (trade.entry || trade.plannedEntry || trade.sizeNote) ? `<div class="record-tickets">${trade.entry ? `<div><b>Entry</b> — ${trade.entry}</div>` : ''}${trade.plannedEntry ? `<div><b>Plan</b> — ${trade.plannedEntry}</div>` : ''}${trade.sizeNote ? `<div><b>Size</b> — ${trade.sizeNote}</div>` : ''}</div>` : '';
+    // Execution audit (9/23): one row per venue order, closed sub-disclosure at the bottom of Trade Record.
+    const auditHtml = Array.isArray(trade.audit) && trade.audit.length ? `<details class="subsection"><summary><span class="sec-title">Execution audit</span></summary><div class="section-body"><div class="notes" style="margin-top:8px;overflow-x:auto"><table class="scen audit"><thead><tr><th>Order</th><th>Time ET</th><th>Side</th><th>Cts</th><th>Price</th><th>Fee</th><th>Note</th></tr></thead><tbody>${trade.audit.map(r => `<tr><td class="mono">${r.tag || ''}</td><td>${r.time || ''}</td><td>${r.side || ''}</td><td>${r.cts != null ? r.cts : ''}</td><td class="mono">${r.price || ''}</td><td>${r.fee || ''}</td><td>${r.note || ''}</td></tr>`).join('')}</tbody></table></div></div></details>` : '';
+    const rulesHtml = Array.isArray(trade.rulesChanged) && trade.rulesChanged.length ? `<div class="notes"><b>Rules changed:</b><ul class="snips">${trade.rulesChanged.map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
     // Read (snippets) ABOVE the image — compact record standard 9/9
     const detailHtml = (bull.details || []).map(d => `<details class="subsection"><summary><span class="sec-title">${d.title}</span></summary><div class="section-body"><div class="notes" style="margin-top:10px">${d.body}</div>${d.chart ? `<div class="chart-card" style="margin-top:10px"><img src="${d.chart.src}" alt="${(d.chart.caption || '').replace(/"/g, '&quot;')}" data-zoom="1" />${d.chart.caption ? `<div class="chart-caption">${d.chart.caption}</div>` : ''}</div>` : ''}</div></details>`).join('');
     const killsHtml = bear && (bear.levels || bear.triggers || bear.notes) ? `<div class="kills"><div class="section-h">${bear.label || 'What kills it'}${bear.analog ? ` — ${bear.analog}` : ''}</div><div class="levels kill-levels"></div><div class="triggers-root kill-trig"></div>${bear.notes ? `<div class="notes">${bear.notes}</div>` : ''}</div>` : '';
@@ -4673,12 +4701,15 @@ const DATA = {
           ${ticketsHtml}
         </div></details>
         <details class="section"><summary><span class="sec-title">Trade Record</span></summary><div class="section-body">
+          ${closed && trade.pnl ? `<div class="notes"><b>Result:</b> ${trade.pnl}</div>` : ''}
+          ${closed && trade.postmortem ? `<div class="notes"><b>Diagnosis:</b> ${trade.postmortem}</div>` : ''}
+          ${closed ? rulesHtml : ''}
           ${bull.position ? `<div class="section-h">Position &amp; Sizing — one row per order</div><div class="position-root"></div>` : ''}
           ${bull.levels && bull.levels.length ? `<div class="section-h">${bull.levelsLabel || 'Key Levels'}</div><div class="levels rec-levels"></div>` : ''}
           ${pendingSteps.length ? `<div class="section-h">${bull.triggersLabel || 'Steps'} — still to come</div><div class="triggers-root rec-trig"></div>` : ''}
           ${killsHtml}
-          ${closed && trade.pnl ? `<div class="notes"><b>P&amp;L:</b> ${trade.pnl}</div>` : ''}
-          ${closed && trade.postmortem ? `<div class="notes"><b>Post-mortem:</b> ${trade.postmortem}</div>` : ''}
+          ${!closed ? rulesHtml : ''}
+          ${auditHtml}
         </div></details>
         <details class="section"><summary><span class="sec-title">Charts &amp; Rationale</span></summary><div class="section-body">
           ${detailHtml || '<div class="notes">No reads attached yet.</div>'}
