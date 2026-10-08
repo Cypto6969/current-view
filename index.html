@@ -1306,7 +1306,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-09-23",
+  asOf: "2026-10-07",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1417,78 +1417,6 @@ const DATA = {
   // -----------------------------------------------------------------
   tradePlans: [
     {
-      ticker: "BTC", direction: "long", status: "watching",
-      setupTag: "1H 3-TAP ACCUM · 4H TAP 2 · MODEL 2 · HALF SIZE",
-      live: {
-        state: "WAITING · 1H TAP 3/4 · ONE LIMIT RESTING",
-        position: "PLAN LONG 185 BTC @ $83,905",
-        stop: { price: "$83,420", note: "deviation-limit stop · tap 3" },
-        risk: "$0",
-        targets: [ { label: "TP1", cts: 185, price: "$85,880" }, { label: "TP2", cts: "[ASK — add]", price: "$87,905" } ]
-      },
-      structure: {
-        schematic: "Model 2 accumulation · 1hr 3-tap on the low nested in a 4hr 3-tap at tap 2 · range exists, targets are owed · half size now, full size (390) on the PO1 if the deviation limit is run",
-        taps4h: "1) [ASK BRENDAN — date · level] · 2) 9/23 — this low, at the 1.15 of the deviation limit · 3) pending",
-        taps1h: "9/23: 1) 10:00 · 2) 12:00 · 3) 13:00 · HLC shows only 2, so this entry is the 3rd or 4th — the next entry either way",
-        entryType: "tap 3",
-        confirmation: "1hr closed above the .236 then rejected back under it → looking for the .236 → .111 pullback; LTF fib .666 + midpoint inefficiency = $83,905"
-      },
-      strip: [
-        { if: "$83,905 · .111 / LTF .666", then: "LONG 185 · SL $83,420 · TP1 $85,880", armed: "order" },
-        { if: ".382 tags before the fill", then: "MOVE the limit up to $84,060 (S/R retest)", armed: "[ASK — alert?]" },
-        { if: "$83,420 trades · SL", then: "FLAT · PO1 LONG 390 @ $83,200 · SL $82,715", armed: "[ASK — alert?]" },
-        { if: "3-tap forms before TP2", then: "EXIT the TP2 runners there", armed: "alert" }
-      ],
-      ticket: {
-        planned: "185 @ $83,905 · SL $83,420 · TP1 $85,880 ×185 · TP2 $87,905 ×[ASK]",
-        risk: "$897 · 4.1R / 8.2R (TP1 under the 5R floor — Brendan's call)",
-        exception: "PO1 leg: 390 @ $83,200 · SL $82,715 · $1,892 · 5.5R / 9.7R · full size"
-      },
-      thesisOneLiner: "Third (or fourth) 1hr tap into the low of 4hr tap 2, the entry refined to the LTF .666 and the midpoint inefficiency; half size at the deviation-limit stop, full size on the PO1 if the limit is run.",
-      bull: {
-        label: "The trade", openPosition: true,
-        position: [
-          { k: "Order 1 — .111 retest · RESTING (API 17:42)", v: "LONG 185 @ $83,905 · SL $83,420 · TP1 $85,880 ×185 · TP2 $87,905 ×[ASK — needs the add]", tone: "win" },
-          { k: "Order 1 alt — if the .382 tags first", v: "limit moves up to $84,060 (S/R retest) · same SL / TPs", tone: "win" },
-          { k: "Order 2 — PO1 · NOT PLACED", v: "LONG 390 @ $83,200 · SL $82,715 (deviation of the deviation) · TP1 $85,880 · TP2 $87,905 · 5.5R / 9.7R", tone: "win" },
-          { k: "Risk at entry", v: "$897 (485 pts × 1.85 BTC) · PO1 $1,892 (485 pts × 3.90 BTC)", tone: "loss" }
-        ],
-        levels: [
-          { name: "Entry — .236 → .111 · LTF .666 + midpoint inefficiency", value: "$83,905" },
-          { name: "Entry alt — S/R retest if the .382 tags first", value: "$84,060" },
-          { name: "SL — deviation limit (tap 3)", value: "$83,420" },
-          { name: "PO1 entry — full size", value: "$83,200" },
-          { name: "PO1 SL — deviation of the deviation", value: "$82,715" },
-          { name: "TP1 — .618 MTF = .111 macro HTF + midpoint inefficiency", value: "$85,880" },
-          { name: "TP2 — −0.15 of the range · exit early on a 3-tap", value: "$87,905" }
-        ],
-        triggersLabel: "Steps — in order",
-        triggers: [
-          { label: "1. ✔ 9/23 10:00–13:00 — 1hr taps 1–3 printed on the low of 4hr tap 2 (tap 2 sat at the 1.15 of the deviation limit — pattern to track)", status: "met" },
-          { label: "2. ✔ 9/23 14:44 — limit 185 @ $83,905 resting (API-verified 17:42)", status: "met" },
-          { label: "3. Scenario table — Brendan's rows owed before the order sleeps", status: "pending" },
-          { label: "4. .382 tags first → limit up to $84,060", status: "pending" },
-          { label: "5. Fill → verify the bracket attached · SL $83,420 · TP1 $85,880", status: "pending" },
-          { label: "6. $83,420 trades → flat · PO1 long 390 @ $83,200 · SL $82,715", status: "pending" },
-          { label: "7. TP1 $85,880 · then the add for TP2 $87,905, exit early on a 3-tap", status: "pending" }
-        ],
-        details: [
-          { title: "The read — LTF (1hr) · Brendan 9/23",
-            body: "<ul class=\"snips\"><li>Setup: Model 2 accumulation — three 1hr taps (10:00 · 12:00 · 13:00) on the low of 4hr tap 2; on the HLC only two are in, so this is the 3rd or 4th tap and the next entry either way</li><li>Read: price closed above the .236 and rejected back under it — the pullback target is the .236 back to the .111</li><li>Trigger: the .111, refined by an LTF fib pull — the .666 and the midpoint inefficiency both sit at $83,905</li><li>Alternate: straight up to the .382 first → the retest is the S/R between the .111 and .236 at $84,060, the limit moves up</li><li>Invalidation: the deviation limit at $83,420 (tap 3) — a stop-out means the PO1 entry at full size, SL at the deviation of the deviation $82,715</li><li>Targets: TP1 $85,880 = .618 MTF, .111 macro HTF and the midpoint inefficiency stacked · TP2 $87,905 = −0.15 of the range, exit on any 3-tap that forms first</li><li>Why half size: tap 2 sat at the 1.15 of the deviation limit and keeps doing so — the full 390 waits for the PO1</li></ul>" }
-        ],
-        notes: "Written 9/23 17:45 from Brendan's read. PO1 entry $83,200 given 9/23 17:55. Owed: 4hr tap 1 date/level · TP2 cts and the add · scenario rows · alert texts for the .382 move and the stop-out · charts (daily · 4hr · 1hr · LTF fib)."
-      },
-      bear: {
-        label: "What kills it",
-        levels: [ { name: "SL — Order 1", value: "$83,420 × 185" }, { name: "SL — PO1", value: "$82,715 × 390" } ],
-        triggersLabel: "If it fires",
-        triggers: [
-          { label: "$83,420 trades → flat · the deviation-limit entry is done · PO1 long 390 @ $83,200, SL $82,715", status: "pending" },
-          { label: "$82,715 trades on the PO1 → flat · no re-entry without a new count", status: "pending" }
-        ]
-      }
-    },
-    {
       ticker: "BTC",
       direction: "short",
       status: "watching",
@@ -1572,7 +1500,7 @@ const DATA = {
         details: [
           {
             title: "The read — the range at the −0.15 (Brendan 9/22)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-22_19-00-08%20SHORT%201hr%20sweep.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 19:00 · grey circles = the taps · range grid 0 → 1 with the .111 / .5 / .236 · cyan = the −0.15, red = the −0.3 · box = the short ticket (entry / SL / TP at the −0.3 retest ≈ .236) · green line = path drawing (expectation only) · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-22_19-00-08%20SHORT%201hr%20sweep.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 19:00 · grey circles = the taps · range grid 0 → 1 with the .111 / .5 / .236 · cyan = the −0.15, red = the −0.3 · box = the short ticket (entry / SL / TP at the −0.3 retest ≈ .236) · green line = path drawing (expectation only) · card levels govern." },
             body: "<ul class=\"snips\"><li>Setup: the 9/21 leg completed the move from the weekend accumulation at the .111 to the HTF −0.15 · a range is building at the level</li><li>Read: the pullback could not hold the .111 and turned between the .111 and the .236 into the BMSB · no-man's land = the range needs more time · bias now: a .236 retest next, then the .382 if the .236 fails</li><li>Path: tap 2 = an SFP sweep of the highs — touches and comes down fast, and the level it stops at (−0.15 · −0.3 · overshoot) is unknowable in advance · so: resting ladder weighted to the overshoot, no alarms, no chasing · the sweep raises the .236 to about the −0.3 retest from above ($84,830) = the target · the exit is the first level price interacts with and cannot close below · tap 3 = a sweep or a model 2, not traded</li><li>Overshoot handling (Brendan 9/22): two stops · A carries the tight stop at the deviation limit and is the trade when the sweep stops at the −0.15 (the base case) · if the wick overshoots, A books its loss at $88,650 and C doubles at that same price with the stop above the deviation of the deviation (fib channel on the limit band, its −0.3 $88,850 + 100 = $88,950 — the standard rule from 9/22) · C is sized on its own budget, worst case both stop $2,018 · a 1hr CLOSE above the −0.3 is the hand exit on either rung · rung B at the −0.3 was dropped: once the −0.15 is tagged, a come-down-and-resweep is off the table, so the only miss on A is the overshoot</li><li>Why tap 2 and not tap 3: a tap-3 model-2 distribution is too hard to decipher live · the BMSB holds either way if higher is next</li><li>Ladder context: see the rally-retest fib ladder on the 9/21 archive card (.111 / .236 / .5 / .382 / signal degradation)</li><li>Two modes at the −0.15: a fast tag-and-go = the limit only, no add · a close up into the level that builds a 3-tap distribution = add a double (150) as a resting limit at the counted tap and CANCEL rung C</li><li>Side note (Brendan 9/22 eve): the range may belong drawn from the 9/22 low rather than the 3-tap distribution low · time will tell · it would only tighten the short and long entries a little, the plan does not change</li></ul>"
           },
           {
@@ -1783,6 +1711,506 @@ const DATA = {
   // -----------------------------------------------------------------
   closedTrades: [
     {
+      ticker: "BTC", direction: "long",
+      closed: "2026-10-06", outcome: "loss", exit: "SL",
+      capture: { realizedR: -1.01, plannedR: 12.5 },
+      pnl: "−$801.60 pre-fees — 150 @ $85,540 → $85,005.6 (trigger $85,010) · fees $180.00 · net −$981.60 · −1.0R on $795",
+      postmortem: "Brendan, 10/7 Notion daily: \"The first time the nuance mattered. BTC in this range never swept any of the highs — the high was 9/21 and it was lower highs after, a large liquidity trail to the upside. That is inherent weakness. In every other fractal an accumulation builds with an opposing distribution; when it is only an accumulation with lower highs, the 'obvious' accumulation distributes. Hypothesis — a handful of cases. Otherwise a good loss: accumulation and retest, half size, waited for the BMSB, and stopped myself adding early again.\"",
+      rulesChanged: [
+        "Watch item, not yet a rule (n = a handful): an accumulation range that has stopped making new highs — lower highs only, no opposing distribution — is weak; tally it in the TCT practice log before it touches the structure gate",
+        "Structure budget on this count: 2 of 4 attempts, $1,259 gross = 1.6R of the 2R budget · one more attempt only at ≤ $330 risk, or wait for a PO3"
+      ],
+      setupTag: "PO2 Retest · Cycle-Low Flush · Half Size · Clean Stop",
+      live: {
+        state: "CLOSED 10/6 21:55 · STOP HIT · −1.0R · CYCLE-LOW FLUSH, RANGE NEVER MADE A NEW HIGH",
+        position: "LONG 1.50 BTC @ $85,540",
+        stop: { price: "$85,010", note: "HIT @ $85,005.6 avg · bracket" },
+        risk: "−$801.60 pre-fees",
+        targets: [ { label: "TP1 ✘", cts: 150, price: "$92,170" } ]
+      },
+      structure: {
+        schematic: "4hr 3-tap PO2 accumulation on the range low · range exists ($82,535 → $87,250), targets are owed · the entry is the retest of the 1hr 3-tap at the MTF .382 / LTF .236 overlap",
+        taps4h: "1) 9/24 05:00 $82,850 · 2) 9/28 10:00 $82,535 · 3) 10/2 14:00 $83,875",
+        taps1h: "1hr 3-tap inside the 4hr tap-3 bounce — 1) 10/5 01:00 $85,380 · 2) 10/5 12:00 $84,955 · 3) 10/6 02:00 $85,110 · the entry is the retest of that count",
+        entryType: "rally retest (PO2 3-tap accumulation retest) · Order 3 was to be the BMSB confirmation — never armed"
+      },
+      ticket: {
+        planned: "150 @ $85,540 · SL $85,010 · TP1 $92,170 ×150 · Order 3 ~285 on the BMSB confirmation: 140 @ $93,565 · 140 @ $97,260",
+        actual: "150 filled @ $85,540 13:04 · stopped 21:55 @ $85,005.6 avg (trigger $85,010) · Order 3 never armed",
+        risk: "$795 planned · −1.0R realized · 12.5R was the plan",
+        exception: "Order 2: 150 added @ $85,775 before the BMSB close, stopped $85,470 = −$457.50 — its own card below · both attempts on this count are now losses"
+      },
+      thesisOneLiner: "STOPPED 10/6 21:55, −1.0R, into the time-cycle low the pre-mortem named. The original read: three 4hr taps into the range low with a 1hr 3-tap nested in the bounce, this entry the retest of that count at the .382 / .236 overlap, the move owed the deviation zone above the range.",
+      bull: {
+        label: "The trade — PO2 retest, half size, stopped in the flush", openPosition: true,
+        position: [
+          { k: "Order 1 — PO2 retest · FILLED 10/6 13:04 · STOPPED 21:55", v: "LONG 150 @ $85,540 · SL $85,010 → out $85,005.6 = −$801.60 · TP1 ✘", tone: "loss" },
+          { k: "Order 2 — early BMSB add · STOPPED 10/6 15:10", v: "150 @ $85,775 → $85,470 · −$457.50 · its own card below", tone: "loss" },
+          { k: "Order 3 — BMSB confirmation · NEVER ARMED", v: "the 1hr close above the BMSB never printed · the 11:00 wick $86,720 was the high of the trade · asked 10/6 evening whether to add to half size before it — no" },
+          { k: "Risk at entry", v: "$795 (530 pts × 1.50 BTC) · realized −$801.60 · −1.0R · fees $180.00", tone: "loss" },
+          { k: "The exit that was available", v: "none better — the stop was the plan; the 21:00 candle went $85,555 → $84,370 in one hour, a hand exit would have filled lower" }
+        ],
+        levels: [
+          { name: "Entry — retest of the 1hr 3-tap", value: "$85,540" },
+          { name: "SL — 1hr tap-3 wick $85,110 − 100 · HIT", value: "$85,010" },
+          { name: "10/6 wick high — never cleared · the liquidity trail starts here", value: "$86,720" },
+          { name: "MTF range high (9/21 16:00) — never reached · BE trigger", value: "$87,430" },
+          { name: "S/R rectangle — the re-entry zone · broke 22:00 the same night, no count formed", value: "~$84,400" },
+          { name: "Range low — 4hr tap 2 · the next test (10/7 low $82,725 so far)", value: "$82,535" },
+          { name: "TP1 — HTF −0.3 deviation − 100 ✘", value: "$92,170" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/24 → 10/2 — 4hr taps counted: $82,850 · $82,535 · $83,875", status: "met" },
+          { label: "2. ✔ 10/5 01:00 → 10/6 02:00 — 1hr 3-tap nested: $85,380 · $84,955 · $85,110", status: "met" },
+          { label: "3. ✔ 10/6 11:24 — Order 1 limit resting $85,540 · no card existed (card written 10/6 evening, after the fill)", status: "met" },
+          { label: "4. ✔ 10/6 13:04 — Order 1 filled 150 @ $85,540 · bracket attached SL $85,010 / TP $91,285 → $92,170", status: "met" },
+          { label: "5. ✘ 10/6 14:05 — Order 2 added 150 @ $85,775 without the BMSB close · stopped 15:10 · archived", status: "failed" },
+          { label: "6. ✔ 10/6 evening — card + scenario table written · asked whether to add to half size before the BMSB close · no", status: "met" },
+          { label: "7. ✘ 10/6 21:55 — the time-cycle-low flush: 21:00 candle $85,555 → $84,370 · stop hit @ $85,005.6 · flat · scenario row 1, as written", status: "failed" },
+          { label: "8. ✘ 10/6 22:00 → 10/7 — the ~$84,400 re-entry zone broke the next hour (low $83,550) · no 1hr count formed · no re-entry · range low $82,535 is the next test · 2 of 4 attempts used, $331 of the 2R budget left", status: "failed" }
+        ],
+        details: [
+          { title: "Post-mortem — the structure that fooled the count (Brendan, 10/7)",
+            body: "<ul class=\"snips\"><li>Read: the range high was 9/21 and was never swept — every high after it was lower, so a liquidity trail built above price while the accumulation built below it</li><li>Why: in the fractals both sides build at once, an accumulation at the low and a distribution at the high, and that is what makes them hard; when only the accumulation is visible and the highs are lower, the other side has already been taken away — the 'obvious' accumulation is the one that distributes</li><li>Hypothesis, not a rule: a handful of cases so far · tally it in the TCT practice log (accumulations with vs without an opposing distribution, and what each did)</li><li>Time cycles: scared out of two clean longs for being too close to the 120-day low, then took the third and it was too close — pattern of three, resolves with practice, not a veto</li><li>Result: the process held — half size, the BMSB gate respected on the second ask, an exchange-enforced stop that fired exactly where the pre-mortem said it would</li></ul>" },
+          { title: "The read — HTF (daily)", chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-10-06_18-42-15%20LONG%20daily%20targets.png", caption: "1D BTCUSDT.P Bybit · captured 10/6 18:42 · daily fib from the Jul low to the prior high with the −0.15 / −0.3 deviation lines, the three target tags and the position tool · card levels govern." },
+            body: "<ul class=\"snips\"><li>Setup: price sat just above the prior daily high (the fib 0) after reclaiming it in late September; the −0.15 line overhead, the deviation zone (−0.3 → .666) was the move owed</li><li>Read: liquidity trails both sides of the range; the fake move came lower first into the LTF time-cycle low (10/6) · the upside trail started at the $86,720 wick the 11:00 dump came from — and was never taken</li><li>Context: FOMC minutes 10/7 inside the window · Puell $83k weekly and the LN diagonal tag were the bearish override on the MU, not a veto here · the flush came the night before the minutes</li></ul>" },
+          { title: "The read — MTF (4hr)", chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-10-06_18-37-45%20LONG%204hr%203-tap.png", caption: "4H BTCUSDT.P Bybit · captured 10/6 18:37 · circles = the three taps, range fib 0 → 1 with the −0.3 / 1.15 / 1.3 lines, time-cycle arcs bottoming 10/7, the position tool · card levels govern." },
+            body: "<ul class=\"snips\"><li>Setup: 3-tap PO2 accumulation on the range low — 9/24 05:00 $82,850 · 9/28 10:00 $82,535 · 10/2 14:00 $83,875 — with the BMSB turned up under price since 10/2</li><li>Trigger: the bounce off tap 3 built the 1hr count; the entry was its retest at the MTF .382, which sat on the LTF .236</li><li>Invalidation: a 4hr close below the BMSB = exit, close only; the hard stop was the 1hr wick rule, and it fired first</li><li>Context: the 4hr time-cycle arcs bottomed 10/7 — the entry was into the low, not after it</li></ul>" },
+          { title: "The read — LTF (1hr)", chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-10-06_18-35-53%20LONG%201hr%20retest.png", caption: "1H BTCUSDT.P Bybit · captured 10/6 18:35 · circles = the three taps, LTF fib 0 → 1 with the .111 / .236 / .382, the time-cycle arc into 10/6–7, the position tool and the shaded target band · card levels govern." },
+            body: "<ul class=\"snips\"><li>Setup: 1hr 3-tap accumulation — 10/5 01:00 $85,380 · 10/5 12:00 $84,955 · 10/6 02:00 $85,110 — the fourth touch was the retest at the .236 of the LTF range, overlapping the MTF .382</li><li>Trigger: resting limit $85,540 at the retest, filled 13:04 · price closed the 18:00 bar back at the .236 with the BMSB (the .382 band) overhead, and never closed above it</li><li>Invalidation: $85,010 = tap-3 wick − 100 · hit 21:55</li><li>Why Order 2 died: the 1hr closed above the .382 / .236 and the add went in on that close; the rule is a 1hr close above the BMSB, which never printed</li></ul>" },
+          { title: "Fractal provenance — Jul 2018 setup (15m) vs now (1hr)", chart: { src: "charts/BTC%20Current/BTCUSD_2026-10-06_18-52%20FRACTAL%20Jul2018%2015m%20vs%20now%201hr.png", caption: "Left: 15m BTCUSD Bitstamp, Jul 23–24 2018, range fib 7,642 → 7,798 with the −0.3 at 7,845 · Right: 1H BTCUSDT.P Bybit, 9/27 → 10/6, range fib 83,811 → 87,262 with the −0.3 at 88,324 · circles = the taps in both · captured 10/6 18:52 · chart dollars are Bitstamp / Bybit, card levels govern." },
+            body: "<ul class=\"snips\"><li>Read: in 2018 the range built under the prior high, three taps printed at the shallow fibs, the retest held into the time-cycle arc, then one candle took the range high and the −0.3 in the same hour</li><li>Where it differed: the 2018 range was making highs into the launch; this one had made lower highs since 9/21 — the post-mortem hypothesis above is the difference between the two charts</li><li>Context and targets only, never a veto</li></ul>" },
+          { title: "Scenario table — written 10/6 evening, after the fill",
+            body: "<ul class=\"snips\"><li>Pre-mortem (Brendan 10/6): the dump into the time-cycle low comes tonight and takes the stop, or price never clears the $86,720 wick it dumped from — tags it and turns, with the liquidity trail starting there</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>Dump into the time-cycle low, $85,010 trades</td><td>bracket stop fires · flat</td><td>tonight</td><td class=\"ok\">YES</td></tr><tr><td>After the stop, a new 1hr 3-tap accumulation at the ~$84,400 S/R rectangle</td><td>new count, new card, attempt 3 of 4 · resting limit only</td><td>tonight → 10/7</td><td class=\"no\">only at the screen</td></tr><tr><td>No new highs — $86,720 tagged and rejected</td><td>nothing until a close breaks the BMSB; the stop is the exit</td><td>10/7</td><td class=\"ok\">YES</td></tr><tr><td>1hr close above the BMSB</td><td>SL → under the pullback low · arm Order 3</td><td>any close</td><td class=\"no\">only at the screen</td></tr><tr><td>Above $87,430, the MTF range high</td><td>SL → BE $85,540 · the 1hr rule starts</td><td>any hour</td><td class=\"no\">only at the screen</td></tr><tr><td>Order 3 fills, bracket rejected (margin)</td><td>stop by hand before any card work</td><td>at the fill</td><td class=\"no\">only at the screen</td></tr><tr><td>Order 3 partial fill</td><td>keep what filled · no chasing</td><td>at the fill</td><td class=\"ok\">YES</td></tr><tr><td>BMSB close-below exits (1hr after new highs · 4hr)</td><td>exit all at market</td><td>any close</td><td class=\"no\">only at the screen</td></tr><tr><td>FOMC minutes 10/7 14:00</td><td>context only · stop and TP stay</td><td>10/7</td><td class=\"ok\">YES</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">Row 1 fired at 21:55 while Brendan was away from the screen — the stop was exchange-enforced, so the position was allowed to sleep, and it worked as written. Row 2 (the $84,400 re-entry) was awake-only and the level broke the next hour with no count; nothing was taken.</div>" }
+        ],
+        notes: "Archived 10/7 from the Coinbase API. Chart dollar levels are Bybit / Bitstamp; the card's Coinbase levels govern."
+      },
+      audit: [
+        { tag: "857432af", time: "10/6 13:04", side: "BUY", cts: 150, price: "$85,540", fee: "$74.24", note: "limit resting since 11:24 · bracket addb65a0 OPEN · SL 85,010 / TP 91,285 → 92,170" },
+        { tag: "addb65a0", time: "10/6 21:55", side: "SELL", cts: 150, price: "$85,005.6", fee: "$105.76", note: "bracket stop · trigger 85,010 · 131 @ 85,005 + 19 @ 85,010" }
+      ],
+      bear: {
+        label: "What killed it",
+        levels: [ { name: "SL — bracket", value: "$85,010 × 150" } ],
+        triggersLabel: "If it fires",
+        triggers: [ { label: "✔ $85,010 traded 10/6 21:55 → flat · 2 of 4 attempts used · no re-entry without a new count", status: "met" } ]
+      }
+    },
+    {
+      ticker: "BTC", direction: "long",
+      closed: "2026-10-06", outcome: "loss", exit: "SL",
+      capture: { realizedR: -1.02, plannedR: 21.3 },
+      pnl: "−$457.50 pre-fees — 150 @ $85,775 → $85,470 · fees $180.64 · net −$638.14 · −1.02R on $450",
+      postmortem: "Brendan, 10/6 Notion daily: \"I entered in a confirmation 150 contracts without BMSB 1hr confirmation… and got stopped out. I got excited and jumped the gun and justified it by saying I'm not going the full size to get to 70% utilization. This was dumb and antsy and I'm not sure why I did it. Waiting for confirmation for the next tranche.\" No card existed for either order; archived as unplanned.",
+      rulesChanged: [],
+      setupTag: "Early BMSB Add · No 1hr Close · Stopped",
+      live: {
+        state: "CLOSED 10/6 15:10 · STOP HIT · −1.02R · ADD BEFORE THE BMSB CLOSE",
+        position: "LONG 1.50 BTC @ $85,775",
+        stop: { price: "$85,475", note: "HIT @ $85,470 · bracket" },
+        risk: "−$457.50 pre-fees",
+        targets: [ { label: "TP ✘", cts: 150, price: "$92,170" } ]
+      },
+      structure: {
+        schematic: "Same structure as the Order 1 card above (archived 10/7) — 4hr 3-tap PO2 accumulation on the range low, 1hr 3-tap nested in the tap-3 bounce",
+        taps4h: "1) 9/24 05:00 $82,850 · 2) 9/28 10:00 $82,535 · 3) 10/2 14:00 $83,875",
+        taps1h: "1) 10/5 01:00 $85,380 · 2) 10/5 12:00 $84,955 · 3) 10/6 02:00 $85,110",
+        entryType: "BMSB confirmation — taken on a 1hr close above the .382 / .236, before the 1hr close above the BMSB · not an entry-menu entry"
+      },
+      ticket: {
+        planned: "Order 3 of the live plan: ~285 on a 1hr close above the BMSB, limit at the retest",
+        actual: "150 filled @ $85,775 14:05 · bracket SL $85,475 / TP $92,170 · stopped 15:10 @ $85,470",
+        risk: "$450 planned · −1.02R realized"
+      },
+      thesisOneLiner: "STOPPED 10/6 15:10, −1.02R. The confirmation add for the 4hr 3-tap long, placed on the 1hr close above the .382 / .236 instead of the 1hr close above the BMSB; the pullback that followed took the 300-point stop in 65 minutes.",
+      audit: [
+        { tag: "7488632a", time: "10/6 14:05", side: "BUY", cts: 150, price: "$85,775", fee: "$74.40", note: "limit placed 14:03, filled in five parts 14:04–14:05 · bracket 16e67910 attached" },
+        { tag: "16e67910", time: "10/6 15:10", side: "SELL", cts: 150, price: "$85,470", fee: "$106.24", note: "stop · trigger 85,475 · Coinbase FIFO shows this against the 85,540 lot (−$105); by order it is −$457.50" }
+      ],
+      bull: {
+        label: "The trade — early add, stopped", openPosition: true,
+        position: [
+          { k: "Order 2 — early BMSB add · FILLED 10/6 14:05 · STOPPED 15:10", v: "LONG 150 @ $85,775 · SL $85,475 → out $85,470 = −$457.50 · TP ✘", tone: "loss" },
+          { k: "Risk at entry", v: "$450 · realized −$457.50 · −1.02R · fees $180.64", tone: "loss" },
+          { k: "The exit that was available", v: "no entry — the arm condition (1hr close above the BMSB) had not printed" }
+        ],
+        levels: [
+          { name: "Entry — 1hr close above the .382 / .236", value: "$85,775" },
+          { name: "SL — 300 under the entry", value: "$85,475" },
+          { name: "BMSB — the arm condition, never closed above", value: "chart band" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 10/6 13:04 — Order 1 (the live card) filled 150 @ $85,540", status: "met" },
+          { label: "2. ✘ 10/6 14:03 — limit 150 @ $85,775 placed on the 1hr close above the .382 / .236 · the BMSB close had not printed · no card", status: "failed" },
+          { label: "3. ✔ 10/6 14:05 — filled · bracket attached SL $85,475 / TP $92,170", status: "met" },
+          { label: "4. ✘ 10/6 15:10 — stop hit @ $85,470 · −$457.50 · Order 1 untouched · attempt 2 of 4 on the structure", status: "failed" }
+        ],
+        details: [
+          { title: "Why it died",
+            body: "<ul class=\"snips\"><li>Read: the 1hr closed above the .382 / .236 overlap and the add went in on that close — the rule for a confirmation add is a 1hr close above the BMSB, then a resting limit at the retest</li><li>Why: excitement, justified by \"not full size yet\"; a smaller wrong entry is still a wrong entry</li><li>Result: the pullback into the same retest the live order was built for took the 300-point stop in 65 minutes while the planned order (stop $85,010) was never threatened</li><li>Rule: already written — the long BMSB mirror (1hr close above arms, limit at the retest, no retest no order). Nothing new; it was not applied</li></ul>" }
+        ],
+        notes: "Archived 10/6 from the Coinbase API. Post-mortem in Brendan's words from the 10/6 Notion daily."
+      },
+      bear: {
+        label: "What killed it",
+        levels: [ { name: "SL", value: "$85,475 × 150" } ],
+        triggersLabel: "If it fires",
+        triggers: [ { label: "✔ $85,475 triggered 10/6 15:10 → flat on this leg", status: "met" } ]
+      }
+    },
+    {
+      ticker: "SPCX", direction: "short",
+      closed: "2026-10-06", outcome: "loss", exit: "HAND",
+      capture: { realizedR: -0.95, plannedR: 9.5 },
+      pnl: "−$2,118 pre-fees — cost $5,234 → proceeds $3,116 · Oct −$496 · Nov −$798 · Dec −$824 · fees $47.74 · net −$2,165.74 · −0.95R on $2,220",
+      postmortem: "Brendan, 10/5 Notion daily: entry 2 was a fixed price ($165) with no confirmation condition, so adding there was adding to a loser by construction; the half-at-the-limit, half-on-wick-confirmation pattern applies to swings too. Entry 1 was taken knowing price would go higher first. The exit condition hit at the 10/5 close and was not executed — a hand stop that depends on remembering is not a stop. 10/6: the wick printed at an S/R, not the deviation limit like COIN and HOOD; re-entry only on wick confirmation, 7+ bars.",
+      rulesChanged: [
+        "A confirmation condition on every add — the wick is the trigger, the price is only where the limit rests",
+        "One TV alert per exit condition, set the moment the order fills (the 9/9 rule, not applied here)"
+      ],
+      setupTag: "Puts · Add With No Confirmation · Hand Stop Missed",
+      live: {
+        state: "CLOSED 10/6 09:31 · HAND EXIT · −0.95R · STOP PASSED AT THE 10/5 CLOSE",
+        position: "SHORT SPCX · PUTS 16 / 12 / 8",
+        stop: { price: "$169", note: "daily close · passed 10/5 · sold the 10/6 open" },
+        risk: "−$2,118 pre-fees",
+        targets: [
+          { label: "Oct ✘", cts: 16, price: "$130" },
+          { label: "Nov ✘", cts: 12, price: "$130 / $120" },
+          { label: "Dec ✘", cts: 8, price: "$120" }
+        ]
+      },
+      structure: {
+        schematic: "3D 3-tap distribution at the edge of the deviation zone, with a daily 3-tap nested in tap 3 · range $157.97 (9/21 high) → $130.35 (8/20 low) · .5 = $144.16",
+        taps4h: "3D count — 1) 8/12 $149.6 · 2) 9/8 $155 or 9/21 $158.13 · 3) 10/2–10/5, the entry · price closed above the deviation limits 10/5",
+        taps1h: "Daily count inside 3D tap 3 — 1) 9/8 $155 · 2) 9/21 $158.13 · 3) 10/2 ~$160",
+        entryType: "tap 3 · entry 2 = fixed-price add at $165 with no confirmation condition — not an entry-menu entry"
+      },
+      ticket: {
+        planned: "Entry 1 (10/2 close): 8 Oct16 143P · 6 Nov20 130P · 4 Dec18 130P · Entry 2 ($165): the same · SL daily close above $169 · exits by leg at $130 / $120",
+        actual: "Entry 1 10/2: 8 @ $0.68 · 6 @ $1.98 · 4 @ $3.35 ($3,072) · Entry 2 10/5 10:10: 8 @ $0.34 · 6 @ $1.41 · 4 @ $2.61 ($2,162) · exit 10/6 09:31: 16 @ $0.20 · 12 @ $1.03 · 8 @ $1.95 ($3,116)",
+        risk: "$2,220 modelled at the stop (~$1,770 entry 1 + ~$450 entry 2) · −0.95R realized · −1.20R on entry 1 alone"
+      },
+      thesisOneLiner: "SOLD 10/6 09:31, −0.95R. The original read: third tap of a 3D distribution into the edge of the deviation zone, three expiries covering the early dump, the on-time low and the late low; price closed above the deviation limits on 10/5 and the daily-close stop was executed the next open.",
+      audit: [
+        { tag: "1008162974411", time: "10/2 15:54", side: "BUY", cts: 4, price: "$3.35", fee: "$2.65", note: "18 DEC 26 130 PUT · two fills of 2 · TOS" },
+        { tag: "1008162974531", time: "10/2 15:55", side: "BUY", cts: 6, price: "$1.98", fee: "$3.97", note: "20 NOV 26 130 PUT · TOS" },
+        { tag: "1008162975116", time: "10/2 15:57", side: "BUY", cts: 8, price: "$0.68", fee: "$5.30", note: "16 OCT 26 143 PUT · TOS" },
+        { tag: "1008167171977", time: "10/5 10:10", side: "BUY", cts: 6, price: "$1.41", fee: "$3.97", note: "20 NOV 26 130 PUT · entry 2 · TOS" },
+        { tag: "1008168134022", time: "10/5 10:11", side: "BUY", cts: 4, price: "$2.61", fee: "$2.65", note: "18 DEC 26 130 PUT · entry 2 · TOS" },
+        { tag: "1008168134102", time: "10/5 10:12", side: "BUY", cts: 8, price: "$0.34", fee: "$5.30", note: "16 OCT 26 143 PUT · entry 2 · a $0.33 limit cancelled first · TOS" },
+        { tag: "1008183166196", time: "10/6 09:30", side: "SELL", cts: 16, price: "$0.20", fee: "$10.60", note: "16 OCT 26 143 PUT · hand exit at the open" },
+        { tag: "1008183166266", time: "10/6 09:31", side: "SELL", cts: 8, price: "$1.95", fee: "$5.33", note: "18 DEC 26 130 PUT · hand exit" },
+        { tag: "1008183166321", time: "10/6 09:31", side: "SELL", cts: 12, price: "$1.03", fee: "$7.97", note: "20 NOV 26 130 PUT · $1.07 and $1.04 limits cancelled first" }
+      ],
+      bull: {
+        label: "The trade — puts, stop missed at the close", openPosition: true,
+        position: [
+          { k: "Entry 1 — tap 3 · FILLED 10/2 close", v: "8 Oct16 143P @ $0.68 · 6 Nov20 130P @ $1.98 · 4 Dec18 130P @ $3.35 · SPCX $159.21 · $3,072", tone: "loss" },
+          { k: "Entry 2 — $165, no confirmation · FILLED 10/5 10:10", v: "8 @ $0.34 · 6 @ $1.41 · 4 @ $2.61 · $2,162", tone: "loss" },
+          { k: "Exit — hand, 10/6 09:31", v: "16 @ $0.20 · 12 @ $1.03 · 8 @ $1.95 · $3,116 · Oct −$496 · Nov −$798 · Dec −$824", tone: "loss" },
+          { k: "Risk at entry", v: "$2,220 modelled · realized −$2,118 · −0.95R · fees $47.74", tone: "loss" },
+          { k: "The exit that was available", v: "the 10/5 close — the stop condition, passed with no order and no alert · or a limit at the predicted top instead of entry 1 (Brendan 10/5)" }
+        ],
+        levels: [
+          { name: "Entry 1 — tap 3, 10/2 close", value: "$159.21" },
+          { name: "Entry 2 — fixed price, no confirmation", value: "$165" },
+          { name: "SL — daily close above the invalidation", value: "$169" },
+          { name: ".5 of the range — the move owed", value: "$144.16" },
+          { name: "Range low", value: "$130" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 10/2 — /trade-sizing run (log T9) · taps numbered on the 3D and the daily · exit rules ratified", status: "met" },
+          { label: "2. ✔ 10/2 close — Entry 1 filled 8 / 6 / 4 · SPCX $159.21 · no stop resting", status: "met" },
+          { label: "3. ✘ 10/5 10:10 — Entry 2 filled 8 / 6 / 4 at $165 · fixed price, no confirmation condition · full size into strength", status: "failed" },
+          { label: "4. ✘ 10/5 close — price closed above the deviation limits on the 1hr and 4hr · the daily-close stop passed with no order and no alert", status: "failed" },
+          { label: "5. ✔ 10/6 09:30–09:31 — sold all 16 / 12 / 8 at the open · −$2,118", status: "met" },
+          { label: "6. Re-entry only on a wick confirmation, 7+ bars, at the deviation limit — new card, rerun /strike", status: "pending" }
+        ],
+        details: [
+          { title: "The read — HTF (daily)",
+            body: "<ul class=\"snips\"><li>Setup: 3D 3-tap distribution (8/12 $149.6 · 9/8–9/21 · now), tap 3 (PO1) forming at the edge of the deviation zone as a daily 3-tap (9/8 $155 · 9/21 $158.13 · 10/2 ~$160)</li><li>Trigger: half filled at the 10/2 close with SPCX $159.21, half at $165 — the 10/2 close did not clear $161</li><li>Invalidation: a daily close above $169, through the deviation limit and the channel deviation limit toward the $172 high</li><li>Targets: the .5 at $144.16 is owed · the range low $130 · the .111 near $120 with the abundance pocket and a demand zone</li><li>Timing (context only): cycle low 10/26 ± 6 bars · late dates 11/13 and 11/30 · the down move takes 4–7 days</li></ul>", chart: { src: "charts/SPCX%20Current/SPCX_2026-10-02_16-17-34.png", caption: "1D SPCX NASDAQ · captured 10/2 16:17 · fib levels, time-cycle arcs, the short tool and the expected path · card levels govern." } },
+          { title: "The read — MTF (4hr)", chart: { src: "charts/SPCX%20Current/SPCX_2026-10-02_16-18-51.png", caption: "4H SPCX NASDAQ · captured 10/2 16:18 · circles = the taps, range fib 0 → 1 with the 1.15 and 1.3 deviation lines · card levels govern." },
+            body: "<ul class=\"snips\"><li>Setup: taps stepping up under a rising channel into the range high ($157.97) and the deviation band above it (1.15 at $162.11, 1.3 at $166.26)</li><li>Trigger: Order 1 near the range high, Order 2 at $165 just under the 1.3 line</li><li>Invalidation: a daily close above $169, past the 1.3 line and the channel</li><li>Targets: the range .5, the range low, then the −0.3 extension and the .111 near $120</li></ul>" },
+          { title: "The path — an expectation", chart: { src: "charts/SPCX%20Current/SPCX_2026-10-02_16-19-39.png", caption: "4H SPCX NASDAQ · captured 10/2 16:19 · the drawn path · the path invalidates; the trade doesn't · card levels govern." },
+            body: "<ul class=\"snips\"><li>Read: a last push to about $165 near 10/6, a hard dump to the range low, a bounce toward the .5, a second leg down, a bounce to the .236, then the final leg toward $120 by the 10/26 cycle date</li></ul>" },
+          { title: "Fractal provenance — HOOD 2022", chart: { src: "charts/SPCX%20Current/HOOD_2026-10-02_16-35-59.png", caption: "1D HOOD NASDAQ · captured 10/2 16:35 · circles = the taps, range fib with the 1.3 deviation line, time-cycle arcs · context only." },
+            body: "<ul class=\"snips\"><li>Read: a newly listed name builds a range ($8.91 → $11.61), taps the high, deviates to the 1.3 line (about $12.57) in early November 2022, then dumps through the .5 and the range low to the −0.3 ($8.23)</li><li>Why: the same sequence the SPCX path draws — deviation above the range high, then the range low and below. Context and targets only, never a veto</li></ul>" },
+          { title: "Fractal provenance — COIN 2021", chart: { src: "charts/SPCX%20Current/COIN_2026-10-02_16-36-06.png", caption: "1D COIN NASDAQ · captured 10/2 16:36 · circles = the taps, rising channel, range fib with the 1.3 deviation line, time-cycle arcs · context only." },
+            body: "<ul class=\"snips\"><li>Read: taps step up under a rising channel into the range high ($262.02) and the 1.3 line ($280.72) by early September 2021, then the drop runs through the .5 ($233.58) into early October</li><li>Read: that drop held above the range low ($208.22) and price made new highs in November before the 2022 breakdown — the .5 was paid, the range low was not, on the first leg</li></ul>" },
+          { title: "Scenario table — written 10/2",
+            body: "<ul class=\"snips\"><li>Pre-mortem: the structure is sound, the dates are the risk — a top near 10/11–12 leaves the October expiry too little time</li><li>Pre-mortem: a hold of the .382 from above, then higher, means a higher-timeframe distribution and the count is off</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>Daily close above $169</td><td>sell all at a limit</td><td>any close</td><td class=\"no\">only at the screen</td></tr><tr><td>Late top (~10/11–12)</td><td>Oct leg lost · Order 2 Oct piece → weekly · time stop = top + 7 trading days</td><td>after 10/7</td><td class=\"ok\">YES</td></tr><tr><td>.382 ($151) holds from above, then higher</td><td>time stop sells all</td><td>by 10/20</td><td class=\"no\">only at the screen</td></tr><tr><td>Shallow low — distribution into $133</td><td>sell Nov + Dec · $133 is the low</td><td>10/19–11/4</td><td class=\"no\">only at the screen</td></tr><tr><td>Hard dump to $130 first</td><td>sell Oct + half Nov at that close · stop → close above the BMSB</td><td>by ~10/12</td><td class=\"no\">only at the screen</td></tr><tr><td>Only the .5 ($144.16)</td><td>stop → dollar breakeven · wait for another tap</td><td>by 10/20</td><td class=\"no\">only at the screen</td></tr><tr><td>1hr 3-tap accumulation at $144.16 / $133 / $120</td><td>exit</td><td>any session</td><td class=\"no\">only at the screen</td></tr><tr><td>Order 1 partial fill</td><td>keep what filled · no chasing after the close</td><td>10/2</td><td class=\"ok\">YES</td></tr><tr><td>Order 2 never fills</td><td>Order 1 is the position</td><td>—</td><td class=\"ok\">YES</td></tr><tr><td>Macro in the window</td><td>context only · FOMC minutes 10/7 · CPI 10/14 · PPI 10/15 · FOMC 10/28 · PCE + GDP 10/29</td><td>—</td><td class=\"ok\">YES</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">Every exit is a hand sell on a daily close or a pattern read → nothing protects the position on a day Brendan is not at the screen for the close.</div>" }
+        ],
+        notes: "Archived 10/6 from the TOS account statement (2026-10-06-AccountStatement.csv). Post-mortem in Brendan's words from the 10/5 and 10/6 Notion dailies."
+      },
+      bear: {
+        label: "What killed it",
+        levels: [
+          { name: "SL — daily close", value: "above $169 × all" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "✔ Price closed above the deviation limits 10/5 · no order, no alert · sold by hand 10/6 09:31", status: "met" }
+        ]
+      }
+    },
+    {
+      ticker: "BTC", direction: "long",
+      closed: "2026-09-27", outcome: "loss", exit: "SL",
+      capture: { realizedR: -0.25, plannedR: 2.9 },
+      pnl: "−$503.80 pre-fees — 240 @ $83,920 → $83,710.08 · fees $208.40 · net −$712.20 · −0.25R on $2,040 (−1.05R on the $480 stop)",
+      postmortem: "Brendan 9/30 (given in session, not yet on a Notion page): the S/R close above on the 1hr confirmed the 3-tap wick Model 2 accumulation, so I moved the SL up — we should not lose the S/R again — to 100 under the recent wick. Honestly risky: the real SL is under the 3rd tap, ~$83k, and part of it was wanting tight after a few losses. I treated that move as the BE move and ignored the .382 closes, close enough to BE, which is bad practice. Then a 1hr 3-tap printed at the front-run target inside the range (Sun 06:00 · 07:00 · 20:00) which I had not game-planned; I saw it ~21:00 and let the SL take me out instead of exiting above BE.",
+      rulesChanged: [
+        "Above the .382: BE means zero risk, not close-enough — if price comes back down at all the thesis is wrong and the book is flat",
+        "SL sits at the invalidation until the .382 close; the two ideas (invalidation vs derisk) are sequential, not a choice",
+        "A 1hr 3-tap distribution at ANY target, inside the range included, is an exit — game-plan it on the card, do not wait for the absolute TP"
+      ],
+      setupTag: "PO2 Long · Tight Stop · .382 Closes Ignored · 3-Tap Exit Missed",
+      live: {
+        state: "CLOSED 9/27 21:49 · STOP HIT · −0.25R · 3-TAP EXIT SEEN, NOT TAKEN",
+        position: "LONG 2.40 BTC @ $83,920",
+        stop: { price: "$83,720", note: "HIT · the BE move, wick −100" },
+        risk: "−$503.80 pre-fees",
+        targets: [ { label: "TP ✘", cts: 240, price: "$88,120" } ]
+      },
+      structure: {
+        schematic: "4hr 3-tap accumulation inside the MTF PO3 · range $82,850 → $87,430 · taken as the PO2 hold of the $83,812 body S/R after three long wicks to the range low · structure ended 9/28 10:00 when $82,535 printed under tap 2",
+        taps4h: "PO3 reset: 1) 9/23 12:00 $83,530 · 2) 9/24 05:00 $82,850 · 3) the 9/25 09:00–11:00 wicks to $83,170 — the entry · invalidated 9/28 by the new low $82,535",
+        taps1h: "9/25 09:00 · 10:00 · 11:00 each wicked to the range low and closed back above the S/R (the third by a rounding) · entry rested as a limit at $83,920 inside the 15:00 candle, the Friday time-cycle window",
+        entryType: "tap 3 (PO2 — the S/R hold)",
+        confirmation: "Three closes back above $83,812 after the wicks (Brendan 9/25 MU) · limit, not the two-close close-trigger the card specified"
+      },
+      ticket: {
+        planned: "≤390 at the 2nd 1hr close back above $83,812 · SL dip wick − 100 · TP bracket $88,005 · exit on the 3rd distribution tap",
+        actual: "240 limit @ $83,920 (maker, 15:04–15:09) · bracket TP $86,400 / SL $83,070 → replaced 15:32 by TP $88,120 / SL $83,720 · 240 stop @ $83,710.08",
+        risk: "$2,040 at $83,070 (850 pts × 2.40) → $480 at $83,720 · −0.25R realized on the original",
+        exception: "Sized 240 to $2k on the wick stop, then the stop tightened to 100 under the recent wick 28 min after the fill (the 1hr close above the S/R confirmed the accumulation; partly loss-aversion after the 9/24 pair) · treated as the BE move, so the seven .382 closes on 9/27 were ignored · TP moved to the MTF −.15 · a 195 limit at $82,505 (PO1 half) rested 13:48 → cancelled"
+      },
+      audit: [
+        { tag: "dd735883", time: "9/25 13:48", side: "BUY", cts: 195, price: "$82,505", fee: "—", note: "PO1 half limit · cancelled by Brendan" },
+        { tag: "85a0df41", time: "9/25 15:04–15:09", side: "BUY", cts: 240, price: "$83,920", fee: "$79.15", note: "limit, maker · bracket 1722fb79 OPEN (TP $86,400 / SL $83,070)" },
+        { tag: "1722fb79", time: "9/25 15:32", side: "—", cts: 240, price: "—", fee: "—", note: "first bracket cancelled by Brendan" },
+        { tag: "db1d9634", time: "9/25 15:32", side: "SELL", cts: 240, price: "bracket", fee: "—", note: "second bracket OPEN · TP $88,120 / SL $83,720 · edited 9/26 22:47 (TP unchanged)" },
+        { tag: "db1d9634", time: "9/27 21:49", side: "SELL", cts: 240, price: "$83,710.08", fee: "$129.25", note: "stop · trigger $83,720 · Sunday 21:00 candle low $83,595" }
+      ],
+      thesisOneLiner: "STOPPED 9/27 21:49, −0.25R — a PO2 limit at the body S/R after three wicks to the range low, stop tightened to −200 the same afternoon, taken out by the Sunday-night dump that then broke the range low. The original read: third 4hr tap of the accumulation inside the MTF PO3, targets the 3rd distribution tap with the −.15 as the absolute.",
+      bull: {
+        label: "The trade — PO2 long at the S/R, stop −200", openPosition: true,
+        position: [
+          { k: "Order 1 — PO2 limit · FILLED 9/25 15:04 · STOPPED 9/27 21:49", v: "LONG 240 @ $83,920 · SL $83,070 → $83,720 (15:32) → out $83,710.08 = −$503.80 · TP $88,120 ✘", tone: "loss" },
+          { k: "Risk at entry", v: "$2,040 at the wick stop · $480 after the 15:32 move · realized −$504 · fees $208", tone: "loss" },
+          { k: "The exit that was available", v: "the 1hr 3-tap at the front-run target (Sun 06:00 · 07:00 · 20:00), seen ~21:00: exit ≈ $84,115 = +$468 gross · or BE $83,920 on the Sunday .382 closes = $0 · took neither, −$504" }
+        ],
+        levels: [
+          { name: "Entry — limit at the S/R hold", value: "$83,920" },
+          { name: "SL — the 9/25 wick $83,170 − 100 (original)", value: "$83,070" },
+          { name: "SL — 100 under the recent wick, the BE move in Brendan's read (real invalidation ≈ $83,000 under tap 3)", value: "$83,720" },
+          { name: ".382 MTF — closed above 7× on 9/27 03:00–09:00, BE trigger ignored as close-enough", value: "$84,600" },
+          { name: "Front-run target — the 1hr 3-tap distribution Sun 06:00 · 07:00 · 20:00", value: "$85,125 · $84,980 · $84,990" },
+          { name: "Sunday dump — 9/27 21:00 low · 9/28 10:00 low (under tap 2)", value: "$83,595 · $82,535" },
+          { name: "TP — −.15 bracket", value: "$88,120 ✘" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/24 — PO3 reset the count · taps 1 ($83,530) and 2 ($82,850) numbered · plan card written", status: "met" },
+          { label: "2. ✔ 9/25 09:00–11:00 — three long wicks to $83,170, each closing back above the S/R · the PO2 setup (MU notes)", status: "met" },
+          { label: "3. ✔ 9/25 13:48 — PO1 half 195 rested at $82,505 · cancelled after the PO2 fill", status: "met" },
+          { label: "4. ✔ 9/25 15:04 — 240 limit filled at $83,920 · bracket TP $86,400 / SL $83,070 attached", status: "met" },
+          { label: "5. ✔ 9/25 15:32 — 1hr close above the S/R confirmed the accumulation → SL to 100 under the recent wick $83,720 (risk $2,040 → $480) · TP to the −.15 $88,120 · treated as the BE move", status: "met" },
+          { label: "6. ✘ 9/27 03:00–09:00 — seven 1hr closes above the .382 $84,600 · SL → BE not taken, −200 judged close enough", status: "failed" },
+          { label: "7. ✘ 9/27 06:00 · 07:00 · 20:00 — 1hr 3-tap distribution at the front-run target inside the range, not game-planned · seen ~21:00, no exit", status: "failed" },
+          { label: "8. ✘ 9/27 21:49 — Sunday dump · stop hit $83,710 · flat · 9/28 10:00 printed $82,535 under tap 2, structure over", status: "failed" }
+        ],
+        details: [
+          { title: "Diagnosis — Brendan 9/30",
+            body: "<ul class=\"snips\"><li>Result: the entry was right and the tight stop was fine this time — the question for more reps is whether a 100-under-the-recent-wick stop keeps working or gets wicked; the real invalidation was under the 3rd accumulation tap near $83,000</li><li>Why the stop was tight: the S/R should not be lost again once the 1hr closed above it, and after a few losses I wanted tight. I called it the BE move</li><li>The .382 closes: I fought it mentally — SL at invalidation vs derisk fully — and left it. The resolution: SL stays at invalidation until the .382; once above the .382, zero risk is the move, because any return means the thesis is wrong and the book should be flat</li><li>The TP: moved to the MTF −.15 on the idea that a 3-tap would come first or the level would hit. What came was a 1hr 3-tap inside the range at the front-run target — not game-planned, and I was not paying attention Sunday</li><li>The miss: saw the 3rd tap ~21:00 and said the SL will handle it. It did, at −$504, where the exit at the tap was ≈ +$468</li></ul>" },
+          { title: "The entry read — Brendan 9/25 MU",
+            body: "<ul class=\"snips\"><li>Overnight we could not hold the .382: a 3-tap attempt failed, two 1hr closes above barely, then the hard dump — so the two-close number is fluid, 1–2 candles with context</li><li>Three very large wicks to the range low, each closing back above the S/R; the rule is go below, close above, then hold = enter. The third close was ~10 pts under, rounded up, so the wait was for the next candle to hold</li><li>Structure: 1hr and 4hr align, a 3-tap PO2; the three candles can be a small 1hr PO2 inside the 4hr PO2 · time: close enough to the ideal date low, a little early</li><li>Sizing as written: SL below the wick + 100, the wick is far, $2k = 260 contracts (took 240) · anything below that wick = the PO1 · confluence at $82.0–82.4k: HTF .382, macro HTF .666 retest, anchored VWAP, 1.15 LTF, 1.3 MTF, prior HTF range high</li></ul>" },
+          { title: "The read — MTF (4hr) · Brendan 9/24 ~14:00",
+            body: "<ul class=\"snips\"><li>Setup: the 9/23 hard separation from the range above = a PO3 on the MTF; inside its deviation limit a LTF range formed (a PO3 inside a PO3), faked the high at 03:00 into the untested BMSB, then swept to the PO1 at 05:00. The PO3 resets the 4hr count: tap 1 = 9/23 12:00, tap 2 = 9/24 05:00</li><li>Read: both sides are now clear and price can move higher — the BMSB was retested from above and held at the .236 with an S/R level. But that happened at a half time cycle, so this is early and the third tap is still owed</li><li>Trigger (revised ~17:15): PO2 = price trades below the $83,812 S/R zone; the 1st 1hr wicks under and closes above, the 2nd 1hr closes above → buy right after the 2nd close, SL 100 under the dip wick. Two closes because the first wicks and the second confirms; there will be cases where it takes off on the first — accepted. PO1 = 195 resting at $82,642 (SL $82,135), 2nd half on a 1hr close back above. Bias PO2 on the price action — a hunch, and the hunch never touches the stop or the size</li><li>Rep question (replay log, not a rule): for a PO2, do bodies or wicks define the S/R? Recent reads say the bodies create the S/R and the PO2 forms there; the perfect PO2 is when the S/R is the wick low. The 05:00 wick is long and far from the body S/R, so tonight is one specimen — the card covers both answers (body S/R = PO2, wick zone = PO1)</li><li>Invalidation: PO2 = the S/R wick lost → small loss, the PO1 is the next entry · PO1 = wick − 100 → flat, budget spent, one confirmation entry (half) remains</li><li>Targets: the −.15 of the deviation limit $88,005 is the absolute target and the bracket limit (full exit). What I actually expect is a 3-tap distribution that ends at the abundance pocket (.666–.705, $85,900–$86,080), the extreme pocket (.786–.82, $86,450–$86,605) or the .111 front-run ($85,880) — I exit on that 3rd tap, wherever it forms</li><li>Manipulation PO3s often need only 2 taps (entry on a continuation of the BMSB tap, SL right below it) — not called yet: three failed closes above the .382 say the taps are not done. A 1hr close above $84,600 changes the menu to confirmation entries</li></ul>" },
+          { title: "Scenario table — written 9/24 ~17:45",
+            body: "<ul class=\"snips\"><li>Pre-mortem (Brendan): the S/R reclaim prints while I am asleep and I miss it · the PO1 limit fills and the deviation wick runs past $82,135 · a 1hr close above the .382 goes straight to the targets and I miss the whole move</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>1 · $83,812 holds — dip below, 1st 1hr closes above, 2nd 1hr closes above</td><td>LONG full size at the 2nd close · SL 100 under the dip wick · bracket verified</td><td>tonight 18:00–24:00</td><td class=\"ok\">YES awake</td></tr><tr><td>2 · Scenario 1 stopped, price comes down to the range low ($82,850) and reclaims the same way</td><td>PO2 again at the 2nd close · SL under that low · <b>attempt 4 of 4 — the last one</b></td><td>overnight → Thu 08:00</td><td class=\"no\">NO asleep</td></tr><tr><td>3 · Stopped again → PO1: the 195 limit fills at $82,642</td><td>bracket SL $82,135 takes the risk · 2nd half on the 1hr close back above $82,642 · <b>attempt 5 — over the 4-attempt cap unless scenario 2 is skipped</b></td><td>overnight</td><td class=\"ok\">YES fill (bracket) · NO 2nd half asleep</td></tr><tr><td>3b · The limit does not fill and a 1hr closes back above the range low</td><td>LONG full size at the close · SL 100 under the low · DELETE the resting 195</td><td>overnight → Thu am</td><td class=\"no\">NO asleep</td></tr><tr><td>4 · 1hr close above the .382 $84,600</td><td>SL → BE (hand)</td><td>Thu → Fri</td><td class=\"no\">NO asleep</td></tr><tr><td>5 · In the target ranges — 3rd distribution tap forms in a pocket ($85,880 · $85,900–86,080 · $86,450–86,605)</td><td>EXIT ALL by hand on the 3rd tap · the $88,005 bracket is the sleeping fallback · once inside the ranges SL → $84,500 (100 under the .382) to lock profit</td><td>Thu 08:00 → Fri 15:00</td><td class=\"no\">NO asleep (both hand moves)</td></tr><tr><td>6 · 1hr close above the .382, 2nd close confirms → taps done</td><td>anticipation OFF · look for BMSB-retest confirmation entries (half) · if it runs straight to the targets the move is missed — accepted</td><td>any</td><td class=\"no\">NO asleep</td></tr><tr><td>7 · Deviation wick runs past $82,135 on the limit entry</td><td>bracket takes it (flat) · the reclaim after it = a FULL entry, not a half · budget check first</td><td>overnight</td><td class=\"ok\">YES (bracket) · NO (re-entry asleep)</td></tr><tr><td>8 · Any entry prints while asleep</td><td>missed · no chase in the morning · re-read from the menu</td><td>overnight</td><td class=\"ok\">MUST</td></tr><tr><td>Sequencing — the 195 rests only after the PO2 is ruled out (stopped, or price loses $83,812 without the two-close reclaim) · never a PO2 position and the 195 at once</td><td>place the 195 then · if a PO2 is on at bedtime the 195 is NOT placed</td><td>tonight</td><td class=\"ok\">MUST</td></tr><tr><td>9 · PO2 stopped, then straight up through the .382 — no reclaim entry printed</td><td>no chase · rally-retest half at the .111/.236 pullback with strength showing, else nothing · taps-done rule after the 1hr close</td><td>Thu</td><td class=\"no\">NO asleep</td></tr><tr><td>10 · 1hr close above the .382, then the next 1hr closes back below</td><td>confirmation state cancelled · anticipation back on · a BE stop hit here = a scratch that counts an attempt</td><td>Thu → Fri</td><td class=\"no\">NO asleep (BE already resting)</td></tr><tr><td>Bracket REJECTED at the 195 fill (margin)</td><td>stop by hand · nothing else rests, so the 9/23 cause is absent — ruling 9/24: ACCEPTED as the one sleeping NO</td><td>overnight</td><td class=\"no\">NO asleep · accepted</td></tr><tr><td>Partial fill on the 195</td><td>size = what filled · bracket on that size</td><td>at fill</td><td class=\"ok\">YES (exchange)</td></tr><tr><td>Deribit quarterly expiry Fri 04:00 ET</td><td>context only · no new entry into it · brackets hold</td><td>Fri 04:00</td><td class=\"ok\">n/a</td></tr><tr><td>Stale — Fri 15:00 passes, no fill, no reclaim</td><td>cancel the 195 · re-read the count · new card</td><td>Fri 15:00</td><td class=\"ok\">YES awake</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">Only the 195 limit, its bracket SL $82,135 and the $88,005 TP bracket sleep. Every entry, the 2nd half, the BE move, the profit lock and the 3rd-tap exit are hand actions = awake-only. Ruling (a) 9/24: the bracket-rejected sleeping NO is accepted — single order resting, the 9/23 cause absent, and the 195 is placed only after the PO2 is ruled out. Ruling (b) still owed: the chain scenario 1 → 2 → 3 is five attempts on a four-attempt structure — drop scenario 2, or the PO1 is the last entry.</div><ul class=\"snips\"><li>Scenario 2 is the same trade as scenario 1 at a lower level; under the budget it is the last attempt if taken, and it prints asleep — it is on the table so the morning read does not call it new</li><li>Scenario 5 locks profit at $84,500 only once price is inside a target range — not on the first tag of the .382 (that is the $83,258 move)</li><li>Scenario 6 is the taps-done rule: confirmation entries only from that close, half size</li></ul>" }
+        ],
+        notes: "Archived 9/30 from the Coinbase API; post-mortem from Brendan in session 9/30 (to be pasted to a Notion daily). The 9/24 plan card is compressed here. Still unexplained: the 9/26 22:47 bracket edit (TP unchanged)."
+      },
+      bear: {
+        label: "What killed it",
+        levels: [ { name: "SL", value: "$83,720 × 240 (was $83,070)" } ],
+        triggersLabel: "If it fires",
+        triggers: [ { label: "✔ $83,720 traded 9/27 21:49 → flat · 9/28 new low under tap 2 → structure over, next card needs a new count", status: "met" } ]
+      }
+    },
+    {
+      ticker: "BTC", direction: "long",
+      closed: "2026-09-24", outcome: "scratch", exit: "SL",
+      capture: { realizedR: 0.0, plannedR: 6.3 },
+      pnl: "+$43.49 pre-fees — 340 @ $83,455 → $83,467.79 (BE stop $83,470) · fees $365.37 · net −$321.88 · 0.0R",
+      postmortem: "In Notion (9/24 daily, WB1). Brendan: the 04:00 candle closed inside the wick, the 05:00 candle was the low — wick through the deviation, body back above the 1.3, the exact PO1 trigger. I was asleep; on waking I waited one more close, then entered at the 08:00 close, SL 100 under the wick. We rallied to the .382, I moved to BE per the rule in my head, and the rejection took it. Not a bad beat: the 9/21 rule (SL under the .111, not BE above it) was never ratified and '.382 = BE' had no tag-vs-close. Now written: tag → .111 − 100; 1hr close → BE. The pullback held the .236, so that stop survives.",
+      rulesChanged: [
+        "One MTF fib per structure: a TAG of the .382 → SL to the .111 − 100 · a 1hr CLOSE above the .382 → BE",
+        "Taps-done trigger: a 1hr close above the .382 ends anticipation → confirmation entries only (half size); next 1hr close back below = invalidated",
+        "PO1 stop = 100 under the entry wick; PO1 trigger spec (1.3 reclaim + close-in-wick + next candle low) → replay log, N = 2"
+      ],
+      setupTag: "PO1 Long · .382 Tag → BE · Pullback Took It",
+      live: {
+        state: "CLOSED 9/24 10:53 · BE STOP HIT · 0.0R · BE ON A TAG, RULE UNWRITTEN",
+        position: "LONG 3.40 BTC @ $83,455",
+        stop: { price: "$83,470", note: "HIT · moved from $82,750 at 10:45" },
+        risk: "+$43.49 pre-fees",
+        targets: [ { label: "TP ✘", cts: 340, price: "$87,880" } ]
+      },
+      structure: {
+        schematic: "The PO1 of the LTF range inside the MTF PO3 — the sweep the 01:00 trade had priced in and could not survive · MTF fib 9/21 high $87,430 → this low $82,850",
+        taps4h: "PO3 reset: 1) 9/23 12:00 $83,530 · 2) 9/24 05:00 $82,850 — this trade is the tap-2 sweep entry",
+        taps1h: "04:00 closed inside the wick · 05:00 = the low, wick through the deviation, body back above the 1.3 · entry one candle late at the 08:00 close",
+        entryType: "tap 2 (PO1 — the sweep of the 1.15, close-in-wick trigger)",
+        confirmation: "The 05:00 body close above the 1.3 · the .382 $84,600 tag at 10:00 (high $84,940) is what moved the stop"
+      },
+      ticket: {
+        planned: "≤390 on the PO1 close · SL 100 under the wick · TP1 $85,880 · TP2 $87,905",
+        actual: "340 @ $83,455 (limit $83,300 edited up to market at the 08:00 close) · SL $82,750 (100 under the wick) → BE $83,470 at 10:45 · 340 stop @ $83,467.79",
+        risk: "$2,397 at $82,750 · 0.0R realized",
+        exception: "Bracket first placed as 195 (TP $85,880), cancelled at 08:00:53, rewritten as 340 with a single TP $87,880 at 08:01:50 · SL edited twice 10:45–10:46"
+      },
+      audit: [
+        { tag: "f6621561", time: "9/24 08:00:08", side: "BUY", cts: 340, price: "$83,455", fee: "$182.67", note: "limit $83,300 placed 07:51, edited up to market at the close · bracket f9649ad8 (195) cancelled 08:00:53 · bracket 916b4125 (340) OPEN 08:01:50" },
+        { tag: "916b4125", time: "9/24 10:53:06", side: "SELL", cts: 340, price: "$83,467.79", fee: "$182.70", note: "stop · trigger $83,470 (BE +15, edited 10:45 / 10:46) · TP was $87,880" }
+      ],
+      thesisOneLiner: "SCRATCHED 9/24 10:53, 0.0R — a clean PO1 entry, then a BE stop set on a .382 tag that a normal pullback took out. The original read: the 05:00 candle was the PO1 low, entry on the close, stop 100 under the wick, targets the MTF .618 and the −0.15.",
+      bull: {
+        label: "The trade — PO1 long, BE too early", openPosition: true,
+        position: [
+          { k: "Order 1 — PO1 · FILLED 9/24 08:00 · BE STOPPED 10:53", v: "LONG 340 @ $83,455 · SL wick − 100 → BE $83,470 → out $83,467.79 = +$43.49 · TP $87,880 ✘", tone: "win" },
+          { k: "Risk at entry", v: "$2,397 (705 pts × 3.40) · realized +$43 · 0.0R · fees $365 · net −$322", tone: "loss" },
+          { k: "The exit that was available", v: "SL to the .111 − 100 = $83,258 on the tag → still long; the pullback bottomed at $83,365 and held the .236 $83,930 on the 1hr" }
+        ],
+        levels: [
+          { name: "Entry — the 08:00 close, one candle after the PO1 low", value: "$83,455" },
+          { name: "SL — 100 under the 05:00 wick $82,850", value: "$82,750" },
+          { name: ".382 MTF — the tag that moved the stop", value: "$84,600 (10:00 high $84,940)" },
+          { name: "BE stop — set 10:45, hit 10:53", value: "$83,470" },
+          { name: ".111 − 100 — where the stop belonged on the tag", value: "$83,258" },
+          { name: "TP — −0.15 (bracket)", value: "$87,880 ✘" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/24 04:00 — 1hr closed inside the wick · the close the 01:00 trade had wanted", status: "met" },
+          { label: "2. ✔ 9/24 05:00 — the low: wick through the deviation, body closed back above the 1.3 = the PO1 trigger · asleep", status: "met" },
+          { label: "3. ✔ 9/24 08:00 — long 340 at the close, one candle late · SL wick − 100 · bracket rewritten 195 → 340, single TP $87,880", status: "met" },
+          { label: "4. ✘ 9/24 10:00–10:45 — .382 $84,600 tagged · SL moved to BE $83,470 by hand", status: "failed" },
+          { label: "5. ✘ 9/24 10:53 — pullback to $83,365 took the BE · the .111 − 100 held · flat", status: "failed" }
+        ],
+        details: [
+          { title: "Diagnosis — Brendan 9/24",
+            body: "<ul class=\"snips\"><li>Result: execution was right for what was on the screen after waking — PO1 trigger confirmed, entry on the close, stop 100 under the wick</li><li>Why it scratched: '.382 = BE' lived in my head with tag-vs-close unclarified, and the 9/21 rule (SL under the .111, not BE above it, because a BE stop gets hit by a normal pullback on a correct trade) was applied once but never ratified</li><li>Now written: a TAG of the .382 → SL to the .111 − 100 · a 1hr CLOSE above the .382 → BE · one MTF fib for everything (9/21 high → 9/24 05:00 low)</li><li>Test: the pullback held the .236 — the .111 − 100 stop survives this specimen</li><li>Fees: a BE stop at 340 cts is −$365 net; the pair cost $731 in fees — the reason the structure budget has an attempt ceiling, not a reason to put fees in the BE</li><li>Pattern (N = 2, replay log): after a hard separation the LTF range fakes the high before the low → the PO1 is the higher-odds entry in that context</li></ul>" },
+          {
+            title: "Entry read vs what happened (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-24_btc-long-pair_what-happened_1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · trade 9 entry circled ('too small'), trade 10 entry, and the only valid confirmation at 9/25 10:00 = tap 3 of the MTF PO2 · range 0 $85,252 → 1 $82,801, .705 $83,824, 1.3 $82,080." },
+            body: "<ul class=\"snips\"><li>Brendan: a great entry, wrong reasoning — TAP 2 of a PO2 on the normal timeframe, not a PO1 (the PO1 read came from too low a timeframe again). SL belonged under the tap-2 wick; the add was tap 3 on 9/25 10:00, the only valid confirmation on the chart.</li><li>Instead a breakout / trending-up management idea (BE at the .382 tag) was applied and a normal wick took it out in hours — triggered by the loss before it and the off-book trade before that.</li><li>Targets still aimed at a new high (−.15 of the range) because the 9/15–16 early TP had gone way higher and 'I wasn't going to make that mistake again' — but this WAS the top: the time for lower targets. Only the LTF front-run would have hit, BE on the rest.</li><li>Attribution: system design on the stop rule (fixed 9/24: .382 tag → .111−100, close → BE) + behavioral on the timeframe and the target reasoning. Retro = MTF tap 2.</li></ul>"
+          }
+        ],
+        notes: "Archived 9/24 from the Coinbase API. Original SL $82,750 confirmed by Brendan (not in the API after the BE edit)."
+      },
+      bear: {
+        label: "What killed it",
+        levels: [ { name: "SL", value: "$83,470 × 340 (BE +15, was wick − 100)" } ],
+        triggersLabel: "If it fires",
+        triggers: [ { label: "✔ $83,470 traded 9/24 10:53 → flat · re-entry = the 9/24 plan card, tap 3", status: "met" } ]
+      }
+    },
+    {
+      ticker: "BTC", direction: "long",
+      closed: "2026-09-24", outcome: "loss", exit: "SL",
+      capture: { realizedR: -1.03, plannedR: 3.0 },
+      pnl: "−$2,124.30 pre-fees — 340 @ $84,037.78 → $83,412.99 (170 @ $83,410.97 · 170 @ $83,415) · fees $366.26 · net −$2,490.56 · −1.03R on $2,066",
+      postmortem: "In Notion (9/24 daily, WB1). Brendan: the 23:00 candle closed inside the tap-2 wick — not the deep close I wanted, but it triggered, so I entered on the 00:00 close per the plan. This was a PO2, so the stop belonged under the 15m S/R wick ($83,739). I put it at the deviation limit + 100 to cover a PO1 I thought was more likely, because I was going to bed. Tried 195 + 195 first; Coinbase rejected the second order nine times, so the blend was the fallback — placed exhausted, past bedtime, rehashing a written plan. The PO1 came, the wick ran ~0.4% past the limit, both stops hit. Lesson: the stop for the trade at hand, and the PO1 in the morning.",
+      rulesChanged: [
+        "PO2 stop = under the S/R wick; its invalidation IS the PO1 — never blend a PO2 entry with a PO1 stop",
+        "Deviation-of-deviation + 100 is read on the Coinbase CDE chart (it held there; breached on Bybit/TV)",
+        "Split rejected → take the smaller trade, never the merged one (scenario-table plumbing row)",
+        "Two-order margin test when flat; until answered, one resting entry order on CFM",
+        "Structure budget: 2R gross loss AND 4 attempts per structure, PO3 resets"
+      ],
+      setupTag: "PO2 Long · PO1 Stop · Blended Risk · Swept",
+      live: {
+        state: "CLOSED 9/24 04:49 · STOP HIT · −1.03R · PO2 ENTRY WITH A PO1 STOP",
+        position: "LONG 3.40 BTC @ $84,037.78",
+        stop: { price: "$83,430", note: "HIT ×340 (two brackets of 170)" },
+        risk: "−$2,124.30 pre-fees",
+        targets: [ { label: "TP1 ✘", cts: 170, price: "$85,880" }, { label: "TP2 ✘", cts: 170, price: "$87,905" } ]
+      },
+      structure: {
+        schematic: "Model 2 accumulation · 1hr 3-tap on the low of a possible 4hr tap 2 · range owed targets · the 9/23 separation was a PO3 on the MTF and the LTF range inside its deviation limit was a PO3 inside a PO3 — built liquidity both sides, faked the high at 03:00 into the untested BMSB, swept the low at 05:00 (read after the fact)",
+        taps4h: "As written 9/23: 1) 9/22 01:00 low · 2) 9/23 12:00 low $83,530 (the entry) · count later reset by the PO3 — see the 9/24 plan card",
+        taps1h: "9/23: 10:00 · 12:00 · 13:00 on the low · the 23:00 candle closed inside the tap-2 wick = the PO2 trigger, entry on the 00:00 close",
+        entryType: "tap 3 (PO2 — the 1hr close inside the tap-2 wick, before any sweep)",
+        confirmation: "None beyond the close-in-wick — the plan's half-size PO2 (195) was not what filled"
+      },
+      ticket: {
+        planned: "PO2: 195 (half) on the 1hr close inside the tap-2 wick · SL under the 15m S/R wick $83,739 · 2nd 195 on the PO1 candle · TP1 $85,880 · TP2 $87,905",
+        actual: "340 @ $84,037.78 market on the 00:00 close · SL $83,430 (PO1 level) · 170 stop @ $83,410.97 · 170 stop @ $83,415",
+        risk: "$2,066 at the blended stop · −1.03R realized · $1,165 was the PO2 risk at 390",
+        exception: "195 + 195 split REJECTED for insufficient funds with one 195 resting (9 rejections 00:21–00:35 incl. a 200 market) → single 340 with the blended stop"
+      },
+      audit: [
+        { tag: "6102ec6e · 1799b248", time: "9/24 00:21–00:23", side: "BUY", cts: "390 · 195", price: "$83,600", fee: "—", note: "limits accepted, cancelled by Brendan" },
+        { tag: "6148aaa0 … c7c07188", time: "9/24 00:24–00:35", side: "BUY", cts: "180–200 ×9", price: "$83,000–$83,910 · 1 market", fee: "—", note: "all REJECTED · insufficient funds while the 195 rested" },
+        { tag: "fdef5bb0", time: "9/24 01:00:08", side: "BUY", cts: 340, price: "$84,037.78", fee: "$183.66", note: "market · brackets ca00be6c + 504c17a1 OPEN, stop $83,430" },
+        { tag: "504c17a1", time: "9/24 04:49:49", side: "SELL", cts: 170, price: "$83,410.97", fee: "$91.30", note: "stop · trigger $83,430 · TP was $87,905" },
+        { tag: "ca00be6c", time: "9/24 04:49:49", side: "SELL", cts: 170, price: "$83,415", fee: "$91.30", note: "stop · trigger $83,430 · TP was $85,880" }
+      ],
+      thesisOneLiner: "STOPPED 9/24 04:49, −1.03R — a PO2 entry carrying a PO1 stop, placed exhausted after the split was rejected. The original read: third 1hr tap on the low of 4hr tap 2, entry on the close inside the tap-2 wick, targets the MTF .618 and the −0.15.",
+      bull: {
+        label: "The trade — PO2 long with the wrong stop", openPosition: true,
+        position: [
+          { k: "Order 1 — PO2 close-in-wick · FILLED 9/24 01:00 · STOPPED 04:49", v: "LONG 340 @ $84,037.78 · SL $83,430 → out $83,412.99 = −$2,124.30 · TP1/TP2 ✘", tone: "loss" },
+          { k: "Risk at entry", v: "$2,066 · realized −$2,124 · −1.03R · fees $366", tone: "loss" },
+          { k: "The exits that were available", v: "the PO2 stop under the S/R wick $83,739: −$1,016 at 340 · the half-size 195: −$1,215 at the blended stop · the dev-of-dev + 100 on CDE held: still long from $84,038" }
+        ],
+        levels: [
+          { name: "Entry — the 00:00 close inside the tap-2 wick", value: "$84,037.78" },
+          { name: "SL — deviation limit + 100 (the PO1 stop on a PO2 entry)", value: "$83,430" },
+          { name: "S/R wick — the stop the PO2 owed", value: "$83,739" },
+          { name: "PO1 low — 9/24 05:00, CDE", value: "$82,850" },
+          { name: "TP1 — .618 MTF", value: "$85,880 ✘" },
+          { name: "TP2 — −0.15 of the range", value: "$87,905 ✘" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 9/23 23:00 — 1hr closed inside the tap-2 wick · the PO2 trigger", status: "met" },
+          { label: "2. ✘ 9/24 00:21–00:35 — 195 + 195 split rejected nine times (margin) · exhausted, past bedtime, rehashing a written plan", status: "failed" },
+          { label: "3. ✘ 9/24 01:00 — 340 at the 00:00 close · SL blended to the PO1 level $83,430 'to cover both scenarios' · brackets attached", status: "failed" },
+          { label: "4. ✘ 9/24 03:00 — fake high into the untested BMSB, hard rejection · asleep", status: "failed" },
+          { label: "5. ✘ 9/24 04:49 — PO1 wick ~0.4% past the deviation limit · both stops hit · flat", status: "failed" }
+        ],
+        details: [
+          { title: "Diagnosis — Brendan 9/24",
+            body: "<ul class=\"snips\"><li>Result: I entered a PO2 and priced PO1 risk. The card already had the answer — PO2 = 195 half, second 195 on the PO1 candle</li><li>Why: the blended stop was a workaround for my own scenario gate from 12 hours earlier (every entry awake-only). Covering both scenarios so I could sleep is what the table exists to stop</li><li>Why: bias said PO1 more likely; the honest position given that bias was 195 or zero, and the PO1 in the morning</li><li>Stop math: limit + 100 instead of the 9/22 deviation-of-deviation + 100 — checked after, the dev-of-dev stop held on the Coinbase chart (breached on Bybit/TV)</li><li>Sizing: the wide stop did not just widen the loss — it cut the size cap and halved the R:R (3.0 vs 6.2 at the PO2 stop)</li><li>Plumbing: the 195 alone was accepted and could have sat as the PO2 by itself; the fallback when the split fails is the smaller trade, never the merged one</li></ul>" },
+          { title: "The read — LTF (1hr) · as written 9/23",
+            body: "<ul class=\"snips\"><li>Setup: Model 2 accumulation — three 1hr taps (10:00 · 12:00 · 13:00) on the low of 4hr tap 2, this entry the 3rd or 4th tap</li><li>Trigger: a 1hr candle closes inside the tap-2 wick → long at that close; the PO2 variant (close in the wick before any sweep) = 195 half, second 195 on the PO1 candle</li><li>Invalidation as written: the entry candle's deviation limit + 100 — correct for the PO1 leg, wrong for the PO2 leg that actually filled</li><li>Targets: TP1 $85,880 = .618 MTF and the macro .111 · TP2 $87,905 = −0.15 of the range</li></ul>" },
+          { title: "The PO1 entry — close inside the tap-2 wick (Brendan 9/23)",
+            body: "<ul class=\"snips\"><li>Pattern: after a tap-2 wick, tap 3 is almost always a 1hr candle that closes inside that wick. That candle's low is the low, or the next candle is the low or very close to it</li><li>Entry: long at that candle's close, SL = that candle's deviation limit plus 100 pts beyond it — the same construction as the overshoot stop rule. The buffer covers the next-candle undercut and is the one parameter to test</li><li>Why not a resting price: the 1.3, the midpoint and the low each bet on where the wick ends, which is unknowable until the next candle; an equal low misses a deep limit and a limit at the low puts the stop too far away</li><li>Size: stop distance is known only at the close, so cts = min(390, 2,000 ÷ (pts × 0.01)) — the stop is never widened to fit the size</li><li>Rule-fit: a defined close-trigger is a permitted entry (no-alarm rule); the bracket attaches at once and is verified before any card work</li><li>Low N: this is a pattern from few instances — testable in the replay log: does tap 3 close inside the tap-2 wick, is that candle or the next the low, and what buffer would have held</li></ul>" },
+          { title: "Scenario table — written 9/23 ~19:00",
+            body: "<ul class=\"snips\"><li>Pre-mortem (Brendan): the 15m hold rule is untested and too short · a monster wick runs the buffered stop · the LTF tap 2 was really HTF tap 1 and the .382 is where the real low prints</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>1 · Hold fills on the 2nd 15m close, then stops — rule untested</td><td>bracket takes it · flat · wait for the PO1 candle, no re-entry on the hold</td><td>tonight → Thu am</td><td class=\"ok\">YES (bracket) · NO (the wait)</td></tr><tr><td>2 · S/R lost, a 1hr body closes inside the tap-2 wick with no sweep yet (PO2)</td><td>LONG 195 (half) at the close · SL = deviation limit + 100, room for the sweep · 2nd half on the PO1 close-in-wick if the sweep comes, else on the next S/R hold (2 × 15m)</td><td>tonight → Thu am</td><td class=\"no\">NO asleep</td></tr><tr><td>3 · Full size in, a monster wick runs the deviation limit + 100</td><td>bracket takes it · flat · a 1hr close back above that wick = re-enter, SL under the wick, size to $2k</td><td>any</td><td class=\"ok\">YES (bracket) · NO (re-entry)</td></tr><tr><td>4 · 1hr body closes below the deviation limit</td><td>take the loss · the HTF is building a 3-tap at the .382 and this LTF tap 2 was HTF tap 1 · re-read on the HTF, new card</td><td>Thu</td><td class=\"ok\">YES (bracket) · NO (re-read)</td></tr><tr><td>5 · Reverses before TP1</td><td>SL → BE once a 1hr closes above the .382 (tighten only) · worst case a scratch</td><td>Thu → Fri</td><td class=\"no\">NO asleep — the BE move is by hand</td></tr><tr><td>6 · TP1 hits, a 3-tap forms before TP2</td><td>exit the runners at the 3rd tap · the TP2 bracket limit is the sleeping fallback</td><td>Thu 08:00 / Fri 16:00</td><td class=\"no\">NO asleep</td></tr><tr><td>7 · TP1 + TP2 hit</td><td>flat · the short is a new card with its own gate · long brackets clear before anything rests short</td><td>Fri ~16:00</td><td class=\"ok\">YES (brackets) · NO (short)</td></tr><tr><td>8 · V-recovery — the 3-tap is in, no retest of $84,200, straight up</td><td>no chase · rally-retest entry only: 195 (half) at the .111/.236 of the leg with strength showing, SL under the retest wick, BE at a new high, 1hr close below = exit · no retest at all → the no-retest rule: wait for a 1hr 3-tap distribution at the highs, draw the range, entry 2 off the range low (close-below → deviation long · wick-below + close-back → buy the close)</td><td>Thu → Fri</td><td class=\"no\">NO asleep</td></tr><tr><td>Bracket REJECTED at fill (margin)</td><td>stop by hand now, before anything else · entries are close-triggers so Brendan is at the screen</td><td>at fill</td><td class=\"ok\">YES</td></tr><tr><td>Partial fill on the close-trigger</td><td>size = what filled · no chase</td><td>at fill</td><td class=\"ok\">YES</td></tr><tr><td>Deribit quarterly expiry Fri 9/25 04:00 ET in the window</td><td>context only · no new entry into it · brackets hold</td><td>Fri 04:00</td><td class=\"ok\">n/a</td></tr><tr><td>Stale — Fri 16:00 passes, TP1 not reached, position open</td><td>[ASK — time stop: flat, or BE and hold?]</td><td>Fri 16:00</td><td class=\"no\">NO</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">Every entry, the BE move, the re-entry and the HTF re-read are awake-only. Nothing rests unfilled overnight; only a filled position with a verified bracket sleeps.</div><ul class=\"snips\"><li>Scenario 2 adds nothing new: the second half uses the two triggers already on the card (PO1 close-in-wick · S/R hold)</li><li>Scenario 4 is a count invalidation, not a stop — the card is re-read, never stretched</li><li>Scenario 7 is a flip: it gets its own gate and card, never a resting short alongside long brackets</li><li>Scenario 8 reuses two standing rules: the rally-retest entry from the menu (half size, strength required, a prior 3-tap to point to — which this one has) and the no-retest rule from the 9/3 PO2 long</li></ul>" },
+          {
+            title: "Entry read vs what happened (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-24_btc-long-pair_what-happened_1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · trade 9 entry circled ('too small'), trade 10 entry, and the only valid confirmation at 9/25 10:00 = tap 3 of the MTF PO2 · range 0 $85,252 → 1 $82,801, .705 $83,824, 1.3 $82,080." },
+            body: "<ul class=\"snips\"><li>Brendan: a super-LTF entry — a PO2 on the 1hr in name, but the candles were adjacent, more like a 15-min PO2. Should never have been taken. This candle was TAP 1 of the MTF structure.</li><li>Why: antsy from missing the 9/21 move and the 9/23 loss — 'I'm not missing this next move' — so the timeframe dropped to where structure could not be missed. Bottoms take time.</li><li>Attribution: behavioral in full. Correct execution = no trade. Tag as traded Discretionary; retro = MTF tap 1.</li></ul>"
+          }
+        ],
+        notes: "Archived 9/24 from the Coinbase API. The 9/23 plan card (hold / PO1 lean) is compressed here; its owed items were never filled."
+      },
+      bear: {
+        label: "What killed it",
+        levels: [ { name: "SL", value: "$83,430 × 340 (two brackets of 170)" } ],
+        triggersLabel: "If it fires",
+        triggers: [ { label: "✔ $83,430 traded 9/24 04:49 → flat · the PO1 was the next entry (taken 08:00, own card)", status: "met" } ]
+      }
+    },
+    {
       ticker: "BTC",
       direction: "long",
       closed: "2026-09-23",
@@ -1859,7 +2287,7 @@ const DATA = {
         details: [
           {
             title: "The read — the 1hr range under the sweep (9/22 eve)",
-            chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-09-22_18-52-08%20LONG%201hr%20tap3.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 18:52 · grey circles = the taps · fib grid low→high · blue box = the long ticket · green = path drawing (expectation only) · card levels govern." },
+            chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-22_18-52-08%20LONG%201hr%20tap3.png", caption: "1H BTCUSDT.P Bybit · captured 9/22 18:52 · grey circles = the taps · fib grid low→high · blue box = the long ticket · green = path drawing (expectation only) · card levels govern." },
             body: "<ul class=\"snips\"><li>Setup: a 2-tap distribution at the top of the 9/22 range and a 3-tap accumulation forming under it</li><li>Trigger: tap 3 at the .666 pocket, resting limit 100 pts above it so a shallow tap still fills</li><li>Invalidation: the stop under the .86 — below it the count is broken</li><li>Targets: 100 under the 9/21 high, then 20 under the short's first rung — the long hands the sweep to the short</li><li>Result: the high was swept at 00:00 before tap 3; the fill came on the way down; the count broke at 10:10</li></ul>"
           },
           {
@@ -2130,7 +2558,10 @@ const DATA = {
       postmortem: "In Notion (daily reflection). Brendan 9/18: the thesis was right and played out; fear shrank the trade. The tap-2 limit was never rested and tap 3 had no concrete plan, so the fill came late at half size. Then the Abundance time-cycle videos convinced him there was not enough time for the 9/15 plan's range targets, so all 215 went on one near target and the add was dropped. CDE traded $80,985 five hours after the exit. Second pass 9/22: the low target came from assuming a 3rd tap lower was still owed; the weekend range's failed distribution said targets go UP. Runners would have helped — no runners analysis exists yet.",
       rulesChanged: [
         "Time cycles may move targets (context), but never against a live 3-tap that is holding",
-        "A full-size entry needs a written tap-2 / tap-3 ticket; a late BMSB confirmation is half size by rule, not by fear"
+        "A full-size entry needs a written tap-2 / tap-3 ticket; a late BMSB confirmation is half size by rule, not by fear",
+        "The HTF plan (.236 idea) governs target DIRECTION — a Lift-and-Sweep at a target means raise the targets and add back to full size (10/8)",
+        "Scheduled print inside a trade = widen the stop to the prior tap wick for the print (10/8, DRAFT)",
+        "Short setups: invert the chart to read the 3-tap (10/8, from the Sep 30 → Oct 6 top — lives in the read-discipline memory)"
       ],
       setupTag: "4hr 3-Tap Accum · BMSB Confirm · Half Size · Low Target",
       live: {
@@ -2195,6 +2626,26 @@ const DATA = {
             title: "The read — LTF (1hr): the deviation range (9/15)",
             chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-15_13-05-14%20LONG%201hr.png", caption: "1H BTCUSDT.P Bybit · captured 9/15 13:05 (pre-entry) · LTF deviation grid 0 $79,905 → 1 $75,522 · green 1.15 · purple 1.3 · blue circles = 4hr taps · lines = PO2/PO1 paths (expectations only) · card levels govern." },
             body: "<ul class=\"snips\"><li>Frame: the deviation range off the 9/14 high · the 1.15 (≈ $74,900) was the PO1 estimate</li><li>What printed: two wicks to the 1.15 area, no 1hr close below $75,400</li><li>Entry taken vs plan: nothing rested into FOMC; the BMSB confirmation went on after it, one half, one exit</li></ul>"
+          },
+          {
+            title: "What happened — the whole trade on the HTF (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-16_btc-long_what-happened_HTF-full-trade.png", caption: "4H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · the 9/15 low $75,042.6 at the HTF .236 $75,685 / fib 1 $75,463 on the time-cycle low · taps 9/8 · 9/11 · 9/15 · the run to the −.15 $83,291, the −.3 $84,370 and on to the $87,454 confluence · time cycles re-anchored to the market-maker lows." },
+            body: "<ul class=\"snips\"><li>The frame the trade should have been read in: price at the HTF .236 with the HTF 3-tap completing on the cycle date — the place to raise targets, not lower them.</li><li>Exit at $78,015 against a structure that ran to $87,454: the taken leg captured ~2,150 of ~12,400 points available to the confluence.</li></ul>"
+          },
+          {
+            title: "Entry read vs what happened — the entries (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-16_btc-long_what-happened_entries-1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · the three 1hr taps on 9/15 = the HTF 3rd tap (9/8 · 9/11 · 9/15) on the time-cycle bottom date, right at the HTF .236 $75,685 · entry 1 at the 1.15 or after the 3-tap close · the confirmation entry = the retest of the tap-1 wick from above = the actual $75,865 fill." },
+            body: "<ul class=\"snips\"><li>HTF taps: 9/8 low · 9/11 CPI wick · 9/15 — the 1hr PO2 completed the HTF count ON the cycle date. The card's '9/13 = tap 2' was wrong (no lower low).</li><li>Correct entries, two legs = full size: 1) after the 18:00 candle 9/15, SL below the 3rd wick · 2) the confirmation add = tap-1 wick retest from above (taken — a perfect confirmation entry, half size by rule).</li><li>Why entry 1 was missed: the HTF .236 plan was forgotten ('a very easy long' with it in mind); the 120-day cycle at ~day 100 read as a top due; the 9/15 card never finished (3+ hrs from a live chart); FOMC treated as a veto.</li><li>FOMC nuance: the print wicked under the 3rd tap; the 100-pt buffer held, the right stop was under the tap-2 wick. Draft rule: a scheduled print inside a trade = widen the stop to the prior tap wick.</li></ul>"
+          },
+          {
+            title: "What happened at the front-run target — a LTF Lift-and-Sweep (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-16_btc-long_what-happened_FRT-lift-and-sweep-1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · at the front-run target: a textbook 3-tap distribution into the pocket → a (not very clean) 3-tap accumulation → sweep of the high at the −.15 → straight down to the .236 of the impulse / the 1.15, a 3-tap there too. Lift-and-Sweep specimen #2, LTF." },
+            body: "<ul class=\"snips\"><li>Targets were wildly wrong: $78,015 came from the Abundance video + fractals + the past mis-trades + wrong time cycles; the HTF .236 plan alone said RAISE them. Correct ladder: TP1 = the front-run $81,415 · TP2 range high $82,430 · TP3 −.15 $83,415.</li><li>At the FRT the Lift-and-Sweep printed on the LTF: the four trades it offers were available, the TP taken off should have been added back to full size, and the targets raised: −.3 of the MTF deviation limit $84,554 · −.15 of the HTF deviation limit $87,400 · (−.3 $92,306 only if the cycle allowed — it did not).</li><li>120-day cycle + the 10% rule: the top window = 9/19 → 10/17; massive confluence at the .786 / $87,400 (parallel-channel deviation limit · 2.272 extension of the full HTF · S/R rectangle · −.15 of the HTF range) → two targets, then look SHORT from there.</li></ul>"
+          },
+          {
+            title: "Where the third target came from — the HTF topping confluence (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-16_btc-long_what-happened_HTF-topping-3D.png", caption: "3D BTCUSDT.P Binance · Brendan's trade folder, captured 10/8 · the confluence at the .786 / $87.4k and the 120-day cycle window 9/19 → 10/17 (Tue 22 Sep → Fri 16 Oct marked)." },
+            body: "<ul class=\"snips\"><li>Had the targets been raised at the front-run target, the ladder ends here: −.3 of the MTF deviation limit $84,554 → −.15 of the HTF deviation limit $87,400. The −.3 at $92,306 is off the ladder because of the cycle.</li><li>Why $87,400: the parallel-channel deviation limit · the 2.272 extension of the full HTF · an S/R rectangle · the −.15 of the HTF range — all on the .786. Two targets, then look short from there.</li><li>120-day cycle + the 10% rule: the top window is 9/19 → 10/17.</li></ul>"
           }
         ],
         notes: "Archived 9/18 from the Coinbase API; relabeled 9/22 after the range post-mortem (was 'Add Never Rested'). Retired unfilled: the add ticket, 1hr tap numbering, the arming 1hr close."
@@ -2451,6 +2902,11 @@ const DATA = {
             body: "<ul class=\"snips\"><li>Structure: 3-tap distribution at .382 resistance (9/9 01:00 / 04:00 / 08:00)</li><li>Confirmation: hard tap-3 rejection → 1hr close below the BMSB · the late entry, needs the 3-tap identified</li><li>Invalidation: reclaim of the BMSB (stop sits above it)</li></ul>"
           },
           {
+            title: "Entry read vs what happened (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-09_btc-short_what-happened_1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · short from the .382 rejection + BMSB close/retest · the CPI PO1 (9/10 08:00 · 9/10 19:00 · 9/11 08:00 wick $75,945) with the diagonal that was never drawn · Brendan's note on the chart: 'Unexpected CPI tape, didnt mark out 3 tap diag, 2 lessons there, should have exited earlier'." },
+            body: "<ul class=\"snips\"><li>Entries and targets right: .382 rejection → LTF 3-tap distribution (not super clean, real) → 1hr close below the BMSB → retest. TP1 $75,810 missed by 135 pts on the CPI low.</li><li>Not A+: a continuation short inside the range, not a HTF short from the top; 1.2% was on the large side for a continuation.</li><li>Lesson 1 — release tape: during a scheduled release the tape speeds up and tends to print a false move first, then reverse; that is the bias on any card open into a release. Fallback exit = the 1hr body close (~$78,000); the trail at $78,235 was close enough.</li><li>Lesson 2 — the diagonal: the PO1 against the short should have had the diagonal drawn through its three taps as it formed; the close through it (5-min, ~$77,000) was the exit, pre-marked. Not charged — the trail did better.</li><li>HTF structure: the CPI wick $75,945 is market-maker structure = tap 2 of the HTF count (9/8 low = tap 1). Should have been marked at the time.</li><li>The .236 flip-long: not a mis-trade — tape too fast, first release traded, bias still short so a long was a scalp at most.</li></ul>"
+          },
+          {
             title: "Provenance — the June-2021 distribution (context, NOT the idea)",
             chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-09_14-52-01%20FRACTAL%20Jun2021%204hr.png", caption: "4H BTCUSDT.P Binance, May–Jun 2021 · same shape: .382 3-tap → break of the 1 → 1.3 → .42/.53 low · Structure governs; fractals are context." },
             body: "<ul class=\"snips\"><li>Purpose: named the .382 as the point of interest before the 9/8 long — it was right</li><li>Role: context + target map only · the analog was a PO2, which is why the PO1 was misread</li></ul>"
@@ -2481,7 +2937,8 @@ const DATA = {
       postmortem: "In Notion (daily reflection). Rule discovery: the fractal said 'no target, the .382 rejects' on 9/8 — known, correctly not a veto, never compiled into an exit. Rule: an outside read naming a LEVEL + a FAILURE MODE inside the trade → pre-write a 3-tap exit at that level (two failed tests from the trade's side + one from the other = out), armed as a TV alert with the action in the message. Cost: ~+$3,500 at the third tap vs +$2,072 by hand. Same shape as the 8/28 strip finding — a tell that lives in prose produces a late, discretionary exit.",
       rulesChanged: [
         "Context that names a level + a failure mode inside the trade compiles into a 3-tap exit rule at that level, armed as a TV alert",
-        "Naming settled: PO3 = the setup type (deviation sweep-and-reclaim); PO1/PO2 = the entry model inside it"
+        "Naming settled: PO3 = the setup type (deviation sweep-and-reclaim); PO1/PO2 = the entry model inside it",
+        "Time-cycle direction is a SIZING input: a long against the cycle lean is a scalp, never full size (10/8, September close)"
       ],
       setupTag: "PO3 Setup · PO2 Entry · 1hr 3-Tap · Tap-3 · Early Exit",
       live: {
@@ -2544,6 +3001,11 @@ const DATA = {
             body: "<ul class=\"snips\"><li>Setup: the prior range (top $82,400) broken down into a deviation zone · 1hr 3-tap accumulation inside it, countable and dated · no 4hr count (recorded deviation)</li><li>Entry: tap 3 = the S/R flip retest (the PO2 entry model)</li><li>Targets: the range fibs · the .382 = BE arm</li><li>Result: .382 traded → BE · two failed tests from below + one from under = rejection · hand exit beat the scratch</li></ul>"
           },
           {
+            title: "Entry read vs what happened (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-08_btc-long_what-happened_HTF-cycle.png", caption: "HTF BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · the time cycle: a strong move up at the start of the cycle then rejection = the cycle's 20% was the distribution sweep; the remaining 80% leans down to the .236 of the HTF impulse." },
+            body: "<ul class=\"snips\"><li>Entry: CORRECT — a PO3 (weak, the 3-tap only slightly under the range, but valid with a liquidity trail); tap 3 countable and dated</li><li>Exit: GOOD and planned — three drives into the .382, rejected, out by hand in two minutes; ~300 pts better available after the close + retest, noise. The 9/8 MU bullet named the .382 as the failure point before the fill. Exit gap $0.</li><li>The error: a full-size long (2.0% risk) against the HTF cycle lean. Bias should have been red: shorts, and longs only as small scalps for the rest of the cycle.</li><li>Error type: system design — /trade-sizing has no cycle-direction input in the positional multiplier. Time cycles set SIZE, never veto structure (8/28 rule stands).</li><li>Mark the taps as they come: the 9/8 1hr 3-tap is market-maker structure and mattered again later; it printed near a time-cycle low, mid-HTF-cycle — HTF structure, not just an entry trigger.</li></ul>"
+          },
+          {
             title: "Rule discovery — pre-write the exit at the known problem level",
             body: "<ul class=\"snips\"><li>Known 9/8: the fractal said 'no target hit, the .382 rejects' — context, correctly NOT a veto on the long</li><li>Missed: context that names a LEVEL + a FAILURE MODE compiles into an exit rule — it wasn't written</li><li>Rule: any outside read flagging a problem at an area inside the trade → 3-tap exit at that area, armed as a TV alert with the action in the message</li><li>Cost: ~+$3,500 at the third tap vs +$2,072 by hand · margin excess was only $646 at the 9/8 close</li></ul>"
           }
@@ -2570,12 +3032,14 @@ const DATA = {
       exit: "TP",
       capture: { realizedR: 14, plannedR: 14 },
       pnl: "+$11,937.70 pre-fees — 206 @ $76,605 → $82,400 (+5,795 pts) · resting TP · fees $168 · net +$11,770 · +14.1R on $845",
-      postmortem: "In Notion (daily reflection). Lesson: the tap-2 entry off a countable 4hr 3-tap with the 1hr nested inside it (the structure gate) delivered 14R to the tick — the exit was a resting order, not a decision. Entry 2 never came: price ran vertical 9/3 with no .111 retest and the 1hr range for the no-retest add never got drawn. The no-retest rule set written 9/3 carries to the next card.",
+      postmortem: "In Notion (daily reflection) + the September close walk-through 10/8: the tap count started one wick too early (8/28), so the entry was tap 3 of a PO1, not tap 2 of a PO2; the .111 add never fired because there was no tap 3 still to come, and the real second entry was the 9/3 confirmation retest of the tap-1 S/R $76,900 (untaken, ~$11,330 at the TP). Stop was right under either read. Lesson at the time: the tap-2 entry off a countable 4hr 3-tap with the 1hr nested inside it (the structure gate) delivered 14R to the tick — the exit was a resting order, not a decision. Entry 2 never came: price ran vertical 9/3 with no .111 retest and the 1hr range for the no-retest add never got drawn. The no-retest rule set written 9/3 carries to the next card.",
       rulesChanged: [
         "The no-retest add: no chase at market — wait for a 1hr distribution, draw the range, entry 2 at the range low (deviation close / wick-and-reclaim / PO3 fork)",
-        "A missed add costs size, not the trade — the original position rides to target under its own rules"
+        "A missed add costs size, not the trade — the original position rides to target under its own rules",
+        "The tap count starts at the first wick that later acts as S/R, not the first low on the chart (10/8, from the September close)",
+        "Time cycles anchor to market-maker lows; a new deeper low does not move the cycle (10/8)"
       ],
-      setupTag: "3-Tap Range · PO2 · Tap-2 Entry",
+      setupTag: "3-Tap Range · PO2 as traded · retro:PO1 · Tap-3 Entry (read as tap 2)",
       live: {
         state: "CLOSED 9/3 · TP $82,400 HIT · +14R TO THE TICK · ENTRY 2 NEVER FILLED",
         position: "LONG 2.06 BTC @ $76,605",
@@ -2587,9 +3051,9 @@ const DATA = {
       },
       structure: {
         schematic: "3-Tap Range (4hr) — targets exist",
-        taps4h: "1) 8/28 12:00 $76,824 (4hr close low) · 2) 9/1–9/2 ~$76,198 at the fib 1 $76,197.9, built by the 1hr's own 3-tap · 3) not needed — entered on tap 2",
+        taps4h: "AS READ AT ENTRY: 1) 8/28 12:00 $76,824 · 2) 9/1–9/2 ~$76,198 at the fib 1 · 3) not needed. CORRECTED 10/8 (September close): 1) 8/29 low ~$76,900 (the wick that became S/R) · 2) 9/1 wick · 3) 9/2 wick $76,185 = the entry · the 8/28 bar was nothing",
         taps1h: "1hr printed its own 3-tap INTO the 4hr tap 2 — entry off the 1hr count",
-        entryType: "tap 2"
+        entryType: "tap 3 (read as tap 2 at entry) · PO1 shape: taps 2–3 deviate under the tap-1 S/R"
       },
       ticket: {
         planned: "206 @ $76,605 · SL $76,195 · TP $82,400 · add 206 on a .111 retest (never triggered) · PO1 book below if stopped (never armed)",
@@ -2636,6 +3100,11 @@ const DATA = {
             title: "The alternate — PO1 (live only if the SL fired; it never did)",
             chart: { src: "charts/BTC%20Current/old/BTCUSDT.P_2026-09-02_14-43-17%20PO1.png", caption: "4H BTCUSDT.P Bybit · captured 9/2 14:43 · the deeper-flush read: entry zone ~$75.5–75.8k, stop under the 1.3, target the −0.15 · never armed · card levels govern." },
             body: "<ul class=\"snips\"><li>Role: the same trade one floor lower — live only if $76,195 stopped PO2 out</li><li>E1 limit $75,800 at the .5 wick · E2 SFP of the range-low wick $75,600 · SL $75,170 for both · 10.5R from E1</li><li>Gate: a stop-out breaks the tap count → re-run the gate before any order rests</li></ul>"
+          },
+          {
+            title: "Entry read vs what happened (September close, 10/8)",
+            chart: { src: "charts/BTC%20Current/2026-09-02_btc-long_what-happened_1hr.png", caption: "1H BTCUSDT.P Bybit · Brendan's trade folder, captured 10/8 · taps marked = 8/29 low, 9/1 wick, 9/2 wick · tap-1 S/R $76,900 = the confirmation add 9/3 · time cycles re-anchored to the market-maker lows (orange), the low landed inside the projected window." },
+            body: "<ul class=\"snips\"><li>Card said: tap 2 of a 4hr PO2, add on a .111 retest</li><li>Chart says: tap 3 of a PO1 — the 8/28 bar was not a tap; taps 2 and 3 deviated under the tap-1 S/R $76,900</li><li>Why the add never fired: there was no tap 3 still to come; the second entry was the confirmation retest of the tap-1 S/R on 9/3 (multiple touches) — fired, untaken, ~$11,330 at the TP</li><li>Stop $76,195 was right under either read: PO2 stop = under tap 2, PO1 stop = under tap 3, same low</li><li>Time cycles: anchor to market-maker lows, not the deepest lows — re-anchored, the 9/2 low sat inside the projected LTF cycle window; the earlier read moved the cycle on a new low and lost it</li><li>Error type: system design (no rule for which wick starts the count) · see entry chart above for the read at the time</li></ul>"
           },
           {
             title: "Rule set — the no-retest add (written 9/3, carries forward)",
