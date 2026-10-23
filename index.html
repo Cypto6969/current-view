@@ -1419,7 +1419,7 @@ const DATA = {
         { name: "R — entry 1 (799 pts) · entry 2 set at its close", value: "5.1 / 6.6 / 8.4R · tbd" },
         { name: "BE — the .666 touched → stop to entry (all three scenarios)", value: "$78,871" },
         { name: "Risk at the stop — entry 1 $1,398.25 · entry 2 (wick − close) × 1.85", value: "known at the candle" },
-        { name: "Core leg (morning MU) — IBIT inverse ETF, 20% of Schwab, “$33k”", value: "FLAGGED, not resolved — see the flags section" },
+        { name: "Core leg — SET 10/23: 20% of the book ($166,942) short from Schwab on the same trigger as entry 1, on all three scenarios · instrument + HTF invalidation [ASK BRENDAN]", value: "$33,388 notional" },
         { name: "Timing — the low (same windows)", value: "Oct 30 / Nov 5 / Nov 12 ±3d · dead 11/15" }
       ],
       triggers: [
@@ -1427,12 +1427,12 @@ const DATA = {
         { label: "Fill → bracket OPEN on the API · clock starts · 185 by hand on the 1hr close under $81,565 after the rejection wick, SL above the wick", status: "pending" },
         { label: "Branch B: one candle dumps through the low and the range .111 $80,563 to under $80k without touching $81,565 → CANCEL the $81,565 limit · REST SELL LIMIT 360 @ $80,000 (the breakdown retest, full size, one order) · SL $80,500", status: "pending" },
         { label: "$78,871 touched → SL to BE · 1hr close above the BMSB = reduce half · 4hr close above = exit all", status: "pending" },
-        { label: "CORE leg: resolve against the two-sleeve verdict (core % UNDEFINED until V3) before any ETF order", status: "pending" },
+        { label: "CORE leg (10/23): entry 1 fills → SHORT $33,388 notional by hand in Schwab · instrument and the HTF invalidation owed before the order", status: "pending" },
         { label: "Nov 15 passes with the move incomplete → time stop, re-read", status: "pending" }
       ],
       details: [
-        { title: "Flags on the core leg (Claude, 10/22) — not resolved, for Brendan",
-          body: "<ul class=\"snips\"><li>Same-day tension: the MU row says 20% of Schwab into an inverse ETF on a lost .111; the WB1 two-sleeve workshop the same afternoon concluded core % is UNDEFINED until the V3 signal DB produces a count (no signal set → no core). One of the two has to give before the order.</li><li>Candidate rule in the same draft: no 1× inverse ETF for a months-long core short (daily-reset drift); the draft prefers a dated future or IBIT puts for the core short.</li><li>Standing rule: no full-size leveraged ETF held over a weekend.</li><li>The $33k figure does not equal 20% of the Schwab book at the 9/30 balance ($80,375 → $16,075); it is closer to 20% of total AUM. Not derived here — Brendan names which.</li></ul>" },
+        { title: "Core leg — set by Brendan 10/23, with the 10/22 flags underneath",
+          body: "<ul class=\"snips\"><li>Brendan 10/23: “based on the convo yesterday I think it would be wise to add a 20% core short book add from Schwab as well on these triggers, if current book is 89k in Coinbase and 77,942 in Schwab.” → 20% × $166,942 = $33,388 notional, funded from Schwab (42.8% of that balance), on each scenario's entry-1 trigger. This is the “$33k” from the morning MU: it is 20% of the total book, not of Schwab ($15,588).</li><li>Note (Claude): the 10/22 workshop closed with “no signal set, no core”; this 20% is a decision, not a signal count. Recorded that way.</li><li>Same-day tension (10/22): the MU row says 20% of Schwab into an inverse ETF on a lost .111; the WB1 two-sleeve workshop the same afternoon concluded core % is UNDEFINED until the V3 signal DB produces a count (no signal set → no core). One of the two has to give before the order.</li><li>Candidate rule in the same draft: no 1× inverse ETF for a months-long core short (daily-reset drift); the draft prefers a dated future or IBIT puts for the core short.</li><li>Standing rule: no full-size leveraged ETF held over a weekend.</li><li>The $33k figure does not equal 20% of the Schwab book at the 9/30 balance ($80,375 → $16,075); it is closer to 20% of total AUM. Not derived here — Brendan names which.</li></ul>" },
         { title: "The 10/19 sequence this sits inside (Brendan’s MU, context only)",
           body: "<ul class=\"snips\"><li>Short into the .236 touch ~Oct 23–26 → long at the .786 ~$84.5k → dump to the .236–.111 $69–63k → then one of three: a long into the .618 of the recent Math &amp; Matrix and a hard dump, the HTF .786 at $106k, or the start of the next cycle on inflows.</li><li>Alts (NEAR / ZEC / TAO) testing the .5 → ~5-month rejection into a Mar-2027 .236–.111 bottom · alerts set.</li><li>ETH alert at the BMSB (10/19): a close above = the BTC plan runs as normal; a rejection = get short for the move.</li><li>The .236-tap long idea (10/19) is not one of the 10/22 three: it needs a card and a resting order before the level, or it is no trade.</li></ul>" }
       ],
@@ -1448,7 +1448,7 @@ const DATA = {
   positionSizing: {
     onTrigger: [
       "Card before the order. Four structure fields (schematic · 4hr taps numbered · 1hr nest · entry from the menu) plus clock / move / event. Taps that cannot be numbered = no card, no order, resting limits included.",
-      "Futures: the standing convention (70% utilization · ≥5R · $1–2k risk), no /trade-sizing run. The inverse-ETF core leg and anything outside the band → run /trade-sizing.",
+      "Futures: the standing convention (70% utilization · ≥5R · $1–2k risk), no /trade-sizing run. The core leg is notional-sized (20% of the book, 10/23); if it is puts, /strike on the chain before the order.",
       "Resting limit or a defined close-trigger only. Alerts carry the action text; nothing enters on an alarm.",
       "First act at any fill: bracket OPEN on the API. Rejected = stop by hand before any card work.",
       "Anything that rests while away gets a scenario table: Brendan’s rows first (three minimum), plumbing rows after, last row = anything not above → FLAT.",
@@ -1458,9 +1458,9 @@ const DATA = {
       { name: "Scenario 1 · $85,000 short · RESTING (card on Trade Plans) + 185 on a 1hr close below $84,880", instrument: "BIP-20DEC30-CDE · 175 → 360", size: "1.75 BTC · 3.60 after the add", risk: "$1,697.50 on tranche 1 · 9.0R to the .111 · add risk = (high at the close − fill) × 1.85", expiry: "high Oct 26–Nov 5 · low Oct 30 / Nov 5 / Nov 12 ±3d · dead 11/15 at the latest" },
       { name: "Scenario 2 · PO2 — short on the 3rd candle open after two rejections at $83,420 / $83,840", instrument: "BIP-20DEC30-CDE", size: "175 at the 3rd 4hr open · +185 at the body-retest limit = 360", risk: "set at the fill · SL $84,490 (higher S/R) / $83,905 (lower S/R)", expiry: "any time from now · low Oct 30 / Nov 5 / Nov 12 ±3d · dead 11/15" },
       { name: "Scenario 3 — 175 LIMIT $81,565 after the $80,611 touch · +185 on the 1hr rejection · Branch B: 360 LIMIT $80,000 on a one-candle dump under $80k", instrument: "BIP-20DEC30-CDE · 360", size: "175 limit · 185 by hand · Branch B 360 in one order", risk: "$1,398.25 on entry 1 at SL $82,364 · 5.1R to TP1 · entry 2 SL above its wick · Branch B $1,800 at SL $80,500, 5.0R to TP1 · BE at $78,871", expiry: "after the touch · low Oct 30 / Nov 5 / Nov 12 ±3d · dead 11/15" },
-      { name: "Scenario 3 core leg · IBIT inverse ETF (morning MU)", instrument: "[ASK BRENDAN — ticker]", size: "20% of Schwab · “$33k” [ASK BRENDAN — which]", risk: "[run /trade-sizing]", expiry: "core % UNDEFINED until V3 (10/22 WB1) — unresolved" }
+      { name: "CORE SHORT (Schwab) · on entry 1 of whichever scenario fires · set 10/23", instrument: "[ASK BRENDAN — IBIT puts per the 10/22 rule, or BITI 1× if overridden]", size: "$33,388 notional = 20% × $166,942 ($89,000 CFM + $77,942 Schwab) ≈ 0.39–0.42 BTC", risk: "notional × distance to the HTF invalidation [ASK BRENDAN — level + dead date] · puts: run /strike on a chain", expiry: "HTF: exits on a signal flip or the invalidation, not a price target" }
     ],
-    note: "All three scenarios have cards on Trade Plans: PO1 (resting), PO2 (awake-only 4hr entry), Scenario 3 (one limit rests after the $80,611 touch). Sizes (Brendan 10/22): entry 1 = 175, entry 2 = 185 on every scenario, 360 full. BE for all three = the .666 $78,871. TP counts (10/23): PO1 / PO2 = 144 / 144 / 72 · Scenario 3 = 180 / 180 / 0, the range-low leg is a new short at the .5 retest. TV alerts armed 10/23."
+    note: "All three scenarios have cards on Trade Plans: PO1 (resting), PO2 (awake-only 4hr entry), Scenario 3 (one limit rests after the $80,611 touch). Sizes (Brendan 10/22): entry 1 = 175, entry 2 = 185 on every scenario, 360 full. BE for all three = the .666 $78,871. TP counts (10/23): PO1 / PO2 = 144 / 144 / 72 · Scenario 3 = 180 / 180 / 0, the range-low leg is a new short at the .5 retest. TV alerts armed 10/23. CORE (10/23): 20% of the book = $33,388 short from Schwab on entry 1 of whichever scenario fires; instrument + HTF invalidation [ASK BRENDAN]."
   },
 
   // -----------------------------------------------------------------
@@ -1502,6 +1502,7 @@ const DATA = {
         { if: "$78,871 · the .666 touched", then: "SL → BE by hand (both tranches)", armed: "alert" },
         { if: "1hr close above the BMSB", then: "REDUCE — BUY 88 by hand", armed: "" },
         { if: "4hr close above the BMSB", then: "EXIT — BUY ALL by hand · cancel the bracket", armed: "" },
+        { if: "$85,000 · fill (94955ced)", then: "CORE SHORT by hand in Schwab · $33,388 notional (20% of the $166,942 book, 10/23) · instrument [ASK BRENDAN: IBIT puts per the 10/22 core rule, or BITI 1× if overridden] · exit = HTF invalidation [ASK BRENDAN], not this card's stop", armed: "" },
         { ref: "stop", then: "FLAT · re-enter only after a confirmed 3-tap, half size · new card", armed: "order" }
       ],
       ticket: {
@@ -1520,6 +1521,7 @@ const DATA = {
           { k: "Risk at entry", v: "$1,697.50 (970 pts × 1.75 BTC) · 9.0R · half size by design · at the original $85,280: $1,207.50 / 13.1R", tone: "loss" },
           { k: "Order 2 — re-entry after a stop · NOT WRITTEN", v: "if $85,970 fires and price turns at the .786 / .82 / $86.5k liquidity-trail start: wait for a CONFIRMED 3-tap distribution, short half size, SL above it · its own card, attempt 2 of 4" },
           { k: "Order 3 — the second tranche · WRITTEN 10/22, NOT RESTING (hand entry on a close)", v: "SELL 185 on a 1hr CLOSE below $84,880 (the MTF range high = top confirmed, tap 3 in) · SL = the high in place at that close, whatever it printed · same TP ladder · brings the position to full size, 360" },
+          { k: "Order 4 — CORE SHORT (Schwab) · 20% of the book · WRITTEN 10/23, hand entry", v: "94955ced fills at $85,000 → SHORT $33,388 notional in Schwab (20% × $166,942 = $89,000 CFM + $77,942 Schwab) ≈ 0.39 BTC (39 cts-equivalent) · instrument [ASK BRENDAN] — the 10/22 core rule says IBIT puts or a dated future, not a 1× inverse ETF (daily-reset drift) · core exit = HTF invalidation + dead date [ASK BRENDAN], never the tactical stop · 42.8% of the Schwab balance" },
           { k: "Pre-commit", v: "PARTIAL — entry, stop and target were set before the fill; the card, the reduce row, the exit row and the scenario table came three days after the order" }
         ],
         levels: [
@@ -1600,6 +1602,7 @@ const DATA = {
         { if: "$78,871 · the .666 touched", then: "SL → BE by hand", armed: "alert" },
         { if: "1hr close above the BMSB", then: "REDUCE — half by hand", armed: "" },
         { if: "4hr close above the BMSB", then: "EXIT — BUY ALL by hand", armed: "" },
+        { if: "the 3rd 4hr candle open · with entry 1", then: "CORE SHORT by hand in Schwab · $33,388 notional (20% of the $166,942 book, 10/23) · instrument [ASK BRENDAN: IBIT puts per the 10/22 core rule, or BITI 1× if overridden] · exit = HTF invalidation [ASK BRENDAN], not this card's stop", armed: "" },
         { ref: "stop", then: "FLAT · the rejection failed · no re-entry without a new count", armed: "" }
       ],
       ticket: {
@@ -1614,6 +1617,7 @@ const DATA = {
         position: [
           { k: "Order 1 — PO2 entry 1 · NOT RESTING (hand entry, no resting level)", v: "SHORT 175 at the 3rd 4hr candle open, wherever the two rejection candles print · SL $84,490 (higher-S/R rejection, above the .618) or $83,905 (lower) · TP1 $77,504 × 144 / TP2 $76,260 × 144 / TP3 $74,860 × 72 (set 10/23)" },
           { k: "Order 2 — PO2 entry 2 · the confirmation · rested after entry 1", v: "SHORT 185 LIMIT at the retest of the breakdown level, read off the 4hr candle bodies · same SL · full size 360" },
+          { k: "Order 3 — CORE SHORT (Schwab) · 20% of the book · WRITTEN 10/23, hand entry", v: "the 3rd 4hr candle open, with entry 1 → SHORT $33,388 notional in Schwab (20% × $166,942 = $89,000 CFM + $77,942 Schwab) ≈ 0.40 BTC (40 cts-equivalent) · instrument [ASK BRENDAN] — the 10/22 core rule says IBIT puts or a dated future, not a 1× inverse ETF (daily-reset drift) · core exit = HTF invalidation + dead date [ASK BRENDAN], never the tactical stop · 42.8% of the Schwab balance" },
           { k: "Risk at entry", v: "known at the fill: (SL − entry) × 1.75, then × 1.85 for entry 2 · R checked against the ladder at the fill", tone: "loss" },
           { k: "The PO1 order $85,000 (94955ced) when the two 4hr candles print", v: "CANCELLED — the 4hr rejection removes PO1 (Brendan 10/22); one structure, one position" },
           { k: "Pre-commit", v: "YES on structure, entry rule (4hr candles), entry 2 (body-retest limit), stop rule, targets, BE level, timing and size (10/22) · TP counts owed" },
@@ -1686,6 +1690,7 @@ const DATA = {
         { if: "$78,871 · the .666 touched", then: "SL → BE by hand", armed: "alert" },
         { if: "1hr close above the BMSB", then: "REDUCE — half by hand", armed: "" },
         { if: "4hr close above the BMSB", then: "EXIT — BUY ALL by hand", armed: "" }
+        { if: "entry 1 fills · $81,565 (or $80,000 on Branch B)", then: "CORE SHORT by hand in Schwab · $33,388 notional (20% of the $166,942 book, 10/23) · instrument [ASK BRENDAN: IBIT puts per the 10/22 core rule, or BITI 1× if overridden] · exit = HTF invalidation [ASK BRENDAN], not this card's stop", armed: "" },
       ],
       ticket: {
         planned: "After a touch of $80,611: SELL 175 LIMIT $81,565 · SL $82,364 (above the range .5) · entry 2: SELL 185 by hand on the 1hr close under $81,565, or under wherever the rejection wick ends up (a wick up, then a hard close) · its SL above that wick · Branch B (10/23): a hard one-candle dump under $80k that breaks the low and the range .111 without returning to $81,565 → cancel the $81,565 limit, SELL 360 LIMIT $80,000 at the breakdown retest (full size, one order, no second tranche), SL $80,500 · TP1 .786 $77,504 × 180 / TP2 .111 $76,260 × 180 / TP3 range low $74,860 × 0 — the rebound to the .5 takes a BE stop, so TP3 is the next card (set 10/23) · BE at $78,871",
@@ -1699,10 +1704,11 @@ const DATA = {
         position: [
           { k: "Order 1 — Scenario 3 entry 1 · NOT RESTING (placed after the $80,611 touch)", v: "SELL 175 LIMIT $81,565 · SL $82,364 · TP1 $77,504 × 180 / TP2 $76,260 × 180 · no TP3 runner (set 10/23)" },
           { k: "Order 2 — Scenario 3 entry 2 · the 1hr wick-reject close · HAND ENTRY", v: "SELL 185 on the 1hr close under $81,565 (or under wherever the rejection wick level ends up) · SL above that wick · same TP ladder · full size 360" },
+          { k: "Order 3 — CORE SHORT (Schwab) · 20% of the book · WRITTEN 10/23, hand entry", v: "entry 1 fills ($81,565, or $80,000 on Branch B) → SHORT $33,388 notional in Schwab (20% × $166,942 = $89,000 CFM + $77,942 Schwab) ≈ 0.41 BTC (41 cts-equivalent) · instrument [ASK BRENDAN] — the 10/22 core rule says IBIT puts or a dated future, not a 1× inverse ETF (daily-reset drift) · core exit = HTF invalidation + dead date [ASK BRENDAN], never the tactical stop · 42.8% of the Schwab balance" },
           { k: "Branch B — hard one-candle dump under $80k, the low and the range .111 broken, $81,565 never trades (10/23)", v: "CANCEL the $81,565 limit · SELL 360 LIMIT $80,000 = the retest of the breakdown, full size in ONE order (late confirmation entry, no second tranche) · SL $80,500 · $1,800 at the stop · 5.0R / 7.5R / 10.3R · same TP ladder" },
           { k: "Risk at entry", v: "$1,398.25 on entry 1 (799 pts × 1.75) · 5.1R to TP1 · entry 2 = (wick high − close) × 1.85, known at the candle", tone: "loss" },
           { k: "Management", v: ".666 $78,871 touched → SL to BE · 1hr close above the BMSB → reduce half · 4hr close above → exit all" },
-          { k: "Core leg (morning MU) — IBIT inverse ETF, 20% of Schwab, “$33k”", v: "NOT on this card · conflicts with the two-sleeve verdict (core % UNDEFINED until V3) · resolve before any ETF order" },
+          { k: "Core leg — see Order 3 (set 10/23)", v: "20% of the book, $33,388 notional from Schwab, on the entry-1 fill · same on PO1 and PO2" },
           { k: "Pre-commit", v: "YES on trigger, both entries, size, stop, targets, BE and timing (10/22) · counts 180 / 180 / 0 set 10/23 · the scenario table owed before the limit rests" }
         ],
         levels: [
@@ -1732,8 +1738,8 @@ const DATA = {
           { title: "The read — Scenario 3 (10/22 evening)",
             chart: { src: "charts/BTC%20Current/BTCUSDT.P_2026-10-22_18-11-23%20SHORT%204hr%20PO1%20taps%20+%20timing.png", caption: "4hr · Bybit · 10/22 18:11 ET · Scenario 3 levels: tap-3 low 80,611 (10/18) · entry 81,565 · range .5 82,206 (SL 82,364 above it) · .666 78,871 · same targets and time-cycle arcs as PO1 · card levels govern" },
             body: "<ul class=\"snips\"><li>Setup: PO1 and PO2 both need the bottom 3-tap to lift price; Scenario 3 is the branch where it does not. The confirmation is a touch of the third-tap low $80,611 from 10/18 — a wick is enough</li><li>Trigger: after the touch, one SELL limit rests — 175 at $81,565. It cannot rest earlier: above the current price it would fill on any bounce before the bottom has failed</li><li>Entry 2: 185 by hand on the 1hr close under $81,565, or under wherever the rejection wick ends up — the expected print is a candle that wicks up and closes hard from there; the stop on this tranche goes above that wick</li><li>Branch B (Brendan 10/23): if the dump goes through the low AND the range .111 in one candle and closes under $80k without ever trading back to $81,565, the $81,565 limit is dead — the trade is the retest of the breakdown, so 360 rests at the $80k level instead — full size in one order, because it is a late confirmation entry and there is no second tranche to add (Brendan 10/23, chose 360 over 185: $1,800 vs $925 at the stop, same R). SL $80,500, 500 pts. The range .111 = $80,563, the same level on every scenario (Brendan 10/23)</li><li>Stop on entry 1: above the range .5 at $82,364 — 799 pts ($1,398.25, 5.1R to TP1, past the 5R gate); entry 2's risk is (wick high − close) × 1.85, known at the candle</li><li>Targets and timing: the same ladder as PO1 (.786 → .111 → range low) and the same low windows</li><li>Management on all three scenarios (Brendan 10/22): the .666 $78,871 touched → stop to BE; 1hr close above the BMSB → reduce half; 4hr close above → exit all</li><li>Counts (10/23): 180 at the .786, 180 at the .111, nothing left for the range low — Brendan's path has a rebound to the .5 of the total range (~$81k) between the .111 and the range low, and that rebound takes a BE stop at $80,000 (Branch B) and sits 500 pts under $81,565, so a runner here is a coin flip on the exact .5 print. The range-low leg is a new short at the .5 retest with fresh size (Brendan: ‘I will be adding at the .5 retest if it comes’)</li><li>Owed: the scenario table before the limit rests</li></ul>" },
-          { title: "Core leg — flagged, not on this card (Claude, 10/22)",
-            body: "<ul class=\"snips\"><li>The morning MU put 20% of the Schwab book into an IBIT inverse ETF on the breakdown (“33k purchase”); the WB1 two-sleeve workshop the same afternoon concluded core % is UNDEFINED until the V3 signal DB produces a count. One of the two gives before any ETF order</li><li>Candidate rule in that draft: no 1× inverse ETF for a months-long core short (daily-reset drift)</li><li>Standing rule: no full-size leveraged ETF over a weekend</li><li>20% of Schwab at the 9/30 balance is $16,075, not $33k — Brendan names which governs</li></ul>" }
+          { title: "Core leg — set 10/23 (20% of the book from Schwab), 10/22 flags kept underneath",
+            body: "<ul class=\"snips\"><li>Brendan 10/23: 20% core short from Schwab on these triggers, book = $89,000 Coinbase + $77,942 Schwab → $33,388 notional on the entry-1 fill, on all three scenarios. Owed before the order: the instrument (the 10/22 core rule: IBIT puts or a dated future, not a 1× inverse ETF) and the core's own HTF invalidation + dead date — a core never exits on the tactical stop.</li><li>The morning MU put 20% of the Schwab book into an IBIT inverse ETF on the breakdown (“33k purchase”); the WB1 two-sleeve workshop the same afternoon concluded core % is UNDEFINED until the V3 signal DB produces a count. One of the two gives before any ETF order</li><li>Candidate rule in that draft: no 1× inverse ETF for a months-long core short (daily-reset drift)</li><li>Standing rule: no full-size leveraged ETF over a weekend</li><li>20% of Schwab at the 9/30 balance is $16,075, not $33k — Brendan names which governs</li></ul>" }
         ],
         notes: "Written 10/22 evening from Brendan's rows in the dashboard session. Nothing resting until the touch."
       },
