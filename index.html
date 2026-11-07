@@ -1309,7 +1309,7 @@ const LB_READ = {
 // =============================================================
 const DATA = {
   asset: "BTC",
-  asOf: "2026-11-03",
+  asOf: "2026-11-07",
   // What to DO when in each state. Edit these to match your actual playbook.
   // The verdict banner reads from this map by the state label sync.py computes.
   actionByState: {
@@ -1477,6 +1477,97 @@ const DATA = {
   // (dollars live in /trade-sizing). Realized $ shows once, at close, in closedTrades.
   // -----------------------------------------------------------------
   activeTrades: [
+
+    {
+      ticker: "BTC", direction: "short", status: "active",
+      setupTag: "1H 3-TAP DISTRO · PO2 M2 · TAP 3 · .111 ADD",
+      live: {
+        state: "LIVE · BRACKET ATTACHED · DECISION CANDLE: HOLD $75,576 = BULL (EXPECT THE STOP) · BREAK IT = THE DUMP · ADD + BE ON THE 1HR CLOSE BELOW $75,415",
+        position: "SHORT 2.00 BTC @ $75,775",
+        stop: { price: "$76,285", note: "bracket · tap-2 wick $76,180 + 100" },
+        risk: "$1,020",
+        targets: [ { label: "TP1 .49+100", cts: 200, price: "$71,435" }, { label: "TP2 S/R+100", cts: "O2", price: "$67,885" } ],
+        clock: { entered: "2026-11-07", expectedDays: 1, deadline: "2026-11-10" },
+        move: { from: "$75,775", to: "$67,885", mark: "$75,670", markAt: "11/7 11:00 ET" }
+      },
+      structure: {
+        schematic: "1hr 3-tap DISTRIBUTION under the 11/5 breakdown — PO2, model 2 · the range exists, so targets are owed: the .49 of the leg ($71,335) first, then the Feb → Jun 2026 range S/R $67,785 · the whole move is expected to end in a 3-tap at an important level = the flip long (confirmation to be written)",
+        taps4h: "HTF context: the 10/29 → 11/5 dump out of the Oct range ($81,750 high → 11/5 low ~$75k) · the 1hr distro is the first retest under the break · [ASK BRENDAN — confirm the 4hr frame the distro nests in]",
+        taps1h: "1) 11/6 22:00 ET — high $76,005 · 2) 11/7 04:00 — high $76,180 (the SL wick) · 3) 11/7 09:00 — high $75,910 · entry at the 10:00 open after tap 3 (API candles, CDE)",
+        entryType: "tap 3 — resting limit $75,790, filled $75,775 at 10:10",
+        confirmation: "none at entry · entry 2 = a 1hr CLOSE below the .111 $75,415 (TV alert set 11/7)"
+      },
+      strip: [
+        { ref: "stop", then: "FLAT ALL 200 · the distro failed", armed: "order" },
+        { ref: "tp1", then: "TAKE ALL 200 (bracket) · Order 2 rides to TP2 $67,885", armed: "order" },
+        { if: "1hr CLOSE below the .111 $75,415", then: "ADD 170 by hand (70% utilization, 370 total) · SL above the high of the closing candle · SL on the 200 → BE $75,775", armed: "alert" },
+        { if: "1hr CLOSE above the BMSB", then: "FLAT by hand — unless the close is a hair above and the next candle drops fast: that candle is the real tap 3, hold", armed: "alert" },
+        { if: "Sun 11/8 7pm ET weekly close — ABOVE the weekly BMSB $76,750 = recovery → CUT ½ (the expected day) · BELOW and still dumping → hold, split Order 2 into TP2 $67,885 + TP3 .111 HTF $63,150 (half each)", then: "the weekly close is the expected day · calendar Sun 11/8 6:45pm ET", armed: "calendar" },
+        { if: "Tue 11/10 close · TP1 $71,435 has not traded", then: "FLAT — dead date (1.5× the weekend move)", armed: "calendar" }
+      ],
+      audit: [
+        { tag: "185c5bae", time: "11/07 10:10:40", side: "SELL", cts: 200, price: "$75,775", fee: "$128.09", note: "limit $75,790 · bracket 8fe39bcc OPEN · SL trigger $76,285 / TP $71,435 ×200" }
+      ],
+      ticket: {
+        planned: "200 @ $75,790 · SL $76,285 · TP1 $71,435 ×200 · Order 2 170 on the 1hr close below $75,415 → TP2 $67,885 (+ TP3 $63,150 on a weekly close below the BMSB)",
+        actual: "200 filled @ $75,775 · bracket attached (SL $76,285 / TP $71,435 ×200)",
+        risk: "$1,020 (510 pts × 2.00 BTC) · 8.5R / 15.5R · 0.6% of $171k AUM · conviction 60% (Brendan 11/7, \"depends on this hourly close\")"
+      },
+      thesisOneLiner: "First 1hr three-tap distribution under the 11/5 breakdown (PO2, model 2): short the third tap with the stop 100 over tap 2, add and go to break-even on the 1hr close below the .111, targets the .49 of the leg and the Feb–Jun 2026 range S/R, where a three-tap low is expected to set up the flip long.",
+      bull: {
+        label: "The trade — 1hr tap-3 short, PO2 model 2", openPosition: true,
+        position: [
+          { k: "Order 1 — tap 3 · FILLED 11/7 10:10", v: "SHORT 200 @ $75,775 · SL $76,285 · TP1 $71,435 ×200 (bracket)", tone: "win" },
+          { k: "Order 2 — .111 confirmation · BY HAND", v: "SHORT 170 on the 1hr close below $75,415 (70% utilization, Brendan 11/7 · 370 total) · SL above the high of the closing candle · TP2 $67,885, or TP2 + TP3 $63,150 half each after a weekly close below the BMSB", tone: "win" },
+          { k: "Risk at entry", v: "$1,020 (510 pts × 2.00 BTC) · BE on the 200 at the .111 close", tone: "loss" }
+        ],
+        levels: [
+          { name: "Tap 2 wick — 11/7 04:00", value: "$76,180" },
+          { name: "SL — tap 2 + 100 (bracket)", value: "$76,285" },
+          { name: "Entry — tap 3", value: "$75,775" },
+          { name: ".111 — entry 2 + BE trigger, 1hr close", value: "$75,415" },
+          { name: "TP1 — .49 of the leg $71,335 + 100", value: "$71,435" },
+          { name: "TP2 — Feb–Jun 2026 range S/R $67,785 + 100 (the lowest of the candidate S/Rs; 2023 fractal)", value: "$67,885" },
+          { name: "Invalidation — 1hr close above the BMSB", value: "by hand" },
+          { name: "S/R — the decision level (bull holds it, the dump breaks it)", value: "$75,576" },
+          { name: "Weekly BMSB — the Sunday 7pm close decides the week", value: "$76,750" },
+          { name: "11/6 10:00 low — the sweep level for the bull-scenario long", value: "$74,725" },
+          { name: "Earlier 3-tap levels — .5237 · HTF .236", value: "$70,348 · $69,523" },
+          { name: "TP3 — HTF .111, only on a weekly close below the BMSB", value: "$63,150" }
+        ],
+        triggersLabel: "Steps — in order",
+        triggers: [
+          { label: "1. ✔ 11/7 09:00 — taps 1 / 2 / 3 printed (22:00 · 04:00 · 09:00)", status: "met" },
+          { label: "2. ✔ 11/7 10:10 — Order 1 filled 200 @ $75,775 · bracket 8fe39bcc OPEN · .111 alert set", status: "met" },
+          { label: "3. 11/7 11:00 candle — holds $75,576 → bull scenario in play, expect the stop or a new tap 3 · breaks it → the dump is on", status: "pending" },
+          { label: "4. 1hr close below $75,415 → Order 2 by hand · SL on the 200 → BE $75,775", status: "pending" },
+          { label: "5. $71,435 → TP1 · rest to $67,885 · Sun 11/8 7pm weekly close below $76,750 and still dumping → add TP3 $63,150", status: "pending" },
+          { label: "6. 3-tap low at $70,348 / $69,523 / TP2 → flip long (confirmation to be written on its own card)", status: "pending" },
+          { label: "7. Owed: calibration row (60%) · charts for the 1hr + weekly reads (BMSB alert ✔ set 11/7)", status: "pending" }
+        ],
+        details: [
+          { title: "The read — LTF (1hr): the distribution",
+            body: "<ul class=\"snips\"><li>Setup: three taps on the highs under the broken range — 11/6 22:00 $76,005 · 11/7 04:00 $76,180 · 11/7 09:00 $75,910 — a lower third tap, the PO2 model-2 shape</li><li>Trigger: resting limit at tap 3, filled on the 10:00 candle</li><li>Invalidation: $76,285 = the tap-2 wick + 100; a 1hr close above the BMSB ends it by hand, unless the close is a hair above and the next candle drops fast — that would be the real tap 3, not a failure</li><li>Targets: .49 of the leg + 100 = $71,435, then the Feb → Jun 2026 range S/R + 100 = $67,885 — the lowest of several candidate S/Rs, chosen for the 2023 fractal and because it leaves the most room for the 3-tap low (runner logic)</li><li>Why: the first retest under a breakdown distributes; the .111 close confirms the continuation, which is where the add and the BE belong</li></ul>" },
+          { title: "The read — HTF (weekly): three ways the candle closes Sunday 7pm",
+            body: "<ul class=\"snips\"><li>Setup: the weekly candle and the weekly BMSB $76,750 leave three closes — (1) DUMP now, with or without a recovery back above $76,750 by Sunday = the trade · (2) PUMP into the close, into the .382 / range high = a true range; the long comes after a sweep of the 11/6 10:00 low $74,725, for new highs (fractals on the 11/6 Notion daily) · (3) close inside the BMSB and next week continues, the bottom printing before that week closes back above — possible, not favoured</li><li>Read: we sit at the intersection — the close above the BMSB and the dump both happened; the bull case has to hold the S/R $75,576 on a retest and close above it, which the 10:00 candle just did</li><li>Trigger: the 11:00 candle decides — a break of $75,576 and continuation = scenario 1; a hold = higher next, a test of the .382 / range high, and the stop most likely goes (a new tap 3 then dump is possible but the week has not enough time left for it)</li><li>Targets: the bull move can still complete the range sweep of the 9/15 low (CDE 9/15 10:00 $75,525; Brendan's chart says 08:00 — chart governs) on the way back down while holding the .382 · TP1 = the .49, which aligns with the first main S/R · the 3-tap accumulation can print early at the .5237 $70,348 or the HTF .236 $69,523 · a weekly close below the BMSB means lower: if Sunday is still dumping, TP2 splits into TP2 $67,885 + TP3 at the HTF .111 $63,150</li></ul>" },
+          { title: "Scenario table — written 11/7 11:00 ET",
+            body: "<ul class=\"snips\"><li>Pre-mortem: two days out and this lost — the 11:00 candle held $75,576, the .382 / range high got tested and $76,285 traded; or the add filled on the .111 close and the recovery to the weekly BMSB took the BE stop</li></ul><table class=\"scen\"><thead><tr><th>Scenario</th><th>Action</th><th>When</th><th>Exec?</th></tr></thead><tbody><tr><td>11:00 breaks $75,576, continues down (S1 dump)</td><td>hold · wait for the 1hr close below $75,415</td><td>today</td><td class=\"ok\">YES</td></tr><tr><td>11:00 holds $75,576 → .382 / range high test (S2 bull)</td><td>let the stop work · $76,285 ×200 · no re-short without a new 1hr count · long plan after the $74,725 sweep</td><td>today → Sun</td><td class=\"ok\">YES</td></tr><tr><td>1hr close below $75,415</td><td>ADD [ASK cts] by hand · SL on the 200 → BE</td><td>any 1hr close</td><td class=\"no\">NO when asleep — awake-only</td></tr><tr><td>1hr close above the BMSB</td><td>flat by hand (hair-close + fast drop = hold)</td><td>any hour</td><td class=\"no\">NO when asleep — awake-only</td></tr><tr><td>TP1 $71,435 trades</td><td>bracket takes 200 [ASK — or a split]</td><td>Sat–Sun</td><td class=\"ok\">YES</td></tr><tr><td>Sun 7pm close below $76,750, still dumping</td><td>split TP2 → TP2 + TP3 $63,150</td><td>Sun 7pm</td><td class=\"ok\">YES (calendar)</td></tr><tr><td>3-tap low at $70,348 / $69,523 / $67,885</td><td>flip long — own card, confirmation to be written</td><td>next week</td><td class=\"ok\">YES</td></tr><tr><td>Bracket rejected / partial after any edit</td><td>stop by hand first</td><td>at the edit</td><td class=\"ok\">YES</td></tr><tr class=\"last\"><td>Anything not above</td><td>FLAT · rewrite in the morning</td><td>—</td><td class=\"ok\">MUST</td></tr></tbody></table><div class=\"scen-verdict\">The 200 sleeps on the exchange bracket ($76,285 / $71,435) — hard levels, no read needed. The add and the BMSB exit are reads → awake-only.</div>" }
+        ],
+        notes: "Written 11/7 ~10:30 ET from Brendan's count + the Coinbase API, after the fill. Charts owed."
+      },
+      bear: {
+        label: "What kills it",
+        levels: [
+          { name: "SL — bracket", value: "$76,285 × 200" },
+          { name: "1hr close above the BMSB", value: "flat by hand" }
+        ],
+        triggersLabel: "If it fires",
+        triggers: [
+          { label: "$76,285 trades → flat · −$1,020 · the three taps were not the top; no re-entry without a new count", status: "pending" },
+          { label: "1hr close above the BMSB → flat by hand (hair-close + fast drop = hold, it is tap 3)", status: "pending" }
+        ]
+      }
+    },
     {
       ticker: "RIVN", direction: "long", status: "active",
       setupTag: "HTF 3-TAP BASE · T1 IN · T2/T3 RESTING · HOOD ANALOG · 2–4 YR",
